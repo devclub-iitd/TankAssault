@@ -7,7 +7,7 @@ Maze
 	<script type='text/javascript' src='functions.js'></script>
 </head>
 <body>
-<canvas oncontextmenu='return false;' id="maze" style="display: block; margin-top: 50px; margin-left:375px; margin-right:auto; position:absolute;"></canvas>
+<canvas oncontextmenu='return false;' id="maze" width='100px' height='100px' style="display: block; margin-top: 50px; margin-left:450px; margin-right:auto; position:absolute;"></canvas>
 <div id='site'>
 <div id='page'>
 <div id='content'>
@@ -18,10 +18,29 @@ body{
   background: #222a33;
   text-align: center;
 }
-canvas {
+#left{
+	background-color:black;
+	margin-top : -30px;
+	margin-bottom: 0;
+	height : 100vh;
+	width : 283px;
+	position: absolute;
+	//display: inline-block;
+}
+#right{
+	background-color:black;
+	margin-top : -30px;
+	margin-bottom: 0;
+	height : 100vh;
+	width : 283px;
+	position: absolute;
+	margin-left : 400px;
+	display: inline-block;
+}
+/*canvas {
     width: 600px;
     height: 450px;
-}
+}*/
 .mazeParameters {
 	width: 800px;
 	margin-left: auto;
@@ -38,6 +57,8 @@ canvas {
 <table class='mazeParameters'>
 <tr><td><input type='button' value='Start Game' id='generate'/></td>
 </table>
+<div id = 'left'></div>
+<div id = 'right'></div>
 </div>
 </div>
 </div>
