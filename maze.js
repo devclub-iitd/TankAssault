@@ -21,11 +21,11 @@ wallColor = '#000'   //Color of the walls
 pathColor = '#fff'//Color of the path
 
 randomGen = function(seed){
-	if(seed===undefined)var seed=performance.now()
-	return function(){
+  if(seed===undefined)var seed=performance.now()
+  return function(){
     seed = (seed * 9301 + 49297) % 233280
-		return seed/233280
-	}
+    return seed/233280
+  }
 }
 
 init = function(){
