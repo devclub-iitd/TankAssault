@@ -4,14 +4,19 @@ var	ctx, context = canvas.getContext('2d');
 	context.font = "bold 20px sans-serif";
 	//$(document).keydown(handleKeypress);
 var canvas;
-var context;
+//var context;
 var theMaze = null;
 var loaded = 0;
+var reload = 0;
 
 function generate() {
 	//console.profile();
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	//reload = 1;
+	earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 	makeMaze();
+	//reload = 0;
+	//loaded = 1;
 	//document.getElementById("demo").innerHTML = "Hello";
 	//makeTank();
 	//console.profileEnd();
@@ -21,7 +26,9 @@ function loadTank() {
 	//context.clearRect(0, 0, canvas.width, canvas.height);
 	//makeMaze();
 	//document.getElementById("demo").innerHTML = "Hello";
-	if (!loaded++) makeTank();
+	theMaze.draw();
+	if (!loaded++) setInterval(draw, 10);
+
 	//console.profileEnd();
 }
 function makeMaze() {
@@ -379,7 +386,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 
 
 // javascript for tank
-function makeTank() {
+//function makeTank() {
 	var canvas = document.getElementById("maze");
 	var ctx = canvas.getContext("2d");
 	
@@ -486,7 +493,7 @@ function makeTank() {
 	
 	function draw() {
 		earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
-		
+		//if (reload == 1) return;
 		if (rightPressed === true) {
 			tankAngle += dAng;
 		}
@@ -503,13 +510,12 @@ function makeTank() {
 			tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
 			tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
 		}
-		
+		theMaze.draw();
 		drawTank(tankX, tankY, tankLength, tankWidth, tankAngle);
+		//theMaze.draw();
 		// for debugging
 		//document.getElementById("demo").innerHTML = "" + dAng  + " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + upPressed + downPressed;
 	}
-	setInterval(draw, 10);
-}
 	
 	
 	
