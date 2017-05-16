@@ -46,7 +46,7 @@ function makeMaze() {
 	theMaze.draw();
 }
 
-// Detecting the arrow key pressed and then changing values accordingly
+// Detecting the arrow key pressed and then changing values accordingly with wall detection
 function handleKeypress(event) {
 	var currentPlayerGrid = theMaze.grid[theMaze.playerX][theMaze.playerY];
 	var isMoving = false;
@@ -306,7 +306,8 @@ maze.prototype.generate = function() {
 			theMaze.history.push(direction);
 		}
 	}
-	function addToMaze() {
+
+function addToMaze() {
 		nextCell.partOfMaze = true;
 		if (changeX == -1) {
 			currentCell.leftWall = false;
@@ -325,7 +326,8 @@ maze.prototype.generate = function() {
 			nextCell.topWall = false;
 		}
 	}
-	function doGeneration() {
+
+function doGeneration() {
 		//stop generation if the maze is full
 		if (theMaze.generatedCellCount == theMaze.cellCount - 1) {
 			return;		
@@ -401,6 +403,8 @@ maze.prototype.generate = function() {
 		}
 	}
 }
+
+// Draws the maze white cells
 maze.prototype.draw = function() {
 	var totalWidth = this.columns * this.gridsize;
 	var totalHeight = this.rows * this.gridsize;
@@ -449,16 +453,24 @@ maze.prototype.draw = function() {
 	this.drawPlayer();
 }
 
-// drawing tank
+
+// drawing tank. playerX and playerY are the cell numbers of grid of maze, drawX and drawY are positions to draw rectangle
+
+// Tank is resizeable as height and width are a function of gridsize 
 maze.prototype.drawPlayer = function() {
 	var drawX = this.playerX * this.gridsize + (this.gridsize/4);
 	var drawY = this.playerY * this.gridsize + (this.gridsize/4);
+	//console.log(drawX);
+	//console.log(drawY);
+	//console.log(this.playerX);
+	//console.log(this.playerY);
 	context.fillStyle = "gold";
 	context.beginPath();
 	context.rect(drawX, drawY, (this.gridsize/2),(this.gridsize*2/3));
 	context.closePath();
 	context.fill();
 }
+
 
 function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.x = column;
