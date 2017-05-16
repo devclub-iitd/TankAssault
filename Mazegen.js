@@ -1,6 +1,7 @@
 var canvas;
 var context;
 var theMaze = null;
+
 $(document).ready(function() {
 	canvas = document.getElementById('maze');
 	context = canvas.getContext('2d');	
@@ -15,7 +16,7 @@ $('#generate').live('click', function() {
 function makeMaze() {
 	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
 	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
-	var gridsize = 7*rows; // grid size of maze
+	var gridsize =7*rows; // grid size of maze
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
 	if(mazeStyledecision == 1){
@@ -45,6 +46,101 @@ function makeMaze() {
 	theMaze.draw();
 }
 
+// Detecting the arrow key pressed and then changing values accordingly
+function handleKeypress(event) {
+	var currentPlayerGrid = theMaze.grid[theMaze.playerX][theMaze.playerY];
+	var isMoving = false;
+	var changeX = 0;
+	var changeY = 0;
+	if (event.keyCode == 32 || event.keyCode == 38 || event.keyCode == 40) {
+		event.preventDefault();	
+	}
+	switch(event.keyCode) {
+		case 37: {
+			//left key
+			if (currentPlayerGrid.leftWall == false) {
+				changeX = -1;
+				isMoving = true;
+			}
+			break;
+		}
+		case 38: {
+			//up key
+			if (currentPlayerGrid.topWall == false) {
+				changeY = -1;	
+				isMoving = true;
+			}
+			break;
+		}
+		case 39: {
+			//right key
+			if (currentPlayerGrid.rightWall == false) {
+				changeX = 1;
+				isMoving = true;
+			}
+			break;
+		}
+		case 40: {
+			//down key
+			if (currentPlayerGrid.bottomWall == false) {
+				changeY = 1;
+				isMoving = true
+			}
+			break;
+		}
+		default: {
+			//not a key we care about
+			break;
+		}
+	}
+	if (isMoving == true) {
+		//maze.prototype.drawPlayer.cleaRect(drawX, drawY, (this.gridsize/2),(this.gridsize*2/3));
+		theMaze.redrawCell(theMaze.grid[theMaze.playerX][theMaze.playerY]);
+		theMaze.playerX += changeX;
+		theMaze.playerY += changeY;
+		theMaze.drawPlayer();
+	}
+}
+
+// This function basically is to remove the previously drawn tank after tank moves to new position
+maze.prototype.redrawCell = function(theCell) {
+	//console.log(theCell);
+	var drawX = (theCell.x * this.gridsize);
+	var drawY = (theCell.y * this.gridsize);
+	var pastX = parseInt(drawX) + parseInt(this.gridsize);
+	var pastY = parseInt(drawY) + parseInt(this.gridsize);
+	context.fillStyle = this.backgroundColor;		
+	
+	// To remove previous rectangle we graw a white stroke of line of same size as rectangle
+	context.fillRect(drawX, drawY, this.gridsize, this.gridsize);	
+	context.beginPath();
+	if (theCell.leftWall == true) {
+		//context.strokeRect(drawX, drawY, 1, this.gridsize);
+		context.moveTo(drawX, drawY);
+		context.lineTo(drawX, pastY);
+	}
+	if (theCell.topWall == true) {
+		//context.strokeRect(drawX, drawY, this.gridsize, 1);
+		context.moveTo(drawX, drawY);
+		context.lineTo(pastX, drawY);
+	}
+	if (theCell.rightWall == true) {
+		//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+		context.moveTo(pastX, drawY);
+		context.lineTo(pastX, pastY);
+	}
+	if (theCell.bottomWall == true) {
+		//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+		context.moveTo(drawX, pastY);
+		context.lineTo(pastX, pastY);
+	}
+	context.closePath();
+	context.stroke();
+}
+
+
+
+
 function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor) {
 	this.rows = rows;
 	this.columns = columns;
@@ -57,6 +153,8 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.history = new Array();
 	this.startColumn = parseInt(startColumn);
 	this.startRow = parseInt(startRow);
+	this.playerX = this.startColumn;
+	this.playerY = this.startRow;
 	this.endColumn = parseInt(endColumn);
 	this.endRow = parseInt(endRow);
 	this.wallColor = wallColor;
@@ -348,6 +446,18 @@ maze.prototype.draw = function() {
 			
 		}
 	}
+	this.drawPlayer();
+}
+
+// drawing tank
+maze.prototype.drawPlayer = function() {
+	var drawX = this.playerX * this.gridsize + (this.gridsize/4);
+	var drawY = this.playerY * this.gridsize + (this.gridsize/4);
+	context.fillStyle = "gold";
+	context.beginPath();
+	context.rect(drawX, drawY, (this.gridsize/2),(this.gridsize*2/3));
+	context.closePath();
+	context.fill();
 }
 
 function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
@@ -358,4 +468,5 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.rightWall = true;
 	this.bottomWall = true;
 	this.partOfMaze = partOfMaze;
+	this.isPlayer = false;
 }
