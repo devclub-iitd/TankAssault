@@ -1,6 +1,6 @@
 
 var	canvas = document.getElementById('maze');
-var	ctx, context = canvas.getContext('2d');	
+var context = canvas.getContext('2d');	
 	context.font = "bold 20px sans-serif";
 	//$(document).keydown(handleKeypress);
 var canvas;
@@ -9,12 +9,15 @@ var theMaze = null;
 var loaded = 0;
 var reload = 0;
 
+
 function generate() {
 	//console.profile();
-	context.clearRect(0, 0, canvas.width, canvas.height);
+	//context.clearRect(0, 0, canvas.width, canvas.height);
 	//reload = 1;
-	earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
+	//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 	makeMaze();
+	//context.strokeStyle = "gold;
+	//context.strokeRect(0, 0, canvas.width / 2, canvas.height / 2);
 	//reload = 0;
 	//loaded = 1;
 	//document.getElementById("demo").innerHTML = "Hello";
@@ -391,13 +394,28 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var ctx = canvas.getContext("2d");
 	
 	// tank parameters
-	var tankX = canvas.width / 2;
-	var tankY = canvas.height / 2;
-	var tankAngle = 270;
+	var tankX = 30;
+	var tankY = 50
+	
+	// real tank determinants
+	var tankCenterX = 0;
+	var tankCenterY = 0;
+
+	// collision detector parameters
+	var newTankX;
+	var newTankY;
+	var newTankCenterX;
+	var newTankCenterY;
+
+	var tankAngle = 0;
 	var dAng = 1;
 	var dDist = 2;
-	var tankLength = 40;
-	var tankWidth = 20;
+	var tankLength;
+	var tankWidth;
+
+	// maze parameters
+	var borX;
+	var borY;
 	
 	// tank  controls
 	var rightPressed = false;
@@ -449,7 +467,9 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 		
 		ctx.beginPath();
 		// move the rotation point to the center of the rect
-		ctx.translate( x + length/2, y + width/2 );
+		tankCenterX = x + length/2;
+		tankCenterY = y + width/2;
+		ctx.translate( tankCenterX, tankCenterY );
 		// rotate the rect
 		ctx.rotate(degrees * Math.PI / 180);
 		
@@ -492,29 +512,66 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
     }
 	
 	function draw() {
-		earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
+		//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 		//if (reload == 1) return;
+		
+		tankCenterX = tankX + tankLength/2;
+		tankCenterY = tankY + tankWidth/2;
+		
+		// Borders
+		borX = theMaze.columns * theMaze.gridsize;
+		borY = theMaze.rows * theMaze.gridsize;
+		
+		// set tank parameters
+		tankLength = theMaze.gridsize * 2 / 3.5;
+		tankWidth = theMaze.gridsize / 2.5;
+		dDist = tankLength / 30;
 		if (rightPressed === true) {
 			tankAngle += dAng;
 		}
 		else if (leftPressed === true) {
 			tankAngle -= dAng;
 		}
-		if (upPressed){//} && tankX < canvas.width - tankLength && tankX > tankLength) {
+		if (upPressed) {
 			// Move the tank forward
-			tankX += Math.cos(tankAngle * Math.PI / 180) * dDist;
-			tankY += Math.sin(tankAngle * Math.PI / 180) * dDist;
+			if (tankCenterX < borX - tankLength / 2 && tankCenterX > tankLength / 2 && tankCenterY > tankLength / 2 && tankCenterY < borY - tankLength / 2){
+				tankX += Math.cos(tankAngle * Math.PI / 180) * dDist;
+				tankY += Math.sin(tankAngle * Math.PI / 180) * dDist;
+			}
+			else {
+				newTankX = tankX +  Math.cos(tankAngle * Math.PI / 180) * dDist;
+				newTankY = tankY + Math.sin(tankAngle * Math.PI / 180) * dDist;
+				newTankCenterX = newTankX + tankLength/2;
+				newTankCenterY = newTankY + tankWidth/2;
+				if (newTankCenterX < borX - tankLength / 2 && newTankCenterX > tankLength / 2 && newTankCenterY > tankLength / 2 && newTankCenterY < borY - tankLength / 2){
+					tankX = newTankX;
+					tankY = newTankY;
+				}
+			}
+			
 		}
-		if (downPressed){//} && tankY < canvas.height - tankLength && tankY > tankLength) {
-			// Move the tank forward
-			tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
-			tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
+		if (downPressed){
+			// Move the tank backward
+			if (tankCenterX < borX - tankLength / 2 && tankCenterX > tankLength / 2 && tankCenterY > tankLength / 2 && tankCenterY < borY - tankLength / 2){
+				tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
+				tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
+			}
+			else {
+				newTankX = tankX -  Math.cos(tankAngle * Math.PI / 180) * dDist;
+				newTankY = tankY - Math.sin(tankAngle * Math.PI / 180) * dDist;
+				newTankCenterX = newTankX + tankLength/2;
+				newTankCenterY = newTankY + tankWidth/2;
+				if (newTankCenterX < borX - tankLength / 2 && newTankCenterX > tankLength / 2 && newTankCenterY > tankLength / 2 && newTankCenterY < borY - tankLength / 2){
+					tankX = newTankX;
+					tankY = newTankY;
+				}
+			}
 		}
 		theMaze.draw();
 		drawTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 		//theMaze.draw();
 		// for debugging
-		//document.getElementById("demo").innerHTML = "" + dAng  + " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + upPressed + downPressed;
+		//document.getElementById("demo").innerHTML = " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY;
 	}
 	
 	
