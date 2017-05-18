@@ -30,7 +30,8 @@ function loadTank() {
 	//makeMaze();
 	//document.getElementById("demo").innerHTML = "Hello";
 	theMaze.draw();
-	theMaze.drawing();
+	theMaze.initialize();
+	setInterval(theMaze.drawing, 10);
 	//drawTank();
 	//if (!loaded) setInterval(theMaze.drawing, 10);
 	
@@ -416,8 +417,14 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var tankWidth;
 
 	// maze parameters
+	// border parameters
 	var borX;
 	var borY;
+	// wall parameters
+	var wallLeft = 0;
+	var wallRight = 0;
+	var wallTop = 0;
+	var wallBottom = 0;
 	
 	// tank  controls
 	var rightPressed = false;
@@ -442,32 +449,42 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	
 	
 	function keyDownHandler(e) {
-		if(e.keyCode == 39) {
-			rightPressed = true;
+		switch (e.keyCode) {
+			case 38:
+				upPressed = true;
+				break;
+			case 40:
+				downPressed = true;
+				break;
+			case 39:
+				rightPressed = true;
+				break;
+			case 37:
+				leftPressed = true;
+				break;
+			default:
+				// none of these keys
+				break;
 		}
-		else if(e.keyCode == 37) {
-			leftPressed = true;
-		}
-		if(e.keyCode == 38) {
-			upPressed = true;
-		}
-		else if(e.keyCode == 40) {
-			downPressed = true;
-		}
-		theMaze.drawing();
+		//theMaze.drawing();
 	}
 	function keyUpHandler(e) {
-		if(e.keyCode == 39) {
-			rightPressed = false;
-		}
-		else if(e.keyCode == 37) {
-			leftPressed = false;
-		}
-		if(e.keyCode == 38) {
-			upPressed = false;
-		}
-		else if(e.keyCode == 40) {
-			downPressed = false;
+		switch (e.keyCode) {
+			case 38:
+				upPressed = false;
+				break;
+			case 40:
+				downPressed = false;
+				break;
+			case 39:
+				rightPressed = false;
+				break;
+			case 37:
+				leftPressed = false;
+				break;
+			default:
+				// none of these keys
+				break;
 		}
 	}
 	
@@ -480,51 +497,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 		// move the rotation point to the center of the rect
 		tankCenterX = x + length/2;
 		tankCenterY = y + width/2;
-		var i = Math.floor(tankCenterX / theMaze.gridsize)
-		var j = Math.floor(tankCenterY / theMaze.gridsize)
-		var currentPlayerGrid = theMaze.grid[i][j];
-		//console.log(i);
-		//console.log(currentPlayerGrid.rightWall);
-		if((currentPlayerGrid.leftWall == true) && (tankCenterX-i*theMaze.gridsize < tankLength/2) && (upPressed == true)){
-			upPressed = false;
-			downPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.rightWall == true) && (-tankCenterX+(i+1)*theMaze.gridsize < tankLength/2) && (upPressed == true)){
-			upPressed = false;
-			downPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.leftWall == true) && (tankCenterX-i*theMaze.gridsize < tankLength/2) && (downPressed == true)){
-			downPressed = false;
-			upPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.rightWall == true) && (-tankCenterX+(i+1)*theMaze.gridsize < tankLength/2) && (downPressed == true)){
-			downPressed = false;
-			upPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.topWall == true) && (tankCenterY-j*theMaze.gridsize < tankLength/2) && (upPressed == true)){
-			upPressed = false;
-			downPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.topWall == true) && (tankCenterY-j*theMaze.gridsize < tankLength/2) && (downPressed == true)){
-			downPressed = false;
-			upPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.bottomWall == true) && (-tankCenterY+(j+1)*theMaze.gridsize < tankLength/2) && (downPressed == true)){
-			downPressed = false;
-			upPressed = true;
-			theMaze.drawing();
-			}
-		if((currentPlayerGrid.bottomWall == true) && (-tankCenterY+(j+1)*theMaze.gridsize < tankLength/2) && (upPressed == true)){
-			downPressed = false;
-			upPressed = true;
-			theMaze.drawing();
-			}
+		
 		ctx.translate( tankCenterX, tankCenterY );
 		// rotate the rect
 		ctx.rotate(degrees * Math.PI / 180);
@@ -566,13 +539,30 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
         ctx.restore();
 
     }*/
+
+maze.prototype.initialize = function() {
+	// Borders
+	borX = theMaze.columns * theMaze.gridsize;
+	borY = theMaze.rows * theMaze.gridsize;
+		
+	// set tank parameters
+	tankLength = theMaze.gridsize * 2 / 3.5;
+	tankWidth = theMaze.gridsize / 2.5;
 	
+	// tank position
+	tankCenterX = tankX + tankLength/2;
+	tankCenterY = tankY + tankWidth/2;
+	
+	// movement parameters
+	dDist = tankLength / 30;
+	dAng = 1;
+}
+
  maze.prototype.drawing = function() {
 		//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 		//if (reload == 1) return;
 		
-		tankCenterX = tankX + tankLength/2;
-		tankCenterY = tankY + tankWidth/2;
+		
 		
 		
 		//var currentPlayerGrid = theMaze.grid[i][j];
@@ -581,14 +571,59 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 		//console.log(a);
 		//console.log(drawTank().currentPlayerGrid.leftWall);
 		//console.log(drawTank().currentPlayerGrid.rightWall);
-		// Borders
-		borX = theMaze.columns * theMaze.gridsize;
-		borY = theMaze.rows * theMaze.gridsize;
 		
-		// set tank parameters
-		tankLength = theMaze.gridsize * 2 / 3.5;
-		tankWidth = theMaze.gridsize / 2.5;
-		dDist = tankLength / 30;
+	 
+	    // move the rotation point to the center of the rect
+		//tankCenterX = x + length/2;
+		//tankCenterY = y + width/2;
+	 
+	 	var i = Math.floor(tankCenterX / theMaze.gridsize)
+		var j = Math.floor(tankCenterY / theMaze.gridsize)
+		var currentPlayerGrid = theMaze.grid[i][j];
+	 	wallLeft = i*theMaze.gridsize;
+	 	wallRight = (i+1)*theMaze.gridsize;
+	 	wallTop = j*theMaze.gridsize;
+	 	wallBottom = (j+1)*theMaze.gridsize;
+		//console.log(i);
+		//console.log(currentPlayerGrid.rightWall);
+		//if((upPressed == true) && (currentPlayerGrid.leftWall == true) && (wallLeft < tankLength/2)){
+		//	upPressed = false;
+		//	downPressed = true;
+		//	}
+		//else if((upPressed == true) && (currentPlayerGrid.rightWall == true) && (-wallRight < tankLength/2)){
+		//	upPressed = false;
+		//	downPressed = true;
+		//	}
+		//else if((downPressed == true) && (currentPlayerGrid.leftWall == true) && (wallLeft < tankLength/2)){
+		//	downPressed = false;
+		//	upPressed = true;
+		//	}
+		//else if((downPressed == true) && (currentPlayerGrid.rightWall == true) && (-wallRight < tankLength/2)){
+		//	downPressed = false;
+		//	upPressed = true;
+		//	}
+		//else if((upPressed == true) && (currentPlayerGrid.topWall == true) && (wallTop < tankLength/2)){
+		//	upPressed = false;
+		//	downPressed = true;
+		//	}
+		//else if((downPressed == true) && (currentPlayerGrid.topWall == true) && (wallTop < tankLength/2)){
+		//	downPressed = false;
+		//	upPressed = true;
+		//	}
+		//else if((currentPlayerGrid.bottomWall == true) && (-wallBottom < tankLength/2) && (downPressed == true)){
+		//	downPressed = false;
+		//	upPressed = true;
+		//	}
+		//else if((upPressed == true) && (currentPlayerGrid.bottomWall == true) && (-wallBottom < tankLength/2)){
+		//	downPressed = false;
+			//upPressed = true;
+			//}
+		
+	 
+	 
+	 
+	 
+	 
 		if (rightPressed === true) {
 			tankAngle += dAng;
 		}
@@ -597,25 +632,25 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 		}
 		if (upPressed) {
 			// Move the tank forward
-			if (tankCenterX < borX - tankLength / 2 && tankCenterX > tankLength / 2 && tankCenterY > tankLength / 2 && tankCenterY < borY - tankLength / 2){
+			//if (tankCenterX < wallRight - tankLength / 2 && tankCenterX > wallLeft + tankLength / 2 && tankCenterY > wallTop + tankLength / 2 && tankCenterY < wallBottom - tankLength / 2){
 				tankX += Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY += Math.sin(tankAngle * Math.PI / 180) * dDist;
-			}
-			else {
+			//}
+			/*else {
 				newTankX = tankX +  Math.cos(tankAngle * Math.PI / 180) * dDist;
 				newTankY = tankY + Math.sin(tankAngle * Math.PI / 180) * dDist;
 				newTankCenterX = newTankX + tankLength/2;
 				newTankCenterY = newTankY + tankWidth/2;
-				if (newTankCenterX < borX - tankLength / 2 && newTankCenterX > tankLength / 2 && newTankCenterY > tankLength / 2 && newTankCenterY < borY - tankLength / 2){
+				if (newTankCenterX < wallRight - tankLength / 2 && newTankCenterX > wallLeft + tankLength / 2 && newTankCenterY > wallTop + tankLength / 2 && newTankCenterY < wallBottom - tankLength / 2){
 					tankX = newTankX;
 					tankY = newTankY;
 				}
-			}
+			}*/
 			
 		}
 		if (downPressed){
 			// Move the tank backward
-			if (tankCenterX < borX - tankLength / 2 && tankCenterX > tankLength / 2 && tankCenterY > tankLength / 2 && tankCenterY < borY - tankLength / 2){
+			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX < wallRight - tankLength / 2)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX > wallLeft + tankLength / 2)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY > wallTop + tankLength / 2)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY < wallBottom - tankLength / 2))){
 				tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
 			}
@@ -624,7 +659,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				newTankY = tankY - Math.sin(tankAngle * Math.PI / 180) * dDist;
 				newTankCenterX = newTankX + tankLength/2;
 				newTankCenterY = newTankY + tankWidth/2;
-				if (newTankCenterX < borX - tankLength / 2 && newTankCenterX > tankLength / 2 && newTankCenterY > tankLength / 2 && newTankCenterY < borY - tankLength / 2){
+				if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && newTankCenterX < wallRight - tankLength / 2)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && newTankCenterX > wallLeft + tankLength / 2)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && newTankCenterY > wallTop + tankLength / 2)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && newTankCenterY < wallBottom - tankLength / 2))){
 					tankX = newTankX;
 					tankY = newTankY;
 				}
@@ -637,7 +672,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 		drawTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 		//theMaze.draw();
 		// for debugging
-		//document.getElementById("demo").innerHTML = " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY;
+		document.getElementById("demo").innerHTML = " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " " + wallLeft + " " + wallTop;
 	}
 	
 	
