@@ -23,9 +23,9 @@ const cw=width/15
 const ch=height/15
 var p = [1]
 var q = [1]
-const tw = width/20
-const th = height/20
-
+const tw = width/40
+const th = height/40
+var dir = 6
 
 
 for (var i =1; i<(width/cw);i++){
@@ -122,7 +122,53 @@ context.font='25px Calibre'
 context.textAlign='center'
 context.strokeText("Start",cw/2,ch*2/3)
 
+var tank = function(){
 
+	this.update=function(x,y){
+
+		context.lineWidth=2;
+		context.fillStyle='blue';
+		context.strokeStyle='black';
+		context.beginPath();
+		context.moveTo(x-tw/2,y-tw/4);
+		context.lineTo(x-tw/2,y+tw/4);
+		context.lineTo(x-tw/4,y+tw/2);
+		context.lineTo(x+tw/4,y+tw/2);
+		context.lineTo(x+tw/2,y+tw/4);
+		context.lineTo(x+tw/2,y-tw/4);
+		context.lineTo(x+tw/4,y-tw/2);
+		context.lineTo(x-tw/4,y-tw/2);
+		context.lineTo(x-tw/2,y-tw/4);
+		context.closePath();
+		context.fill();
+		context.beginPath();
+		context.moveTo(x-tw/2,y-tw/4);
+		context.lineTo(x-tw/2,y+tw/4);
+		context.lineTo(x-tw/4,y+tw/2);
+		context.lineTo(x+tw/4,y+tw/2);
+		context.lineTo(x+tw/2,y+tw/4);
+		context.lineTo(x+tw/2,y-tw/4);
+		context.lineTo(x+tw/4,y-tw/2);
+		context.lineTo(x-tw/4,y-tw/2);
+		context.lineTo(x-tw/2,y-tw/4);
+		context.moveTo(x-tw/2,y-th/4);
+		context.lineTo(x+tw/2,y-th/4);
+		context.moveTo(x-tw/4,y-th/2);
+		context.lineTo(x-tw/4,y+th/2);
+		context.moveTo(x+tw/4,y+th/2);
+		context.lineTo(x+tw/4,y-th/2);
+		context.moveTo(x-tw/2,y+th/4);
+		context.lineTo(x+tw/2,y+th/4);
+		context.closePath();
+		context.stroke();
+
+	}
+
+
+}
+
+tank1=new tank();
+tank1.update(cw/2,ch*3/2);
 
 
 
