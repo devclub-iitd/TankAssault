@@ -639,10 +639,26 @@ maze.prototype.initialize = function() {
 	 	projectedY = tankLength * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2 + tankWidth * Math.cos(tankAngle * Math.PI / 180) / 2 + dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
 		if (upPressed) {
 			// Move the tank forward
-			//if (tankCenterX < wallRight - tankLength / 2 && tankCenterX > wallLeft + tankLength / 2 && tankCenterY > wallTop + tankLength / 2 && tankCenterY < wallBottom - tankLength / 2){
+			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY))){
 				tankX += Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY += Math.sin(tankAngle * Math.PI / 180) * dDist;
-			//}
+			}
+			else {
+				// right left collision
+				if (!(!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX) || !(!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX))))
+				{
+					// Angle in first or third quadrant
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle += 5;
+					// Angle in second or third quadrant
+					else tankAngle -= 5;
+				}
+				else{
+					// Angle in first or third quadrant
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle -= 5;
+					// Angle in second or third quadrant
+					else tankAngle += 5
+				}
+			}
 			/*else {
 				newTankX = tankX +  Math.cos(tankAngle * Math.PI / 180) * dDist;
 				newTankY = tankY + Math.sin(tankAngle * Math.PI / 180) * dDist;
@@ -661,16 +677,32 @@ maze.prototype.initialize = function() {
 				tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
 			}
-			/*else {
-				newTankX = tankX -  Math.cos(tankAngle * Math.PI / 180) * dDist;
+			else {
+				// right left collision
+				if (!(!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX) || !(!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX))))
+				{
+					// Angle in first or third quadrant
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle++;
+					// Angle in second or third quadrant
+					else tankAngle--;
+				}
+				else{
+					// Angle in first or third quadrant
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle--;
+					// Angle in second or third quadrant
+					else tankAngle++;
+				}
+				
+				
+				/*newTankX = tankX -  Math.cos(tankAngle * Math.PI / 180) * dDist;
 				newTankY = tankY - Math.sin(tankAngle * Math.PI / 180) * dDist;
 				newTankCenterX = newTankX + tankLength/2;
 				newTankCenterY = newTankY + tankWidth/2;
 				if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && newTankCenterX < wallRight - tankLength / 2)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && newTankCenterX > wallLeft + tankLength / 2)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && newTankCenterY > wallTop + tankLength / 2)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && newTankCenterY < wallBottom - tankLength / 2))){
 					tankX = newTankX;
 					tankY = newTankY;
-				}
-			}*/
+				}*/
+			}
 		}
 		//console.log(tankX);
 		//console.log(tankY);
