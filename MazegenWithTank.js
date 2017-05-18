@@ -425,6 +425,10 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var wallRight = 0;
 	var wallTop = 0;
 	var wallBottom = 0;
+
+	// collision parameters
+	var projectedX;
+	var projectedY;
 	
 	// tank  controls
 	var rightPressed = false;
@@ -630,6 +634,9 @@ maze.prototype.initialize = function() {
 		else if (leftPressed === true) {
 			tankAngle -= dAng;
 		}
+	 
+	 	projectedX = tankLength * Math.cos(tankAngle * Math.PI / 180) / 2 + tankWidth * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2 + dDist * Math.cos(tankAngle * Math.PI / 180);
+	 	projectedY = tankLength * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2 + tankWidth * Math.cos(tankAngle * Math.PI / 180) / 2 + dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
 		if (upPressed) {
 			// Move the tank forward
 			//if (tankCenterX < wallRight - tankLength / 2 && tankCenterX > wallLeft + tankLength / 2 && tankCenterY > wallTop + tankLength / 2 && tankCenterY < wallBottom - tankLength / 2){
@@ -650,11 +657,11 @@ maze.prototype.initialize = function() {
 		}
 		if (downPressed){
 			// Move the tank backward
-			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX < wallRight - tankLength / 2)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX > wallLeft + tankLength / 2)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY > wallTop + tankLength / 2)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY < wallBottom - tankLength / 2))){
+			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY))){
 				tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
 			}
-			else {
+			/*else {
 				newTankX = tankX -  Math.cos(tankAngle * Math.PI / 180) * dDist;
 				newTankY = tankY - Math.sin(tankAngle * Math.PI / 180) * dDist;
 				newTankCenterX = newTankX + tankLength/2;
@@ -663,7 +670,7 @@ maze.prototype.initialize = function() {
 					tankX = newTankX;
 					tankY = newTankY;
 				}
-			}
+			}*/
 		}
 		//console.log(tankX);
 		//console.log(tankY);
