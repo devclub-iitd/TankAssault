@@ -626,17 +626,23 @@ maze.prototype.initialize = function() {
 	 
 	 
 	 
+	 	
 	 
-	 
-		if (rightPressed === true) {
-			tankAngle += dAng;
-		}
-		else if (leftPressed === true) {
-			tankAngle -= dAng;
-		}
-	 
-	 	projectedX = tankLength * Math.cos(tankAngle * Math.PI / 180) / 2 + tankWidth * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2 + dDist * Math.cos(tankAngle * Math.PI / 180);
+		if (rightPressed === true) tankAngle += dAng;
+			
+		else if (leftPressed === true) tankAngle -= dAng;
+			
+	 	projectedX = tankLength * Math.cos(tankAngle * Math.PI / 180) / 2 + tankWidth * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2;
 	 	projectedY = tankLength * Math.abs(Math.sin(tankAngle * Math.PI / 180)) / 2 + tankWidth * Math.cos(tankAngle * Math.PI / 180) / 2 + dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
+	 
+	 	if (!((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY)))){
+				if (rightPressed === true) tankAngle -= dAng;
+				else if (leftPressed === true) tankAngle += dAng;
+			}
+		
+	 
+	 	projectedX += dDist * Math.cos(tankAngle * Math.PI / 180);
+	 	projectedY += dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
 		if (upPressed) {
 			// Move the tank forward
 			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY))){
