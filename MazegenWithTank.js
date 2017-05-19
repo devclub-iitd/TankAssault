@@ -400,9 +400,21 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var tankX = 10;
 	var tankY = 10
 	
-	// real tank determinants
+	// tank parameters
 	var tankCenterX = 0;
 	var tankCenterY = 0;
+	var rotorX = 15;
+	var rotorY = 15;
+	var rotorAngle = 270;
+	var dAng = 1;
+	var dDist = 2;
+	var tankRadius = 15;
+	var rotorLength = 20;
+	var rotorWidth = 7;
+
+	// real tank determinants
+//	var tankCenterX = 0;
+//	var tankCenterY = 0;
 
 	// collision detector parameters
 	var newTankX;
@@ -429,7 +441,16 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	// collision parameters
 	var projectedX;
 	var projectedY;
-	
+
+	var dProjectedX;
+	var dProjectedY;
+
+	// 0 or 1
+	var dProjectedXLeft = 0;
+	var dProjectedXRight = 0;
+	var dProjectedYTop = 0;
+	var dProjectedYBottom = 0;
+
 	// tank  controls
 	var rightPressed = false;
 	var leftPressed = false;
@@ -450,7 +471,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
-	
+	document.addEventListener("mousemove", mouseMoveHandler, false);
+
 	
 	function keyDownHandler(e) {
 		switch (e.keyCode) {
@@ -491,33 +513,48 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				break;
 		}
 	}
-	
-	function drawTank(x, y, length, width,degrees){
-		
-		// first save the untranslated/unrotated context
-		ctx.save();
-		
-		ctx.beginPath();
-		// move the rotation point to the center of the rect
-		tankCenterX = x + length/2;
-		tankCenterY = y + width/2;
-		
-		ctx.translate( tankCenterX, tankCenterY );
-		// rotate the rect
-		ctx.rotate(degrees * Math.PI / 180);
-		
-		// draw the rect on the transformed context
-		// Note: after transforming [0,0] is visually [x,y]
-		//       so the rect needs to be offset accordingly when drawn
-		ctx.rect( -length / 2, -width / 2, length, width);
-		
-		ctx.fillStyle = "gold";
-		ctx.fill();
-		
-		// restore the context to its untranslated/unrotated state
-		ctx.restore();
-		
+	function mouseMoveHandler(e) {
+    var relativeX = e.clientX - canvas.offsetLeft;
+	rotorAngle = relativeX/2;
 	}
+
+	function drawTank(x, y, radius, length, width,degrees){
+		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
+		grd.addColorStop(0,"blue");
+		grd.addColorStop(.4,"green");
+		grd.addColorStop(1, "yellow");
+
+		ctx.beginPath();
+		ctx.fillStyle = grd;
+		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+        // first save the untranslated/unrotated context
+        ctx.save();
+
+        ctx.beginPath();
+        // move the rotation point to the center of the rect
+        ctx.translate( x, y );
+        // rotate the rect
+        ctx.rotate(degrees * Math.PI / 180);
+
+        // draw the rect on the transformed context
+        // Note: after transforming [0,0] is visually [x,y]
+        //       so the rect needs to be offset accordingly when drawn
+        
+
+		/*var grdRect = ctx.createLinearGradient(0, 0, 30, 0);
+		grd.addColorStop(0,"white");
+		grd.addColorStop(1,"gold");*/
+	    ctx.fillStyle = "yellow";
+
+		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+        
+
+        // restore the context to its untranslated/unrotated state
+        ctx.restore();
+
+    }
 	/*function earseTank(x, y, length, width,degrees){
 
         // first save the untranslated/unrotated context
@@ -584,50 +621,73 @@ maze.prototype.initialize = function() {
 	 	var i = Math.floor(tankCenterX / theMaze.gridsize)
 		var j = Math.floor(tankCenterY / theMaze.gridsize)
 		var currentPlayerGrid = theMaze.grid[i][j];
+	 	//if (i == 0) currentPlayerGrid.leftWall = true;
+	 	//if (i == theMaze.)
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
 	 	wallTop = j*theMaze.gridsize;
 	 	wallBottom = (j+1)*theMaze.gridsize;
 		//console.log(i);
 		//console.log(currentPlayerGrid.rightWall);
-		//if((upPressed == true) && (currentPlayerGrid.leftWall == true) && (wallLeft < tankLength/2)){
-		//	upPressed = false;
-		//	downPressed = true;
-		//	}
-		//else if((upPressed == true) && (currentPlayerGrid.rightWall == true) && (-wallRight < tankLength/2)){
-		//	upPressed = false;
-		//	downPressed = true;
-		//	}
-		//else if((downPressed == true) && (currentPlayerGrid.leftWall == true) && (wallLeft < tankLength/2)){
-		//	downPressed = false;
-		//	upPressed = true;
-		//	}
-		//else if((downPressed == true) && (currentPlayerGrid.rightWall == true) && (-wallRight < tankLength/2)){
-		//	downPressed = false;
-		//	upPressed = true;
-		//	}
-		//else if((upPressed == true) && (currentPlayerGrid.topWall == true) && (wallTop < tankLength/2)){
-		//	upPressed = false;
-		//	downPressed = true;
-		//	}
-		//else if((downPressed == true) && (currentPlayerGrid.topWall == true) && (wallTop < tankLength/2)){
-		//	downPressed = false;
-		//	upPressed = true;
-		//	}
-		//else if((currentPlayerGrid.bottomWall == true) && (-wallBottom < tankLength/2) && (downPressed == true)){
-		//	downPressed = false;
-		//	upPressed = true;
-		//	}
-		//else if((upPressed == true) && (currentPlayerGrid.bottomWall == true) && (-wallBottom < tankLength/2)){
-		//	downPressed = false;
-			//upPressed = true;
-			//}
-		
 	 
+	 	if (rightPressed === true){
+			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX  + tankRadius < wallRight - dDist)) {
+				// Move the tank left
+				rotorX += dDist;
+			}
+			else if (tankCenterX + tankRadius < wallRight) {
+				rotorX += (wallRight - (tankCenterX + tankRadius))
+			}
+			else {
+				// tank boundary on wall or beyond it
+				// do nothing
+			}
+			
+		}
 	 
+ 		else if (leftPressed === true) {
+		 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX  - tankRadius > wallLeft + dDist)) {
+				// Move the tank left
+				rotorX -= dDist;
+			}
+			else if (tankCenterX - tankRadius > wallLeft) {
+				rotorX -= ((tankCenterX - tankRadius) - wallLeft )
+			}
+			else {
+				// tank boundary on wall
+				// do nothing
+			}
+	 	}
+	 	if (upPressed) {
+		 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY  - tankRadius > wallTop + dDist)) {
+				// Move the tank left
+				rotorY -= dDist;
+			}
+			else if (tankCenterY - tankRadius > wallTop) {
+				rotorY -= ((tankCenterY - tankRadius) - wallTop )
+			}
+			else {
+				// tank boundary on wall
+				// do nothing
+			}
+	 	}
+	 	else if (downPressed) {
+		 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY  + tankRadius < wallBottom - dDist)) {
+				// Move the tank left
+				rotorY += dDist;
+			}
+			else if (tankCenterY + tankRadius < wallBottom) {
+				rotorY += (wallBottom - (tankCenterY + tankRadius))
+			}
+			else {
+				// tank boundary on wall
+				// do nothing
+			}
+	 	}
+	 	tankCenterX = rotorX + rotorLength / 2;
+		tankCenterY = rotorY + rotorWidth / 2;
 	 
-	 	
-	 
+	 	/*
 		if (rightPressed === true) tankAngle += dAng;
 			
 		else if (leftPressed === true) tankAngle -= dAng;
@@ -641,11 +701,37 @@ maze.prototype.initialize = function() {
 			}
 		
 	 
-	 	projectedX += dDist * Math.cos(tankAngle * Math.PI / 180);
-	 	projectedY += dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
+	 	dProjectedX = dDist * Math.cos(tankAngle * Math.PI / 180);
+	 	dProjectedY = dDist * Math.abs(Math.sin(tankAngle * Math.PI / 180));
 		if (upPressed) {
+			// determine the angle
+			switch ((tankAngle % 360) / 90)
+			{
+				case 0:
+					dProjectedXRight = dProjectedYTop = 1;
+					dProjectedXLeft = dProjectedYBottom = 0;
+					break;
+				case 1:
+					dProjectedXLeft = dProjectedYTop = 1;
+					dProjectedXRight = dProjectedYBottom = 0;
+					break;
+				case 2:
+					dProjectedXLeft = dProjectedYBottom = 1;
+					dProjectedXRight = dProjectedYTop = 0;
+					break;
+				case 3:
+					dProjectedXRight = dProjectedYBottom = 1;
+					dProjectedXLeft = dProjectedYTop = 0
+					break;
+			}
+			
+			
 			// Move the tank forward
-			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY))){
+			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX < wallRight - (projectedX * 		dProjectedX * dProjectedXRight))) && 
+				(!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX > wallLeft + (projectedX * dProjectedX * dProjectedXLeft))) && 
+				(!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY > wallTop + (projectedY * dProjectedY * dProjectedYTop))) && 
+				(!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY < wallBottom - (projectedY * dProjectedY * dProjectedYBottom))))
+			{
 				tankX += Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY += Math.sin(tankAngle * Math.PI / 180) * dDist;
 			}
@@ -654,17 +740,17 @@ maze.prototype.initialize = function() {
 				if (!(!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX) || !(!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX))))
 				{
 					// Angle in first or third quadrant
-					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle += 5;
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle += 1;
 					// Angle in second or third quadrant
-					else tankAngle -= 5;
+					else tankAngle -= 1;
 				}
 				else{
 					// Angle in first or third quadrant
-					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle -= 5;
+					if ((tankAngle >= 0 && tankAngle < 90) || (tankAngle >=180 && tankAngle < 270)) tankAngle -= 1;
 					// Angle in second or third quadrant
-					else tankAngle += 5
+					else tankAngle += 1
 				}
-			}
+			}*/
 			/*else {
 				newTankX = tankX +  Math.cos(tankAngle * Math.PI / 180) * dDist;
 				newTankY = tankY + Math.sin(tankAngle * Math.PI / 180) * dDist;
@@ -676,10 +762,33 @@ maze.prototype.initialize = function() {
 				}
 			}*/
 			
-		}
+	/*	}
 		if (downPressed){
+			switch ((-tankAngle % 360) / 90)
+			{
+				case 0:
+					dProjectedXRight = dProjectedYTop = 1;
+					dProjectedXLeft = dProjectedYBottom = 0;
+					break;
+				case 1:
+					dProjectedXLeft = dProjectedYTop = 1;
+					dProjectedXRight = dProjectedYBottom = 0;
+					break;
+				case 2:
+					dProjectedXLeft = dProjectedYBottom = 1;
+					dProjectedXRight = dProjectedYTop = 0;
+					break;
+				case 3:
+					dProjectedXRight = dProjectedYBottom = 1;
+					dProjectedXLeft = dProjectedYTop = 0
+					break;
+			}
+			
 			// Move the tank backward
-			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX <= wallRight - projectedX)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX >= wallLeft + projectedX)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY >= wallTop + projectedY)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY <= wallBottom - projectedY))){
+			if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX < wallRight - (projectedX * 		dProjectedX * dProjectedXRight))) && 
+				(!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX > wallLeft + (projectedX * dProjectedX * dProjectedXLeft))) && 
+				(!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY > wallTop + (projectedY * dProjectedY * dProjectedYTop))) && 
+				(!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY < wallBottom - (projectedY * dProjectedY * dProjectedYBottom)))){
 				tankX -= Math.cos(tankAngle * Math.PI / 180) * dDist;
 				tankY -= Math.sin(tankAngle * Math.PI / 180) * dDist;
 			}
@@ -707,17 +816,16 @@ maze.prototype.initialize = function() {
 				if ((!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && newTankCenterX < wallRight - tankLength / 2)) && (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && newTankCenterX > wallLeft + tankLength / 2)) && (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && newTankCenterY > wallTop + tankLength / 2)) && (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && newTankCenterY < wallBottom - tankLength / 2))){
 					tankX = newTankX;
 					tankY = newTankY;
-				}*/
+				}
 			}
-		}
+		}*/
 		//console.log(tankX);
 		//console.log(tankY);
 		
 		theMaze.draw();
-		drawTank(tankX, tankY, tankLength, tankWidth, tankAngle);
-		//theMaze.draw();
+	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
 		// for debugging
-		document.getElementById("demo").innerHTML = " "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " " + wallLeft + " " + wallTop;
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY +*/ " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall;
 	}
 	
 	
