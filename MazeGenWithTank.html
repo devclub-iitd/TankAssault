@@ -60,13 +60,19 @@ body{
 	background-color: black;
 	color: white;
 }
+	
+#demo {
+	color: wheat;
+	margin-top: 600px;
+	position: relative;
+}
 </style>
 <table class='mazeParameters'>
 <tr>
 	<!--<td><input type='button' value='Start Game' id='generate'/></td>
 	<td><input type='button' value='Load Tank' id='tank'/></td>-->
 	<td> <button onclick="generate()">Start Game</button></td>
-	<td> <button onClick="loadTank()">Load Tank</button></td>
+	<td> <button onClick="reSetTank()">Re Set Tank</button></td>
 </tr>
 </table>
 <div id = 'left'></div>
@@ -74,7 +80,7 @@ body{
 </div>
 </div>
 </div>
-<p id="demo" style="color: wheat"> Controls:<br>up, down, left, right, Mouse: rotate &amp; fire<br> First load maze then tank</p>
+<p id="demo" > Controls:<br>up, down, left, right, Mouse: rotate &amp; fire<br> First load maze then tank</p>
 </body>
 </html>
 
