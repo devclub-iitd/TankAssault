@@ -425,8 +425,6 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var tankAngle = 0;
 	var dAng = 1;
 	var dDist = 2;
-	var tankLength;
-	var tankWidth;
 
 	// maze parameters
 	// border parameters
@@ -582,20 +580,17 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
     }*/
 
 maze.prototype.initialize = function() {
-	// Borders
-	borX = theMaze.columns * theMaze.gridsize;
-	borY = theMaze.rows * theMaze.gridsize;
-		
-	// set tank parameters
-	tankLength = theMaze.gridsize * 2 / 3.5;
-	tankWidth = theMaze.gridsize / 2.5;
+	// initial positions
+	rotorX = 15;
+	rotorY = 15;
 	
-	// tank position
-	tankCenterX = tankX + tankLength/2;
-	tankCenterY = tankY + tankWidth/2;
+	// set tank parameters
+	tankRadius = theMaze.gridsize / 4;
+	rotorLength = tankRadius * 20 / 15;
+	rotorWidth = tankRadius * 7 / 15;
 	
 	// movement parameters
-	dDist = tankLength / 30;
+	dDist = tankRadius / 15;
 	dAng = 1;
 }
 
@@ -630,13 +625,33 @@ maze.prototype.initialize = function() {
 		//console.log(i);
 		//console.log(currentPlayerGrid.rightWall);
 	 
+	 	// fine adjustments
+	 	if (currentPlayerGrid.rightWall && (tankCenterX + tankRadius > wallRight)) {
+			// do something
+			rotorX -= ((tankCenterX + tankRadius) - wallRight);
+		}
+	 	else if (currentPlayerGrid.leftWall && (tankCenterX - tankRadius < wallLeft)) {
+			// do something
+			rotorX += (wallLeft - (tankCenterX - tankRadius));
+		}
+	 
+	 	if (currentPlayerGrid.bottomWall && (tankCenterY + tankRadius > wallBottom)) {
+			// do something
+			rotorY -= ((tankCenterY + tankRadius) - wallBottom);
+		}
+	 	else if (currentPlayerGrid.topWall && (tankCenterY - tankRadius < wallTop)) {
+			// do something
+			rotorY += (wallTop - (tankCenterY - tankRadius));
+		}
+	 
+	 
 	 	if (rightPressed === true){
 			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX  + tankRadius < wallRight - dDist)) {
 				// Move the tank left
 				rotorX += dDist;
 			}
 			else if (tankCenterX + tankRadius < wallRight) {
-				rotorX += (wallRight - (tankCenterX + tankRadius))
+				rotorX += (wallRight - (tankCenterX + tankRadius));
 			}
 			else {
 				// tank boundary on wall or beyond it
@@ -651,7 +666,7 @@ maze.prototype.initialize = function() {
 				rotorX -= dDist;
 			}
 			else if (tankCenterX - tankRadius > wallLeft) {
-				rotorX -= ((tankCenterX - tankRadius) - wallLeft )
+				rotorX -= ((tankCenterX - tankRadius) - wallLeft );
 			}
 			else {
 				// tank boundary on wall
@@ -664,7 +679,7 @@ maze.prototype.initialize = function() {
 				rotorY -= dDist;
 			}
 			else if (tankCenterY - tankRadius > wallTop) {
-				rotorY -= ((tankCenterY - tankRadius) - wallTop )
+				rotorY -= ((tankCenterY - tankRadius) - wallTop );
 			}
 			else {
 				// tank boundary on wall
@@ -677,7 +692,7 @@ maze.prototype.initialize = function() {
 				rotorY += dDist;
 			}
 			else if (tankCenterY + tankRadius < wallBottom) {
-				rotorY += (wallBottom - (tankCenterY + tankRadius))
+				rotorY += (wallBottom - (tankCenterY + tankRadius));
 			}
 			else {
 				// tank boundary on wall
