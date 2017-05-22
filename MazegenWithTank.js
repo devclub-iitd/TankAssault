@@ -489,7 +489,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("mousemove", mouseMoveHandler, false);
-	document.addEventListener("click", mouseClick);
+	//document.addEventListener("click", mouseClick);
 	/*document.addEventListener('keypressed', pressed,false);
 	function pressed(e){
 		Mpressed = true;
@@ -513,9 +513,9 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				// none of these keys
 				break;
 		}
-		if(e.keyCode == 77){
+		/*if(e.keyCode == 77){
 			bulletReload = true;
-			}
+			}*/
 		//theMaze.drawing();
 	}
 	function keyUpHandler(e) {
@@ -547,15 +547,22 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	if(rotorAngle < 0){rotorAngle += 360;}
 	rotorAngle = rotorAngle % 360;
 	}
+	function rightclick(event){
+		if(event.button == 2){
+			bulletReload = true;
+			}else if(event.button == 0){
+				leftClick = true;
+				}
+		}
 
 /*	function WhichButton(event) {
    // alert("You pressed button: " + event.button)
 		//if (event.button == 0) 
 		else if (event.button == 2) rightClick = true;
 }*/
-function mouseClick() {
+/*function mouseClick() {
     leftClick = true;
-}
+}*/
 
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
