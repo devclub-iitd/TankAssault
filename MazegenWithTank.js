@@ -467,8 +467,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	M: 77
 	*/
 	//Bullet controls
-	var bulletReload = false;
-	var leftClick = false;
+	var Mpressed = false;
 	var shoot = false; 
 	var bulletX = tankCenterX;
 	var bulletY = tankCenterY;
@@ -477,8 +476,6 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var dbulletY = 2;
 	var bulletAngle;
 	var t = 0;
-	var collisions = 0;
-
 	//var i = Math.floor(tankCenterX / theMaze.gridsize)
 	//var j = Math.floor(tankCenterY / theMaze.gridsize)
 	//var currentPlayerGrid = theMaze.grid[i][j];
@@ -489,12 +486,11 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("mousemove", mouseMoveHandler, false);
-	document.addEventListener("click", mouseClick);
-	/*document.addEventListener('keypressed', pressed,false);
-	function pressed(e){
+	document.addEventListener("click", click, false);
+	function click(e){
 		Mpressed = true;
 		bullet();
-		}*/
+		}
 	function keyDownHandler(e) {
 		switch (e.keyCode) {
 			case 38:
@@ -513,9 +509,9 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				// none of these keys
 				break;
 		}
-		if(e.keyCode == 77){
-			bulletReload = true;
-			}
+		/*if(e.keyCode == 77){
+			Mpressed = true;
+			}*/
 		//theMaze.drawing();
 	}
 	function keyUpHandler(e) {
@@ -537,7 +533,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				break;
 		}
 		/*if (e.keyCode == 77) {
-			bulletReload = false;
+			Mpressed = false;
 		}*/
 	}
 
@@ -547,15 +543,6 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	if(rotorAngle < 0){rotorAngle += 360;}
 	rotorAngle = rotorAngle % 360;
 	}
-
-/*	function WhichButton(event) {
-   // alert("You pressed button: " + event.button)
-		//if (event.button == 0) 
-		else if (event.button == 2) rightClick = true;
-}*/
-function mouseClick() {
-    leftClick = true;
-}
 
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
@@ -604,11 +591,6 @@ maze.prototype.initialize = function() {
 	tankRadius = theMaze.gridsize / 4;
 	rotorLength = tankRadius * 20 / 15;
 	rotorWidth = tankRadius * 7 / 15;
-	
-	// bullet parameters
-	bulletRadius = rotorWidth * 3 / 7;
-	dbulletX = -2 * bulletRadius / 3;
-	dbulletY = 2 * bulletRadius / 3;
 	
 	// movement parameters
 	dDist = tankRadius / 15;
@@ -728,28 +710,21 @@ maze.prototype.initialize = function() {
 	 	
 		theMaze.draw();
 	 	if (shoot) {
-			if (bulletReload){
-				collisions = 0;
-				shoot = false;
-				bulletReload = false;
-			}
-			else Shoot();
+			Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
-	 	else if (leftClick){
+	 	else if (Mpressed){
 			Bullet();
-			leftClick = false;
+			Mpressed = false;
 		}
-	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);
-	 	//theMaze.draw();
-	 	bulletReload = false;
+	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + collisions + " collisoins or reload to fire next bullet";
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + t + " " /*+ rotorAngle*/ + "<br>Wait till 3 seconds before you can fire next bullet";
 	}
 
 function Bullet() {
-	bulletX = tankCenterX - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
-	bulletY = tankCenterY - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));;
+	bulletX = tankCenterX;
+	bulletY = tankCenterY;
 	bulletAngle = rotorAngle;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
@@ -776,7 +751,6 @@ function drawbullet(bulletX,bulletY){
 	context.arc(bulletX, bulletY, bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
-	leftClick = false;
 	}
 function Shoot(){
 //		if(shoot){
@@ -784,6 +758,7 @@ function Shoot(){
 			 var i = Math.floor(bulletX / theMaze.gridsize)
 		var j = Math.floor(bulletY / theMaze.gridsize)
 		var currentBulletGrid = theMaze.grid[i][j];
+		
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
 	 	wallTop = j*theMaze.gridsize;
@@ -798,7 +773,6 @@ function Shoot(){
 			bulletAngle += (540 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
-			collisions++;
 		}
 	 	else if (currentBulletGrid.leftWall && (bulletX - bulletRadius < wallLeft)) {
 			
@@ -808,7 +782,6 @@ function Shoot(){
 			bulletAngle += (540 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
-			collisions++;
 		}
 		else if (currentBulletGrid.bottomWall && (bulletY + bulletRadius > wallBottom)) {
 			// do something
@@ -818,7 +791,6 @@ function Shoot(){
 			bulletAngle += (720 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
-			collisions++;
 		}
 	 	else if (currentBulletGrid.topWall && (bulletY - bulletRadius < wallTop)) {
 			// do something
@@ -829,7 +801,6 @@ function Shoot(){
 			bulletAngle += (360 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
-			collisions++;
 		}
 			
 			
@@ -837,9 +808,10 @@ function Shoot(){
 			bulletY -=  dbulletY * (Math.sin((180 - bulletAngle) * Math.PI / 180));
 			//console.log(bulletAngle);
 			drawbullet(bulletX,bulletY);
-			if(collisions > 6){
+			t++;
+			if(t>300){
 				shoot = false;
-				collisions = 0;
+				t = 0;
 				//setinterval(10);
 				}
 //			}		
