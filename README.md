@@ -8,9 +8,9 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 <br>
 (Just download and run mazeGenWithTank.html in the browser)<br>
 Controls:<br>
-Move: Up, Down, Right, Left<br>
-Fire: Mouse -> rotate and fire<br>
-Reload: M<br>
+Move: Up, Down, Right, Left, rotate by mouse<br>
+Fire: Mouse left click<br>
+Reload: Mouse right click<br>
 <br>
 
 Have Fun -:)
