@@ -713,10 +713,9 @@ maze.prototype.initialize = function() {
 			Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
-	 	else if (Mpressed) {
+	 	else if (Mpressed){
 			Bullet();
 			Mpressed = false;
-	
 		}
 	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
 		// for debugging
@@ -731,6 +730,9 @@ function Bullet() {
 //	drawbullet(bulletX,bulletY);
 	shoot = true;
 	Shoot();
+	
+	
+	
 	/*t++;
 	if(t<30000){
 	Bullet();
@@ -752,8 +754,59 @@ function drawbullet(bulletX,bulletY){
 	}
 function Shoot(){
 //		if(shoot){
+			
+			 var i = Math.floor(bulletX / theMaze.gridsize)
+		var j = Math.floor(bulletY / theMaze.gridsize)
+		var currentBulletGrid = theMaze.grid[i][j];
+		
+	 	wallLeft = i*theMaze.gridsize;
+	 	wallRight = (i+1)*theMaze.gridsize;
+	 	wallTop = j*theMaze.gridsize;
+	 	wallBottom = (j+1)*theMaze.gridsize;
+		
+	 	// fine adjustments for bullet
+	 	if (currentBulletGrid.rightWall && (bulletX + bulletRadius > wallRight)) {
+			// do something
+			if(bulletAngle <= 180){
+			bulletAngle -= (2*bulletAngle - 180);
+			}else{
+			bulletAngle += (540 - 2*bulletAngle);
+			}
+			bulletAngle = bulletAngle % 360;
+		}
+	 	else if (currentBulletGrid.leftWall && (bulletX - bulletRadius < wallLeft)) {
+			
+			if(bulletAngle <= 180){
+			bulletAngle += (180 - 2*bulletAngle);
+			}else{
+			bulletAngle += (540 - 2*bulletAngle);
+			}
+			bulletAngle = bulletAngle % 360;
+		}
+		else if (currentBulletGrid.bottomWall && (bulletY + bulletRadius > wallBottom)) {
+			// do something
+			if(bulletAngle <= 270){
+			bulletAngle -= (2*bulletAngle - 360);
+			}else{
+			bulletAngle += (720 - 2*bulletAngle);
+			}
+			bulletAngle = bulletAngle % 360;
+		}
+	 	else if (currentBulletGrid.topWall && (bulletY - bulletRadius < wallTop)) {
+			// do something
+			if(bulletAngle <= 90){
+			bulletAngle -= (2*bulletAngle);
+			bulletAngle += 360;
+			}else{
+			bulletAngle += (360 - 2*bulletAngle);
+			}
+			bulletAngle = bulletAngle % 360;
+		}
+			
+			
 			bulletX -=  dbulletX * (Math.cos((180 - bulletAngle) * Math.PI / 180)); 
 			bulletY -=  dbulletY * (Math.sin((180 - bulletAngle) * Math.PI / 180));
+			//console.log(bulletAngle);
 			drawbullet(bulletX,bulletY);
 			t++;
 			if(t>300){
