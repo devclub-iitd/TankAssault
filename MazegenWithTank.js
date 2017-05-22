@@ -468,6 +468,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	*/
 	//Bullet controls
 	var Mpressed = false;
+	var leftClick = false;
+	var rightClick = false;
 	var shoot = false; 
 	var bulletX = tankCenterX;
 	var bulletY = tankCenterY;
@@ -488,6 +490,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("mousemove", mouseMoveHandler, false);
+	document.addEventListener("click", mouseClick);
 	/*document.addEventListener('keypressed', pressed,false);
 	function pressed(e){
 		Mpressed = true;
@@ -546,6 +549,14 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	rotorAngle = rotorAngle % 360;
 	}
 
+/*	function WhichButton(event) {
+   // alert("You pressed button: " + event.button)
+		//if (event.button == 0) 
+		else if (event.button == 2) rightClick = true;
+}*/
+function mouseClick() {
+    leftClick = true;
+}
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
@@ -715,18 +726,19 @@ maze.prototype.initialize = function() {
 			Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
-	 	else if (Mpressed){
+	 	else if (Mpressed || leftClick){
 			Bullet();
 			Mpressed = false;
+			leftClick = false;
 		}
 	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + collisions + " " /*+ rotorAngle*/ + "<br>Wait till 6 collisoins before you can fire next bullet";
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + collisions + " " + leftClick + " " + rightClick + " " /*+ rotorAngle*/ + "<br>Wait till 6 collisoins before you can fire next bullet";
 	}
 
 function Bullet() {
-	bulletX = tankCenterX;
-	bulletY = tankCenterY;
+	bulletX = tankCenterX - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
+	bulletY = tankCenterY - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));;
 	bulletAngle = rotorAngle;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
@@ -753,6 +765,7 @@ function drawbullet(bulletX,bulletY){
 	context.arc(bulletX, bulletY, bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
+	leftClick = false;
 	}
 function Shoot(){
 //		if(shoot){
