@@ -1,4 +1,3 @@
-
 var	canvas = document.getElementById('maze');
 var context = canvas.getContext('2d');	
 	context.font = "bold 20px sans-serif";
@@ -608,14 +607,14 @@ maze.prototype.initialize = function() {
 	rotorY = 15;
 	
 	// set tank parameters
-	tankRadius = theMaze.gridsize / 4;
+	tankRadius = theMaze.gridsize/ 4;
 	rotorLength = tankRadius * 20 / 15;
 	rotorWidth = tankRadius * 7 / 15;
 	
 	// bullet parameters
 	bulletRadius = rotorWidth * 3 / 7;
-	dbulletX = -2 * bulletRadius / 3;
-	dbulletY = 2 * bulletRadius / 3;
+	dbulletX = -1 * bulletRadius / 3;
+	dbulletY = 1 * bulletRadius / 3;
 	
 	// movement parameters
 	dDist = tankRadius / 15;
@@ -755,8 +754,8 @@ maze.prototype.initialize = function() {
 	}
 
 function Bullet() {
-	bulletX = tankCenterX - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
-	bulletY = tankCenterY - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));;
+	bulletX = tankCenterX;// - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
+	bulletY = tankCenterY;// - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));
 	bulletAngle = rotorAngle;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
