@@ -467,9 +467,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	M: 77
 	*/
 	//Bullet controls
-	var Mpressed = false;
+	var bulletReload = false;
 	var leftClick = false;
-	var rightClick = false;
 	var shoot = false; 
 	var bulletX = tankCenterX;
 	var bulletY = tankCenterY;
@@ -515,7 +514,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				break;
 		}
 		if(e.keyCode == 77){
-			Mpressed = true;
+			bulletReload = true;
 			}
 		//theMaze.drawing();
 	}
@@ -537,9 +536,9 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 				// none of these keys
 				break;
 		}
-		if (e.keyCode == 77) {
-			Mpressed = false;
-		}
+		/*if (e.keyCode == 77) {
+			bulletReload = false;
+		}*/
 	}
 
 	function mouseMoveHandler(e) {
@@ -557,6 +556,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 function mouseClick() {
     leftClick = true;
 }
+
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
@@ -604,6 +604,11 @@ maze.prototype.initialize = function() {
 	tankRadius = theMaze.gridsize / 4;
 	rotorLength = tankRadius * 20 / 15;
 	rotorWidth = tankRadius * 7 / 15;
+	
+	// bullet parameters
+	bulletRadius = rotorWidth * 3 / 7;
+	dbulletX = -2 * bulletRadius / 3;
+	dbulletY = 2 * bulletRadius / 3;
 	
 	// movement parameters
 	dDist = tankRadius / 15;
@@ -723,17 +728,23 @@ maze.prototype.initialize = function() {
 	 	
 		theMaze.draw();
 	 	if (shoot) {
-			Shoot();
+			if (bulletReload){
+				collisions = 0;
+				shoot = false;
+				bulletReload = false;
+			}
+			else Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
-	 	else if (Mpressed || leftClick){
+	 	else if (leftClick){
 			Bullet();
-			Mpressed = false;
 			leftClick = false;
 		}
-	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
+	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);
+	 	//theMaze.draw();
+	 	bulletReload = false;
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + collisions + " " + leftClick + " " + rightClick + " " /*+ rotorAngle*/ + "<br>Wait till 6 collisoins before you can fire next bullet";
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + collisions + " collisoins or reload to fire next bullet";
 	}
 
 function Bullet() {
