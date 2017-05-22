@@ -476,6 +476,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var dbulletY = 2;
 	var bulletAngle;
 	var t = 0;
+	var collisions = 0;
+
 	//var i = Math.floor(tankCenterX / theMaze.gridsize)
 	//var j = Math.floor(tankCenterY / theMaze.gridsize)
 	//var currentPlayerGrid = theMaze.grid[i][j];
@@ -719,7 +721,7 @@ maze.prototype.initialize = function() {
 		}
 	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);		//theMaze.draw();
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + t + " " /*+ rotorAngle*/ + "<br>Wait till 3 seconds before you can fire next bullet";
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " + collisions + " " /*+ rotorAngle*/ + "<br>Wait till 6 collisoins before you can fire next bullet";
 	}
 
 function Bullet() {
@@ -758,7 +760,6 @@ function Shoot(){
 			 var i = Math.floor(bulletX / theMaze.gridsize)
 		var j = Math.floor(bulletY / theMaze.gridsize)
 		var currentBulletGrid = theMaze.grid[i][j];
-		
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
 	 	wallTop = j*theMaze.gridsize;
@@ -773,6 +774,7 @@ function Shoot(){
 			bulletAngle += (540 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
+			collisions++;
 		}
 	 	else if (currentBulletGrid.leftWall && (bulletX - bulletRadius < wallLeft)) {
 			
@@ -782,6 +784,7 @@ function Shoot(){
 			bulletAngle += (540 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
+			collisions++;
 		}
 		else if (currentBulletGrid.bottomWall && (bulletY + bulletRadius > wallBottom)) {
 			// do something
@@ -791,6 +794,7 @@ function Shoot(){
 			bulletAngle += (720 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
+			collisions++;
 		}
 	 	else if (currentBulletGrid.topWall && (bulletY - bulletRadius < wallTop)) {
 			// do something
@@ -801,6 +805,7 @@ function Shoot(){
 			bulletAngle += (360 - 2*bulletAngle);
 			}
 			bulletAngle = bulletAngle % 360;
+			collisions++;
 		}
 			
 			
@@ -808,10 +813,9 @@ function Shoot(){
 			bulletY -=  dbulletY * (Math.sin((180 - bulletAngle) * Math.PI / 180));
 			//console.log(bulletAngle);
 			drawbullet(bulletX,bulletY);
-			t++;
-			if(t>300){
+			if(collisions > 6){
 				shoot = false;
-				t = 0;
+				collisions = 0;
 				//setinterval(10);
 				}
 //			}		
