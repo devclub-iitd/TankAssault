@@ -401,42 +401,28 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var canvas = document.getElementById("maze");
 	var ctx = canvas.getContext("2d");
 	
-function tank(){	
+function Tank(){	
 	// tank parameters
-	var tankX = 10;
-	var tankY = 10
+	this.tankX = 10;
+	this.tankY = 10
 	// tank parameters
-	var tankCenterX = 0;
-	var tankCenterY = 0;
-	var rotorX = 15;
-	var rotorY = 15;
-	var rotorAngle;
-	var dAng = 1;
-	var dDist = 2;
-	var tankRadius = 15;
-	var rotorLength = 20;
-	var rotorWidth = 7;
+	this.tankCenterX = 0;
+	this.tankCenterY = 0;
+	this.rotorX = 15;
+	this.rotorY = 15;
+	this.rotorAngle;
+	this.tankRadius = theMaze.gridsize/ 4;
+	this.rotorLength = this.tankRadius * 20 / 15;
+	this.rotorWidth = this.tankRadius * 7 / 15;
+	this.dDist = this.tankRadius / 15;
+	this.dAng = 1;
 	// tank  controls
-	var rightPressed = false;
-	var leftPressed = false;
-	var upPressed = false;
-	var downPressed = false;
+	this.rightPressed = false;
+	this.leftPressed = false;
+	this.upPressed = false;
+	this.downPressed = false;
 
 }
-	
-	// real tank determinants
-//	var tankCenterX = 0;
-//	var tankCenterY = 0;
-
-	// collision detector parameters
-//	var newTankX;
-//	var newTankY;
-//	var newTankCenterX;
-//	var newTankCenterY;
-
-//	var tankAngle = 0;
-//	var dAng = 1;
-//	var dDist = 2;
 
 	// maze parameters
 	// border parameters
@@ -448,54 +434,10 @@ function tank(){
 	var wallTop = 0;
 	var wallBottom = 0;
 
-	// collision parameters
-//	var projectedX;
-//	var projectedY;
-
-//	var dProjectedX;
-//	var dProjectedY;
-
-	// 0 or 1
-//	var dProjectedXLeft = 0;
-//	var dProjectedXRight = 0;
-//	var dProjectedYTop = 0;
-//	var dProjectedYBottom = 0;
-
-	/* Left: 37
-	Up: 38
-	Right: 39
-	Down: 40
-	M: 77
-	*/
-	//Bullet controls
-	var bulletReload = false;
-	var leftClick = false;
-	var shoot = false; 
-	var bulletX = tank.tankCenterX;
-	var bulletY = tank.tankCenterY;
-	var bulletRadius = 3;
-	var dbulletX = -2;
-	var dbulletY = 2;
-	var bulletAngle;
-	var t = 0;
-	var collisions = 0;
-
-	//var i = Math.floor(tankCenterX / theMaze.gridsize)
-	//var j = Math.floor(tankCenterY / theMaze.gridsize)
-	//var currentPlayerGrid = theMaze.grid[i][j];
-	//console.log(currentPlayerGrid.leftWall);
-	//console.log(currentPlayerGrid.rightWall);
-		
 	
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("mousemove", mouseMoveHandler, false);
-	//document.addEventListener("click", mouseClick);
-	/*document.addEventListener('keypressed', pressed,false);
-	function pressed(e){
-		Mpressed = true;
-		bullet();
-		}*/
 	function keyDownHandler(e) {
 		switch (e.keyCode) {
 			case 38:
@@ -514,10 +456,6 @@ function tank(){
 				// none of these keys
 				break;
 		}
-		/*if(e.keyCode == 77){
-			bulletReload = true;
-			}*/
-		//theMaze.drawing();
 	}
 	function keyUpHandler(e) {
 		switch (e.keyCode) {
@@ -537,9 +475,6 @@ function tank(){
 				// none of these keys
 				break;
 		}
-		/*if (e.keyCode == 77) {
-			bulletReload = false;
-		}*/
 	}
 
 	function mouseMoveHandler(e) {
@@ -556,15 +491,6 @@ function tank(){
 				}
 		}
 
-/*	function WhichButton(event) {
-   // alert("You pressed button: " + event.button)
-		//if (event.button == 0) 
-		else if (event.button == 2) rightClick = true;
-}*/
-/*function mouseClick() {
-    leftClick = true;
-}*/
-
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
@@ -578,70 +504,31 @@ function tank(){
 		ctx.closePath();
         // first save the untranslated/unrotated context
         ctx.save();
-
-        ctx.beginPath();
+	    ctx.beginPath();
         // move the rotation point to the center of the rect
         ctx.translate( x, y );
         // rotate the rect
         ctx.rotate(degrees * Math.PI / 180);
-
-        // draw the rect on the transformed context
+	    // draw the rect on the transformed context
         // Note: after transforming [0,0] is visually [x,y]
         //       so the rect needs to be offset accordingly when drawn
         
-
-		/*var grdRect = ctx.createLinearGradient(0, 0, 30, 0);
-		grd.addColorStop(0,"white");
-		grd.addColorStop(1,"gold");*/
 	    ctx.fillStyle = "yellow";
-
 		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
-        
-
         // restore the context to its untranslated/unrotated state
         ctx.restore();
-
-    }
+	}
 
 maze.prototype.initialize = function() {
-	// initial positions
-	tank.rotorX = 15;
-	tank.rotorY = 15;
-	
-	// set tank parameters
-	tank.tankRadius = theMaze.gridsize/ 4;
-	tank.rotorLength = tank.tankRadius * 20 / 15;
-	tank.rotorWidth = tank.tankRadius * 7 / 15;
-	
-	tank.tankCenterX = 0;
-	tank.tankCenterY = 0;
-	// bullet parameters
-	bulletRadius = tank.rotorWidth * 3 / 7;
-	dbulletX = -2 * bulletRadius / 3;
-	dbulletY = 2 * bulletRadius / 3;
-	
-	// movement parameters
-	tank.dDist = tank.tankRadius / 15;
-	tank.dAng = 1;
+	tank = new Tank();
+	bullet1 = new Bullet();
 }
 
  maze.prototype.drawing = function() {
-		//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
-		//if (reload == 1) return;
-		
-		//var currentPlayerGrid = theMaze.grid[i][j];
-		//var a = currentPlayerGrid.y;
-		//console.log(currentPlayerGrid.x);
-		//console.log(a);
-		//console.log(drawTank().currentPlayerGrid.leftWall);
-		//console.log(drawTank().currentPlayerGrid.rightWall);
-		
-	    // move the rotation point to the center of the rect
-		//tankCenterX = x + length/2;
-		//tankCenterY = y + width/2;
 	 	var i = Math.floor(tank.tankCenterX / theMaze.gridsize)
 		var j = Math.floor(tank.tankCenterY / theMaze.gridsize)
 		var currentPlayerGrid = theMaze.grid[i][j];
+		
 	 	//if (i == 0) currentPlayerGrid.leftWall = true;
 	 	//if (i == theMaze.)
 	 	wallLeft = i*theMaze.gridsize;
@@ -728,29 +615,23 @@ maze.prototype.initialize = function() {
 	 	
 	 	tank.tankCenterX = tank.rotorX + tank.rotorLength / 2;
 		tank.tankCenterY = tank.rotorY + tank.rotorWidth / 2;
-	 
-	 	// update bullet parameters
-//	 	bulletX = tankCenterX;
-//	 	bulletY = tankCenterY;
-		//console.log(tankX);
-		//console.log(tankY);
-		
+	 	theMaze.draw();
 	 	
-		theMaze.draw();
-	 	if (shoot) {
+	 	if (leftClick){
+			bullet1.shoot = true;
+			Shoot();
+			leftClick = false;
+		}
+		else if (bullet1.shoot) {
 			if (bulletReload){
-				collisions = 0;
-				shoot = false;
+				bullet1.collisions = 0;
+				bullet1.shoot = false;
 				bulletReload = false;
 			}
 			else Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
-	 	else if (leftClick){
-			Bullet();
-			leftClick = false;
-		}
-	 	drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
+		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
 	 	bulletReload = false;
 		// for debugging
@@ -758,31 +639,20 @@ maze.prototype.initialize = function() {
 	}
 
 function Bullet() {
-	bulletX = tank.tankCenterX;// - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
-	bulletY = tank.tankCenterY;// - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));
-	//console.log(tankCenterX);
-	//console.log(tankCenterY);
-	bulletAngle = tank.rotorAngle;
-	//console.log(rotorAngle);
-//	drawbullet(bulletX,bulletY);
-	shoot = true;
-	Shoot();
-	
-	
-	
-	/*t++;
-	if(t<30000){
-	Bullet();
-	}else{
-	Mpressed = false;
-	}*/
-	//drawbullet();
-	//console.log(bulletX);
-	//console.log(projectedX);
-	//console.log(bulletY);
-	//console.log(projectedY);
+	this.bulletX = tank.tankCenterX;
+	this.bulletY = tank.tankCenterY;
+	this.bulletAngle = tank.rotorAngle;
+	this. bulletRadius = tank.rotorWidth * 3 / 7;
+	this.dbulletX = -2 * this.bulletRadius / 3;
+	this.dbulletY = 2 * this.bulletRadius / 3;
+	this.bulletReload = false;
+	this.leftClick = false;
+	this.shoot = false;
+	this.collisions = 0;
+	this.t = 0;
 }
-function drawbullet(bulletX,bulletY){
+
+function drawbullet(bulletX,bulletY,bulletRadius){
 	context.beginPath();
 	context.fillStyle = "black";
 	context.arc(bulletX, bulletY, bulletRadius, 0, 2 * Math.PI);
@@ -791,70 +661,63 @@ function drawbullet(bulletX,bulletY){
 	leftClick = false;
 	}
 function Shoot(){
-//		if(shoot){
-			
-			 var i = Math.floor(bulletX / theMaze.gridsize)
-		var j = Math.floor(bulletY / theMaze.gridsize)
+		var i = Math.floor(bullet1.bulletX / theMaze.gridsize)
+		var j = Math.floor(bullet1.bulletY / theMaze.gridsize)
+		console.log(bullet1.bulletX);
 		var currentBulletGrid = theMaze.grid[i][j];
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
 	 	wallTop = j*theMaze.gridsize;
 	 	wallBottom = (j+1)*theMaze.gridsize;
-		
+	
 	 	// fine adjustments for bullet
-	 	if (currentBulletGrid.rightWall && (bulletX + bulletRadius > wallRight)) {
-			// do something
-			if(bulletAngle <= 180){
-			bulletAngle -= (2*bulletAngle - 180);
+	 	if (currentBulletGrid.rightWall && (bullet1.bulletX + bullet1.bulletRadius > wallRight)) {
+			if(bullet1.bulletAngle <= 180){
+			bullet1.bulletAngle -= (2*bullet1.bulletAngle - 180);
 			}else{
-			bulletAngle += (540 - 2*bulletAngle);
+			bullet1.bulletAngle += (540 - 2*bullet1.bulletAngle);
 			}
-			bulletAngle = bulletAngle % 360;
-			collisions++;
+			bullet1.bulletAngle = bullet1.bulletAngle % 360;
+			bullet1.collisions++;
 		}
-	 	else if (currentBulletGrid.leftWall && (bulletX - bulletRadius < wallLeft)) {
+	 	else if (currentBulletGrid.leftWall && (bullet1.bulletX - bullet1.bulletRadius < wallLeft)) {
 			
-			if(bulletAngle <= 180){
-			bulletAngle += (180 - 2*bulletAngle);
+			if(bullet1.bulletAngle <= 180){
+			bullet1.bulletAngle += (180 - 2*bullet1.bulletAngle);
 			}else{
-			bulletAngle += (540 - 2*bulletAngle);
+			bullet1.bulletAngle += (540 - 2*bullet1.bulletAngle);
 			}
-			bulletAngle = bulletAngle % 360;
-			collisions++;
+			bullet1.bulletAngle = bullet1.bulletAngle % 360;
+			bullet1.collisions++;
 		}
-		else if (currentBulletGrid.bottomWall && (bulletY + bulletRadius > wallBottom)) {
-			// do something
-			if(bulletAngle <= 270){
-			bulletAngle -= (2*bulletAngle - 360);
+		else if (currentBulletGrid.bottomWall && (bullet1.bulletY + bullet1.bulletRadius > wallBottom)) {
+			if(bullet1.bulletAngle <= 270){
+			bullet1.bulletAngle -= (2*bullet1.bulletAngle - 360);
 			}else{
-			bulletAngle += (720 - 2*bulletAngle);
+			bullet1.bulletAngle += (720 - 2*bullet1.bulletAngle);
 			}
-			bulletAngle = bulletAngle % 360;
-			collisions++;
+			bullet1.bulletAngle = bullet1.bulletAngle % 360;
+			bullet1.collisions++;
 		}
-	 	else if (currentBulletGrid.topWall && (bulletY - bulletRadius < wallTop)) {
-			// do something
-			if(bulletAngle <= 90){
-			bulletAngle -= (2*bulletAngle);
-			bulletAngle += 360;
+	 	else if (currentBulletGrid.topWall && (bullet1.bulletY - bullet1.bulletRadius < wallTop)) {
+			if(bullet1.bulletAngle <= 90){
+			bullet1.bulletAngle -= (2*bullet1.bulletAngle);
+			bullet1.bulletAngle += 360;
 			}else{
-			bulletAngle += (360 - 2*bulletAngle);
+			bullet1.bulletAngle += (360 - 2*bullet1.bulletAngle);
 			}
-			bulletAngle = bulletAngle % 360;
-			collisions++;
+			bullet1.bulletAngle = bullet1.bulletAngle % 360;
+			bullet1.collisions++;
 		}
 			
 			
-			bulletX -=  dbulletX * (Math.cos((180 - bulletAngle) * Math.PI / 180)); 
-			bulletY -=  dbulletY * (Math.sin((180 - bulletAngle) * Math.PI / 180));
-			//console.log(bulletAngle);
-			drawbullet(bulletX,bulletY);
-			if(collisions > 6){
-				shoot = false;
-				collisions = 0;
-				//setinterval(10);
-				}
-//			}		
+			bullet1.bulletX -=  bullet1.dbulletX * (Math.cos((180 - bullet1.bulletAngle) * Math.PI / 180)); 
+			bullet1.bulletY -=  bullet1.dbulletY * (Math.sin((180 - bullet1.bulletAngle) * Math.PI / 180));
+			drawbullet(bullet1.bulletX,bullet1.bulletY,bullet1.bulletRadius);
+			if(bullet1.collisions > 6){
+				bullet1.shoot = false;
+				bullet1.collisions = 0;
+				}	
 	}
 	
 	
