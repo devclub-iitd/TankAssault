@@ -401,10 +401,10 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var canvas = document.getElementById("maze");
 	var ctx = canvas.getContext("2d");
 	
+function tank(){	
 	// tank parameters
 	var tankX = 10;
 	var tankY = 10
-	
 	// tank parameters
 	var tankCenterX = 0;
 	var tankCenterY = 0;
@@ -416,20 +416,27 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var tankRadius = 15;
 	var rotorLength = 20;
 	var rotorWidth = 7;
+	// tank  controls
+	var rightPressed = false;
+	var leftPressed = false;
+	var upPressed = false;
+	var downPressed = false;
 
+}
+	
 	// real tank determinants
 //	var tankCenterX = 0;
 //	var tankCenterY = 0;
 
 	// collision detector parameters
-	var newTankX;
-	var newTankY;
-	var newTankCenterX;
-	var newTankCenterY;
+//	var newTankX;
+//	var newTankY;
+//	var newTankCenterX;
+//	var newTankCenterY;
 
-	var tankAngle = 0;
-	var dAng = 1;
-	var dDist = 2;
+//	var tankAngle = 0;
+//	var dAng = 1;
+//	var dDist = 2;
 
 	// maze parameters
 	// border parameters
@@ -442,23 +449,18 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var wallBottom = 0;
 
 	// collision parameters
-	var projectedX;
-	var projectedY;
+//	var projectedX;
+//	var projectedY;
 
-	var dProjectedX;
-	var dProjectedY;
+//	var dProjectedX;
+//	var dProjectedY;
 
 	// 0 or 1
-	var dProjectedXLeft = 0;
-	var dProjectedXRight = 0;
-	var dProjectedYTop = 0;
-	var dProjectedYBottom = 0;
+//	var dProjectedXLeft = 0;
+//	var dProjectedXRight = 0;
+//	var dProjectedYTop = 0;
+//	var dProjectedYBottom = 0;
 
-	// tank  controls
-	var rightPressed = false;
-	var leftPressed = false;
-	var upPressed = false;
-	var downPressed = false;
 	/* Left: 37
 	Up: 38
 	Right: 39
@@ -469,8 +471,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	var bulletReload = false;
 	var leftClick = false;
 	var shoot = false; 
-	var bulletX = tankCenterX;
-	var bulletY = tankCenterY;
+	var bulletX = tank.tankCenterX;
+	var bulletY = tank.tankCenterY;
 	var bulletRadius = 3;
 	var dbulletX = -2;
 	var dbulletY = 2;
@@ -497,16 +499,16 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	function keyDownHandler(e) {
 		switch (e.keyCode) {
 			case 38:
-				upPressed = true;
+				tank.upPressed = true;
 				break;
 			case 40:
-				downPressed = true;
+				tank.downPressed = true;
 				break;
 			case 39:
-				rightPressed = true;
+				tank.rightPressed = true;
 				break;
 			case 37:
-				leftPressed = true;
+				tank.leftPressed = true;
 				break;
 			default:
 				// none of these keys
@@ -520,16 +522,16 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	function keyUpHandler(e) {
 		switch (e.keyCode) {
 			case 38:
-				upPressed = false;
+				tank.upPressed = false;
 				break;
 			case 40:
-				downPressed = false;
+				tank.downPressed = false;
 				break;
 			case 39:
-				rightPressed = false;
+				tank.rightPressed = false;
 				break;
 			case 37:
-				leftPressed = false;
+				tank.leftPressed = false;
 				break;
 			default:
 				// none of these keys
@@ -542,9 +544,9 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 
 	function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
-	rotorAngle = relativeX/2;
-	if(rotorAngle < 0){rotorAngle += 360;}
-	rotorAngle = rotorAngle % 360;
+	tank.rotorAngle = relativeX/2;
+	if(tank.rotorAngle < 0){tank.rotorAngle += 360;}
+	tank.rotorAngle = tank.rotorAngle % 360;
 	}
 	function rightclick(event){
 		if(event.button == 2){
@@ -603,22 +605,24 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 
 maze.prototype.initialize = function() {
 	// initial positions
-	rotorX = 15;
-	rotorY = 15;
+	tank.rotorX = 15;
+	tank.rotorY = 15;
 	
 	// set tank parameters
-	tankRadius = theMaze.gridsize/ 4;
-	rotorLength = tankRadius * 20 / 15;
-	rotorWidth = tankRadius * 7 / 15;
+	tank.tankRadius = theMaze.gridsize/ 4;
+	tank.rotorLength = tank.tankRadius * 20 / 15;
+	tank.rotorWidth = tank.tankRadius * 7 / 15;
 	
+	tank.tankCenterX = 0;
+	tank.tankCenterY = 0;
 	// bullet parameters
-	bulletRadius = rotorWidth * 3 / 7;
-	dbulletX = -1 * bulletRadius / 3;
-	dbulletY = 1 * bulletRadius / 3;
+	bulletRadius = tank.rotorWidth * 3 / 7;
+	dbulletX = -2 * bulletRadius / 3;
+	dbulletY = 2 * bulletRadius / 3;
 	
 	// movement parameters
-	dDist = tankRadius / 15;
-	dAng = 1;
+	tank.dDist = tank.tankRadius / 15;
+	tank.dAng = 1;
 }
 
  maze.prototype.drawing = function() {
@@ -635,8 +639,8 @@ maze.prototype.initialize = function() {
 	    // move the rotation point to the center of the rect
 		//tankCenterX = x + length/2;
 		//tankCenterY = y + width/2;
-	 	var i = Math.floor(tankCenterX / theMaze.gridsize)
-		var j = Math.floor(tankCenterY / theMaze.gridsize)
+	 	var i = Math.floor(tank.tankCenterX / theMaze.gridsize)
+		var j = Math.floor(tank.tankCenterY / theMaze.gridsize)
 		var currentPlayerGrid = theMaze.grid[i][j];
 	 	//if (i == 0) currentPlayerGrid.leftWall = true;
 	 	//if (i == theMaze.)
@@ -648,32 +652,32 @@ maze.prototype.initialize = function() {
 		//console.log(currentPlayerGrid.rightWall);
 	 
 	 	// fine adjustments
-	 	if (currentPlayerGrid.rightWall && (tankCenterX + tankRadius > wallRight)) {
+	 	if (currentPlayerGrid.rightWall && (tank.tankCenterX + tank.tankRadius > wallRight)) {
 			// do something
-			rotorX -= ((tankCenterX + tankRadius) - wallRight);
+			tank.rotorX -= ((tank.tankCenterX + tank.tankRadius) - wallRight);
 		}
-	 	else if (currentPlayerGrid.leftWall && (tankCenterX - tankRadius < wallLeft)) {
+	 	else if (currentPlayerGrid.leftWall && (tank.tankCenterX - tank.tankRadius < wallLeft)) {
 			// do something
-			rotorX += (wallLeft - (tankCenterX - tankRadius));
+			tank.rotorX += (wallLeft - (tank.tankCenterX - tank.tankRadius));
 		}
 	 
-	 	if (currentPlayerGrid.bottomWall && (tankCenterY + tankRadius > wallBottom)) {
+	 	if (currentPlayerGrid.bottomWall && (tank.tankCenterY + tank.tankRadius > wallBottom)) {
 			// do something
-			rotorY -= ((tankCenterY + tankRadius) - wallBottom);
+			tank.rotorY -= ((tank.tankCenterY + tank.tankRadius) - wallBottom);
 		}
-	 	else if (currentPlayerGrid.topWall && (tankCenterY - tankRadius < wallTop)) {
+	 	else if (currentPlayerGrid.topWall && (tank.tankCenterY - tank.tankRadius < wallTop)) {
 			// do something
-			rotorY += (wallTop - (tankCenterY - tankRadius));
+			tank.rotorY += (wallTop - (tank.tankCenterY - tank.tankRadius));
 		}
 	 
 		//console.log(Mpressed);
-	 	if (rightPressed === true){
-			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tankCenterX  + tankRadius < wallRight - dDist)) {
+	 	if (tank.rightPressed === true){
+			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tank.tankCenterX  + tank.tankRadius < wallRight - tank.dDist)) {
 				// Move the tank left
-				rotorX += dDist;
+				tank.rotorX += tank.dDist;
 			}
-			else if (tankCenterX + tankRadius < wallRight) {
-				rotorX += (wallRight - (tankCenterX + tankRadius));
+			else if (tank.tankCenterX + tank.tankRadius < wallRight) {
+				tank.rotorX += (wallRight - (tank.tankCenterX + tank.tankRadius));
 			}
 			else {
 				// tank boundary on wall or beyond it
@@ -682,39 +686,39 @@ maze.prototype.initialize = function() {
 			
 		}
 	 
- 		else if (leftPressed === true) {
-		 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tankCenterX  - tankRadius > wallLeft + dDist)) {
+ 		else if (tank.leftPressed === true) {
+		 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tank.tankCenterX  - tank.tankRadius > wallLeft + tank.dDist)) {
 				// Move the tank left
-				rotorX -= dDist;
+				tank.rotorX -= tank.dDist;
 			}
-			else if (tankCenterX - tankRadius > wallLeft) {
-				rotorX -= ((tankCenterX - tankRadius) - wallLeft );
+			else if (tank.tankCenterX - tank.tankRadius > wallLeft) {
+				rotorX -= ((tank.tankCenterX - tank.tankRadius) - wallLeft );
 			}
 			else {
 				// tank boundary on wall
 				// do nothing
 			}
 	 	}
-	 	if (upPressed) {
-		 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tankCenterY  - tankRadius > wallTop + dDist)) {
+	 	if (tank.upPressed) {
+		 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tank.tankCenterY  - tank.tankRadius > wallTop + tank.dDist)) {
 				// Move the tank left
-				rotorY -= dDist;
+				tank.rotorY -= tank.dDist;
 			}
-			else if (tankCenterY - tankRadius > wallTop) {
-				rotorY -= ((tankCenterY - tankRadius) - wallTop );
+			else if (tank.tankCenterY - tank.tankRadius > wallTop) {
+				tank.rotorY -= ((tank.tankCenterY - tank.tankRadius) - wallTop );
 			}
 			else {
 				// tank boundary on wall
 				// do nothing
 			}
 	 	}
-	 	else if (downPressed) {
-		 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tankCenterY  + tankRadius < wallBottom - dDist)) {
+	 	else if (tank.downPressed) {
+		 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tank.tankCenterY  + tank.tankRadius < wallBottom - tank.dDist)) {
 				// Move the tank left
-				rotorY += dDist;
+				tank.rotorY += tank.dDist;
 			}
-			else if (tankCenterY + tankRadius < wallBottom) {
-				rotorY += (wallBottom - (tankCenterY + tankRadius));
+			else if (tank.tankCenterY + tank.tankRadius < wallBottom) {
+				tank.rotorY += (wallBottom - (tank.tankCenterY + tank.tankRadius));
 			}
 			else {
 				// tank boundary on wall
@@ -722,8 +726,8 @@ maze.prototype.initialize = function() {
 			}
 	 	}
 	 	
-	 	tankCenterX = rotorX + rotorLength / 2;
-		tankCenterY = rotorY + rotorWidth / 2;
+	 	tank.tankCenterX = tank.rotorX + tank.rotorLength / 2;
+		tank.tankCenterY = tank.rotorY + tank.rotorWidth / 2;
 	 
 	 	// update bullet parameters
 //	 	bulletX = tankCenterX;
@@ -746,7 +750,7 @@ maze.prototype.initialize = function() {
 			Bullet();
 			leftClick = false;
 		}
-	 	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);
+	 	drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
 	 	bulletReload = false;
 		// for debugging
@@ -754,9 +758,11 @@ maze.prototype.initialize = function() {
 	}
 
 function Bullet() {
-	bulletX = tankCenterX;// - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
-	bulletY = tankCenterY;// - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));
-	bulletAngle = rotorAngle;
+	bulletX = tank.tankCenterX;// - rotorLength * (Math.cos(rotorAngle * Math.PI / 180));
+	bulletY = tank.tankCenterY;// - rotorLength * (Math.sin(rotorAngle * Math.PI / 180));
+	//console.log(tankCenterX);
+	//console.log(tankCenterY);
+	bulletAngle = tank.rotorAngle;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
 	shoot = true;
