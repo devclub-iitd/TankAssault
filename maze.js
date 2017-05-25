@@ -13,7 +13,7 @@ if(width<10){
 if( width>25){
   height =18;
 }      //Number paths fitted vertically
-delay = 1            //Delay between algorithm cycles
+delay = 0            //Delay between algorithm cycles
 x = width/2|0        //Horisontal starting position
 y = height/2|0       //Vertical starting position
 seed = Math.random()*100000|0//Seed for random numbers
@@ -143,4 +143,4 @@ loop = function(){
 }
 settings.display()
 loop()
-setInterval(settings.check,400)
+setInterval(settings.check,0)
