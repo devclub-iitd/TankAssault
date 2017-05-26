@@ -16,11 +16,13 @@ function generate() {
 	//reload = 1;
 	//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 	makeMaze();
+	tank = new Tank();
+	bullet1 = new Bullet();
 	theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
-		setInterval(theMaze.drawing, 10);
+		setInterval(theMaze.playGame, 10);
 	}
 	loaded++;
 	//context.strokeStyle = "gold;
@@ -427,6 +429,28 @@ function Tank(){
 
 }
 
+function initializeTank(aTank) {
+	// tank parameters
+	aTank.tankX = 10;
+	aTank.tankY = 10
+	// tank parameters
+	aTank.tankCenterX = 0;
+	aTank.tankCenterY = 0;
+	aTank.rotorX = 15;
+	aTank.rotorY = 15;
+	aTank.rotorAngle;
+	aTank.tankRadius = theMaze.gridsize/ 4;
+	aTank.rotorLength = aTank.tankRadius * 20 / 15;
+	aTank.rotorWidth = aTank.tankRadius * 7 / 15;
+	aTank.dDist = aTank.tankRadius / 15;
+	aTank.dAng = 1;
+	// tank  controls
+	aTank.rightPressed = false;
+	aTank.leftPressed = false;
+	aTank.upPressed = false;
+	aTank.downPressed = false;
+}
+
 function Bullet() {
 	this.bulletX = 0;
 	this.bulletY = 0;
@@ -553,8 +577,7 @@ function initializeBullet(aTank, aBullet){
 	}
 
 maze.prototype.initialize = function() {
-	tank = new Tank();
-	bullet1 = new Bullet();
+	initializeTank(tank);
 	initializeBullet(tank, bullet1);
 	if (onceLoaded > 0) {	
 		document.addEventListener("keydown", keyDownHandler, false);
@@ -565,9 +588,15 @@ maze.prototype.initialize = function() {
 	}
 }
 
- maze.prototype.drawing = function() {
-	 	var i = Math.floor(tank.tankCenterX / theMaze.gridsize)
-		var j = Math.floor(tank.tankCenterY / theMaze.gridsize)
+
+maze.prototype.playGame = function() {
+	// useful when having more than one tank
+	 theMaze.drawing(tank);
+ }
+
+ maze.prototype.drawing = function(aTank) {
+	 	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
+		var j = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 		var currentPlayerGrid = theMaze.grid[i][j];
 		
 	 	//if (i == 0) currentPlayerGrid.leftWall = true;
@@ -580,32 +609,32 @@ maze.prototype.initialize = function() {
 		//console.log(currentPlayerGrid.rightWall);
 	 
 	 	// fine adjustments
-	 	if (currentPlayerGrid.rightWall && (tank.tankCenterX + tank.tankRadius > wallRight)) {
+	 	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.tankRadius > wallRight)) {
 			// do something
-			tank.rotorX -= ((tank.tankCenterX + tank.tankRadius) - wallRight);
+			aTank.rotorX -= ((aTank.tankCenterX + aTank.tankRadius) - wallRight);
 		}
-	 	else if (currentPlayerGrid.leftWall && (tank.tankCenterX - tank.tankRadius < wallLeft)) {
+	 	else if (currentPlayerGrid.leftWall && (aTank.tankCenterX - aTank.tankRadius < wallLeft)) {
 			// do something
-			tank.rotorX += (wallLeft - (tank.tankCenterX - tank.tankRadius));
+			aTank.rotorX += (wallLeft - (aTank.tankCenterX - aTank.tankRadius));
 		}
 	 
-	 	if (currentPlayerGrid.bottomWall && (tank.tankCenterY + tank.tankRadius > wallBottom)) {
+	 	if (currentPlayerGrid.bottomWall && (aTank.tankCenterY + aTank.tankRadius > wallBottom)) {
 			// do something
-			tank.rotorY -= ((tank.tankCenterY + tank.tankRadius) - wallBottom);
+			aTank.rotorY -= ((aTank.tankCenterY + aTank.tankRadius) - wallBottom);
 		}
-	 	else if (currentPlayerGrid.topWall && (tank.tankCenterY - tank.tankRadius < wallTop)) {
+	 	else if (currentPlayerGrid.topWall && (aTank.tankCenterY - aTank.tankRadius < wallTop)) {
 			// do something
-			tank.rotorY += (wallTop - (tank.tankCenterY - tank.tankRadius));
+			aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.tankRadius));
 		}
 	 
 		//console.log(Mpressed);
-	 	if (tank.rightPressed === true){
-			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && tank.tankCenterX  + tank.tankRadius < wallRight - tank.dDist)) {
+	 	if (aTank.rightPressed === true){
+			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && aTank.tankCenterX  + aTank.tankRadius < wallRight - aTank.dDist)) {
 				// Move the tank left
-				tank.rotorX += tank.dDist;
+				aTank.rotorX += aTank.dDist;
 			}
-			else if (tank.tankCenterX + tank.tankRadius < wallRight) {
-				tank.rotorX += (wallRight - (tank.tankCenterX + tank.tankRadius));
+			else if (aTank.tankCenterX + aTank.tankRadius < wallRight) {
+				aTank.rotorX += (wallRight - (aTank.tankCenterX + aTank.tankRadius));
 			}
 			else {
 				// tank boundary on wall or beyond it
@@ -614,39 +643,39 @@ maze.prototype.initialize = function() {
 			
 		}
 	 
- 		else if (tank.leftPressed === true) {
-		 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && tank.tankCenterX  - tank.tankRadius > wallLeft + tank.dDist)) {
+ 		else if (aTank.leftPressed === true) {
+		 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && aTank.tankCenterX  - aTank.tankRadius > wallLeft + aTank.dDist)) {
 				// Move the tank left
-				tank.rotorX -= tank.dDist;
+				aTank.rotorX -= aTank.dDist;
 			}
-			else if (tank.tankCenterX - tank.tankRadius > wallLeft) {
-				tank.rotorX -= ((tank.tankCenterX - tank.tankRadius) - wallLeft );
+			else if (aTank.tankCenterX - aTank.tankRadius > wallLeft) {
+				aTank.rotorX -= ((aTank.tankCenterX - aTank.tankRadius) - wallLeft );
 			}
 			else {
 				// tank boundary on wall
 				// do nothing
 			}
 	 	}
-	 	if (tank.upPressed) {
-		 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && tank.tankCenterY  - tank.tankRadius > wallTop + tank.dDist)) {
+	 	if (aTank.upPressed) {
+		 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.tankRadius > wallTop + aTank.dDist)) {
 				// Move the tank left
-				tank.rotorY -= tank.dDist;
+				aTank.rotorY -= aTank.dDist;
 			}
-			else if (tank.tankCenterY - tank.tankRadius > wallTop) {
-				tank.rotorY -= ((tank.tankCenterY - tank.tankRadius) - wallTop );
+			else if (aTank.tankCenterY - aTank.tankRadius > wallTop) {
+				aTank.rotorY -= ((aTank.tankCenterY - aTank.tankRadius) - wallTop );
 			}
 			else {
 				// tank boundary on wall
 				// do nothing
 			}
 	 	}
-	 	else if (tank.downPressed) {
-		 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && tank.tankCenterY  + tank.tankRadius < wallBottom - tank.dDist)) {
+	 	else if (aTank.downPressed) {
+		 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.tankRadius < wallBottom - aTank.dDist)) {
 				// Move the tank left
-				tank.rotorY += tank.dDist;
+				aTank.rotorY += aTank.dDist;
 			}
-			else if (tank.tankCenterY + tank.tankRadius < wallBottom) {
-				tank.rotorY += (wallBottom - (tank.tankCenterY + tank.tankRadius));
+			else if (aTank.tankCenterY + aTank.tankRadius < wallBottom) {
+				aTank.rotorY += (wallBottom - (aTank.tankCenterY + aTank.tankRadius));
 			}
 			else {
 				// tank boundary on wall
@@ -654,8 +683,8 @@ maze.prototype.initialize = function() {
 			}
 	 	}
 	 	
-	 	tank.tankCenterX = tank.rotorX + tank.rotorLength / 2;
-		tank.tankCenterY = tank.rotorY + tank.rotorWidth / 2;
+	 	aTank.tankCenterX = aTank.rotorX + aTank.rotorLength / 2;
+		aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
 	 	theMaze.draw();
 	 	
 	 	
@@ -666,15 +695,15 @@ maze.prototype.initialize = function() {
 				bullet1.bulletReload = false;
 				document.getElementById('demo').innerHTML = "Relax";
 			}
-			else Shoot();
+			else Shoot(bullet1);
 //	 		drawbullet(bulletX, bulletY);
 		}
 	 	else if (bullet1.leftClick){
-			shootBullet();
+			shootBullet(bullet1);
 			bullet1.leftClick = false;
 			document.getElementById('demo').innerHTML = "Beware!";
 		}
-		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
+		drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
 	 	//theMaze.draw();
 	 	bullet1.bulletReload = false;
 	 	bullet1.leftClick = false;
@@ -694,38 +723,38 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 	leftClick = false;
 	}
 
-function shootBullet() {
-	bullet1.bulletX = tank.tankCenterX - tank.rotorLength * (Math.cos(tank.rotorAngle * Math.PI / 180));
-	bullet1.bulletY = tank.tankCenterY - tank.rotorLength * (Math.sin(tank.rotorAngle * Math.PI / 180));;
-	bullet1.bulletAngle = tank.rotorAngle;
+function shootBullet(aBullet) {
+	aBullet.bulletX = tank.tankCenterX - tank.rotorLength * (Math.cos(tank.rotorAngle * Math.PI / 180));
+	aBullet.bulletY = tank.tankCenterY - tank.rotorLength * (Math.sin(tank.rotorAngle * Math.PI / 180));;
+	aBullet.bulletAngle = tank.rotorAngle;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
-	bullet1.shoot = true;
-	bullet1.shootBegin = true;
-	Shoot();
+	aBullet.shoot = true;
+	aBullet.shootBegin = true;
+	Shoot(aBullet);
 }
-function Shoot(){
-		var i = Math.floor(bullet1.bulletX / theMaze.gridsize)
-		var j = Math.floor(bullet1.bulletY / theMaze.gridsize)
-		if (bullet1.shootBegin === true){
+function Shoot(aBullet){
+		var i = Math.floor(aBullet.bulletX / theMaze.gridsize)
+		var j = Math.floor(aBullet.bulletY / theMaze.gridsize)
+		if (aBullet.shootBegin === true){
 			if (i < 0 || i >= theMaze.columns || j < 0 || j >= theMaze.rows) {
-				bullet1.shoot = false;
+				aBullet.shoot = false;
 				return;
 			}
 			var iTank = Math.floor(tank.tankCenterX / theMaze.gridsize)
 			var jTank = Math.floor(tank.tankCenterY / theMaze.gridsize)
 			if (i != iTank){
 				i = iTank;
-				bullet1.bulletX = tank.tankCenterX;
+				aBullet.bulletX = tank.tankCenterX;
 			}
 			if (j != jTank) {
 				j = jTank;
-				bullet1.bulletY = tank.tankCenterY;
+				aBullet.bulletY = tank.tankCenterY;
 			}
-			bullet1.shootBegin = false;
+			aBullet.shootBegin = false;
 		}
-	//	console.log(bullet1.bulletX);
-	//	document.getElementById('demo').innerHTML = " " + bullet1.bulletX;
+	//	console.log(aBullet.bulletX);
+	//	document.getElementById('demo').innerHTML = " " + aBullet.bulletX;
 		var currentBulletGrid = theMaze.grid[i][j];
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
@@ -733,52 +762,52 @@ function Shoot(){
 	 	wallBottom = (j+1)*theMaze.gridsize;
 	
 	 	// fine adjustments for bullet
-	 	if (currentBulletGrid.rightWall && (bullet1.bulletX + bullet1.bulletRadius > wallRight)) {
-			if(bullet1.bulletAngle <= 180){
-			bullet1.bulletAngle -= (2*bullet1.bulletAngle - 180);
+	 	if (currentBulletGrid.rightWall && (aBullet.bulletX + aBullet.bulletRadius > wallRight)) {
+			if(aBullet.bulletAngle <= 180){
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle - 180);
 			}else{
-			bullet1.bulletAngle += (540 - 2*bullet1.bulletAngle);
+			aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
 			}
-			bullet1.bulletAngle = bullet1.bulletAngle % 360;
-			bullet1.collisions++;
+			aBullet.bulletAngle = aBullet.bulletAngle % 360;
+			aBullet.collisions++;
 		}
-	 	else if (currentBulletGrid.leftWall && (bullet1.bulletX - bullet1.bulletRadius < wallLeft)) {
+	 	else if (currentBulletGrid.leftWall && (aBullet.bulletX - aBullet.bulletRadius < wallLeft)) {
 			
-			if(bullet1.bulletAngle <= 180){
-			bullet1.bulletAngle += (180 - 2*bullet1.bulletAngle);
+			if(aBullet.bulletAngle <= 180){
+			aBullet.bulletAngle += (180 - 2*aBullet.bulletAngle);
 			}else{
-			bullet1.bulletAngle += (540 - 2*bullet1.bulletAngle);
+			aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
 			}
-			bullet1.bulletAngle = bullet1.bulletAngle % 360;
-			bullet1.collisions++;
+			aBullet.bulletAngle = aBullet.bulletAngle % 360;
+			aBullet.collisions++;
 		}
-		else if (currentBulletGrid.bottomWall && (bullet1.bulletY + bullet1.bulletRadius > wallBottom)) {
-			if(bullet1.bulletAngle <= 270){
-			bullet1.bulletAngle -= (2*bullet1.bulletAngle - 360);
+		else if (currentBulletGrid.bottomWall && (aBullet.bulletY + aBullet.bulletRadius > wallBottom)) {
+			if(aBullet.bulletAngle <= 270){
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle - 360);
 			}else{
-			bullet1.bulletAngle += (720 - 2*bullet1.bulletAngle);
+			aBullet.bulletAngle += (720 - 2*aBullet.bulletAngle);
 			}
-			bullet1.bulletAngle = bullet1.bulletAngle % 360;
-			bullet1.collisions++;
+			aBullet.bulletAngle = aBullet.bulletAngle % 360;
+			aBullet.collisions++;
 		}
-	 	else if (currentBulletGrid.topWall && (bullet1.bulletY - bullet1.bulletRadius < wallTop)) {
-			if(bullet1.bulletAngle <= 90){
-			bullet1.bulletAngle -= (2*bullet1.bulletAngle);
-			bullet1.bulletAngle += 360;
+	 	else if (currentBulletGrid.topWall && (aBullet.bulletY - aBullet.bulletRadius < wallTop)) {
+			if(aBullet.bulletAngle <= 90){
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle);
+			aBullet.bulletAngle += 360;
 			}else{
-			bullet1.bulletAngle += (360 - 2*bullet1.bulletAngle);
+			aBullet.bulletAngle += (360 - 2*aBullet.bulletAngle);
 			}
-			bullet1.bulletAngle = bullet1.bulletAngle % 360;
-			bullet1.collisions++;
+			aBullet.bulletAngle = aBullet.bulletAngle % 360;
+			aBullet.collisions++;
 		}
 			
 			
-			bullet1.bulletX -=  bullet1.dbulletX * (Math.cos((180 - bullet1.bulletAngle) * Math.PI / 180)); 
-			bullet1.bulletY -=  bullet1.dbulletY * (Math.sin((180 - bullet1.bulletAngle) * Math.PI / 180));
-			drawbullet(bullet1.bulletX,bullet1.bulletY,bullet1.bulletRadius);
-			if(bullet1.collisions > 6){
-				bullet1.shoot = false;
-				bullet1.collisions = 0;
+			aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180)); 
+			aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
+			drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
+			if(aBullet.collisions > 6){
+				aBullet.shoot = false;
+				aBullet.collisions = 0;
 				}	
 	}
 	
