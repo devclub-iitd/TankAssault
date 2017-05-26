@@ -512,14 +512,14 @@ function initializeBullet(aTank, aBullet){
 	tank.rotorAngle = tank.rotorAngle % 360;
 	}
 	function rightclick(event){
-		if (loaded) {
 			if(event.button == 2){
 				bullet1.bulletReload = true;
+				bullet1.leftClick = false;
 			}
 			else if(event.button == 0){
 					bullet1.leftClick = true;
+					bullet1.bulletReload = false;
 			}
-		}
 	}
 	
 
@@ -657,25 +657,27 @@ maze.prototype.initialize = function() {
 		tank.tankCenterY = tank.rotorY + tank.rotorWidth / 2;
 	 	theMaze.draw();
 	 	
-	 	if (bullet1.leftClick){
-			bullet1.shoot = true;
-//			Shoot();
-			bullet1.leftClick = false;
-		}
-		else if (bullet1.shoot) {
+	 	
+		if (bullet1.shoot) {
 			if (bullet1.bulletReload){
 				bullet1.collisions = 0;
 				bullet1.shoot = false;
 				bullet1.bulletReload = false;
+				document.getElementById('demo').innerHTML = "Relax";
 			}
-//			else Shoot();
+			else Shoot();
 //	 		drawbullet(bulletX, bulletY);
+		}
+	 	else if (bullet1.leftClick){
+			shootBullet();
+			bullet1.leftClick = false;
+			document.getElementById('demo').innerHTML = "Beware!";
 		}
 		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
 	 	bullet1.bulletReload = false;
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet";
+	//	document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet" + bullet1.bulletX + bullet1.leftClick + bullet1.bulletReload;
 	}
 
 
@@ -689,11 +691,20 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 	leftClick = false;
 	}
 
+function shootBullet() {
+	bullet1.bulletX = tank.tankCenterX - tank.rotorLength * (Math.cos(tank.rotorAngle * Math.PI / 180));
+	bullet1.bulletY = tank.tankCenterY - tank.rotorLength * (Math.sin(tank.rotorAngle * Math.PI / 180));;
+	bullet1.bulletAngle = tank.rotorAngle;
+	//console.log(rotorAngle);
+//	drawbullet(bulletX,bulletY);
+	bullet1.shoot = true;
+	Shoot();
+}
 function Shoot(){
 		var i = Math.floor(bullet1.bulletX / theMaze.gridsize)
 		var j = Math.floor(bullet1.bulletY / theMaze.gridsize)
 	//	console.log(bullet1.bulletX);
-		document.getElementById('demo').innerHTML = " " + bullet1.bulletX;
+	//	document.getElementById('demo').innerHTML = " " + bullet1.bulletX;
 		var currentBulletGrid = theMaze.grid[i][j];
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
