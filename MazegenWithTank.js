@@ -48,7 +48,7 @@ function reSetTank() {
 function makeMaze() {
 	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
 	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
-	var gridsize = 7*rows; // grid size of maze
+	var gridsize = 400 / rows; // grid size of maze
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
 	if(mazeStyledecision == 1){
@@ -95,7 +95,7 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.wallColor = wallColor;
 	this.backgroundColor = backgroundColor;
 	this.solutionColor = solutionColor;
-	this.lineWidth = 2;
+	this.lineWidth = this.gridsize / 60;
 	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
 	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
 	this.cellCount = this.columns * this.rows;
@@ -342,44 +342,70 @@ maze.prototype.draw = function() {
 	$('#maze').attr("width", totalWidth);
 	$('#maze').attr("height", totalHeight);
 	//document.getElementById("maze").style.margin-left = "600";
-	context.lineWidth = this.lineWidth;
 	context.clearRect(0, 0, totalWidth, totalHeight);
-	context.strokeStyle = this.wallColor;
 	for (j = 0; j < this.columns; j++) {
 		for (k = 0; k < this.rows; k++) {
+			var limit = this.lineWidth;
 			var drawX = (j * this.gridsize);
 			var drawY = (k * this.gridsize);
 			var pastX = parseInt(drawX) + parseInt(this.gridsize);
 			var pastY = parseInt(drawY) + parseInt(this.gridsize);
 			var theCell = this.grid[j][k];
 			//this.drawColors(theCell);
-				context.fillStyle = this.backgroundColor;
-			
+			context.lineWidth = this.lineWidth;
+			context.fillStyle = this.backgroundColor;
+			context.strokeStyle = this.wallColor;
 			context.fillRect(drawX, drawY, this.gridsize, this.gridsize);	
+			
 			context.beginPath();
 			if (theCell.leftWall == true) {
 				//context.strokeRect(drawX, drawY, 1, this.gridsize);
-				context.moveTo(drawX, drawY);
-				context.lineTo(drawX, pastY);
+				context.moveTo(drawX, drawY - limit);
+				context.lineTo(drawX, pastY + limit);
 			}
 			if (theCell.topWall == true) {
 				//context.strokeRect(drawX, drawY, this.gridsize, 1);
-				context.moveTo(drawX, drawY);
-				context.lineTo(pastX, drawY);
+				context.moveTo(drawX - limit, drawY);
+				context.lineTo(pastX + limit, drawY);
 			}
 			if (theCell.rightWall == true) {
 				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
-				context.moveTo(pastX, drawY);
-				context.lineTo(pastX, pastY);
+				context.moveTo(pastX, drawY - limit);
+				context.lineTo(pastX, pastY + limit);
 			}
 			if (theCell.bottomWall == true) {
 				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
-				context.moveTo(drawX, pastY);
-				context.lineTo(pastX, pastY);
+				context.moveTo(drawX - limit, pastY);
+				context.lineTo(pastX + limit, pastY);
 			}
 			context.closePath();
 			context.stroke();
 			
+			context.lineWidth = this.lineWidth + 1;
+			context.strokeStyle = this.backgroundColor;
+			context.beginPath();
+			if (theCell.leftWall == false) {
+				//context.strokeRect(drawX, drawY, 1, this.gridsize);
+				context.moveTo(drawX, drawY + limit);
+				context.lineTo(drawX, pastY - limit);
+			}
+			if (theCell.topWall == false) {
+				//context.strokeRect(drawX, drawY, this.gridsize, 1);
+				context.moveTo(drawX + limit, drawY);
+				context.lineTo(pastX - limit, drawY);
+			}
+			if (theCell.rightWall == false) {
+				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+				context.moveTo(pastX, drawY + limit);
+				context.lineTo(pastX, pastY - limit);
+			}
+			if (theCell.bottomWall == false) {
+				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+				context.moveTo(drawX + limit, pastY);
+				context.lineTo(pastX - limit, pastY);
+			}
+			context.closePath();
+			context.stroke();
 		}
 	}
 }
