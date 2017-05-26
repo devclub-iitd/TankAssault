@@ -424,6 +424,20 @@ function Tank(){
 
 }
 
+function Bullet() {
+	this.bulletX = tank.tankCenterX;
+	this.bulletY = tank.tankCenterY;
+	this.bulletAngle = tank.rotorAngle;
+	this. bulletRadius = tank.rotorWidth * 3 / 7;
+	this.dbulletX = -2 * this.bulletRadius / 3;
+	this.dbulletY = 2 * this.bulletRadius / 3;
+	this.bulletReload = false;
+	this.leftClick = false;
+	this.shoot = false;
+	this.collisions = 0;
+	this.t = 0;
+}
+
 	// maze parameters
 	// border parameters
 	var borX;
@@ -485,9 +499,9 @@ function Tank(){
 	}
 	function rightclick(event){
 		if(event.button == 2){
-			bulletReload = true;
+			bullet1.bulletReload = true;
 			}else if(event.button == 0){
-				leftClick = true;
+				bullet1.leftClick = true;
 				}
 		}
 
@@ -617,40 +631,28 @@ maze.prototype.initialize = function() {
 		tank.tankCenterY = tank.rotorY + tank.rotorWidth / 2;
 	 	theMaze.draw();
 	 	
-	 	if (leftClick){
+	 	if (bullet1.leftClick){
 			bullet1.shoot = true;
 			Shoot();
-			leftClick = false;
+			bullet1.leftClick = false;
 		}
 		else if (bullet1.shoot) {
-			if (bulletReload){
+			if (bullet1.bulletReload){
 				bullet1.collisions = 0;
 				bullet1.shoot = false;
-				bulletReload = false;
+				bullet1.bulletReload = false;
 			}
 			else Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
 		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
-	 	bulletReload = false;
+	 	bullet1.bulletReload = false;
 		// for debugging
 		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + collisions + " collisoins or reload to fire next bullet";
 	}
 
-function Bullet() {
-	this.bulletX = tank.tankCenterX;
-	this.bulletY = tank.tankCenterY;
-	this.bulletAngle = tank.rotorAngle;
-	this. bulletRadius = tank.rotorWidth * 3 / 7;
-	this.dbulletX = -2 * this.bulletRadius / 3;
-	this.dbulletY = 2 * this.bulletRadius / 3;
-	this.bulletReload = false;
-	this.leftClick = false;
-	this.shoot = false;
-	this.collisions = 0;
-	this.t = 0;
-}
+
 
 function drawbullet(bulletX,bulletY,bulletRadius){
 	context.beginPath();
