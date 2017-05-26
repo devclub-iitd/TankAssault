@@ -6,6 +6,7 @@ var canvas;
 //var context;
 var theMaze = null;
 var loaded = 0;
+var onceLoaded = 0;
 var reload = 0;
 
 
@@ -16,6 +17,7 @@ function generate() {
 	//earseTank(tankX, tankY, tankLength, tankWidth, tankAngle);
 	makeMaze();
 	theMaze.draw();
+	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
 		setInterval(theMaze.drawing, 10);
@@ -400,7 +402,8 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 //function makeTank() {
 	var canvas = document.getElementById("maze");
 	var ctx = canvas.getContext("2d");
-	
+	var tank;
+	var bullet1;
 function Tank(){	
 	// tank parameters
 	this.tankX = 10;
@@ -425,17 +428,31 @@ function Tank(){
 }
 
 function Bullet() {
-	this.bulletX = tank.tankCenterX;
-	this.bulletY = tank.tankCenterY;
-	this.bulletAngle = tank.rotorAngle;
-	this. bulletRadius = tank.rotorWidth * 3 / 7;
-	this.dbulletX = -2 * this.bulletRadius / 3;
-	this.dbulletY = 2 * this.bulletRadius / 3;
+	this.bulletX = 0;
+	this.bulletY = 0;
+	this.bulletAngle;
+	this. bulletRadius;
+	this.dbulletX;
+	this.dbulletY;
 	this.bulletReload = false;
 	this.leftClick = false;
 	this.shoot = false;
 	this.collisions = 0;
 	this.t = 0;
+}
+
+function initializeBullet(aTank, aBullet){
+	aBullet.bulletX = aTank.tankCenterX;
+	aBullet.bulletY = aTank.tankCenterY;
+	aBullet.bulletAngle = aTank.rotorAngle;
+	aBullet. bulletRadius = aTank.rotorWidth * 3 / 7;
+	aBullet.dbulletX = -2 * aBullet.bulletRadius / 3;
+	aBullet.dbulletY = 2 * aBullet.bulletRadius / 3;
+	aBullet.bulletReload = false;
+	aBullet.leftClick = false;
+	aBullet.shoot = false;
+	aBullet.collisions = 0;
+	aBullet.t = 0;
 }
 
 	// maze parameters
@@ -448,10 +465,7 @@ function Bullet() {
 	var wallTop = 0;
 	var wallBottom = 0;
 
-	
-	document.addEventListener("keydown", keyDownHandler, false);
-	document.addEventListener("keyup", keyUpHandler, false);
-	document.addEventListener("mousemove", mouseMoveHandler, false);
+
 	function keyDownHandler(e) {
 		switch (e.keyCode) {
 			case 38:
@@ -498,12 +512,16 @@ function Bullet() {
 	tank.rotorAngle = tank.rotorAngle % 360;
 	}
 	function rightclick(event){
-		if(event.button == 2){
-			bullet1.bulletReload = true;
-			}else if(event.button == 0){
-				bullet1.leftClick = true;
-				}
+		if (loaded) {
+			if(event.button == 2){
+				bullet1.bulletReload = true;
+			}
+			else if(event.button == 0){
+					bullet1.leftClick = true;
+			}
 		}
+	}
+	
 
 	function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
@@ -536,6 +554,14 @@ function Bullet() {
 maze.prototype.initialize = function() {
 	tank = new Tank();
 	bullet1 = new Bullet();
+	initializeBullet(tank, bullet1);
+	if (onceLoaded > 0) {	
+		document.addEventListener("keydown", keyDownHandler, false);
+		document.addEventListener("keyup", keyUpHandler, false);
+		document.addEventListener("mousemove", mouseMoveHandler, false);
+			
+		onceLoaded = -1;
+	}
 }
 
  maze.prototype.drawing = function() {
@@ -593,7 +619,7 @@ maze.prototype.initialize = function() {
 				tank.rotorX -= tank.dDist;
 			}
 			else if (tank.tankCenterX - tank.tankRadius > wallLeft) {
-				rotorX -= ((tank.tankCenterX - tank.tankRadius) - wallLeft );
+				tank.rotorX -= ((tank.tankCenterX - tank.tankRadius) - wallLeft );
 			}
 			else {
 				// tank boundary on wall
@@ -633,7 +659,7 @@ maze.prototype.initialize = function() {
 	 	
 	 	if (bullet1.leftClick){
 			bullet1.shoot = true;
-			Shoot();
+//			Shoot();
 			bullet1.leftClick = false;
 		}
 		else if (bullet1.shoot) {
@@ -642,14 +668,14 @@ maze.prototype.initialize = function() {
 				bullet1.shoot = false;
 				bullet1.bulletReload = false;
 			}
-			else Shoot();
+//			else Shoot();
 //	 		drawbullet(bulletX, bulletY);
 		}
 		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
 	 	bullet1.bulletReload = false;
 		// for debugging
-		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + collisions + " collisoins or reload to fire next bullet";
+		document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet";
 	}
 
 
@@ -662,10 +688,12 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 	context.closePath();
 	leftClick = false;
 	}
+
 function Shoot(){
 		var i = Math.floor(bullet1.bulletX / theMaze.gridsize)
 		var j = Math.floor(bullet1.bulletY / theMaze.gridsize)
-		console.log(bullet1.bulletX);
+	//	console.log(bullet1.bulletX);
+		document.getElementById('demo').innerHTML = " " + bullet1.bulletX;
 		var currentBulletGrid = theMaze.grid[i][j];
 	 	wallLeft = i*theMaze.gridsize;
 	 	wallRight = (i+1)*theMaze.gridsize;
