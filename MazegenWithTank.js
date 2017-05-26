@@ -439,6 +439,7 @@ function Bullet() {
 	this.shoot = false;
 	this.collisions = 0;
 	this.t = 0;
+	this.shootBegin = false;
 }
 
 function initializeBullet(aTank, aBullet){
@@ -676,6 +677,8 @@ maze.prototype.initialize = function() {
 		drawTank(tank.tankCenterX, tank.tankCenterY, tank.tankRadius, tank.rotorLength, tank.rotorWidth, tank.rotorAngle);
 	 	//theMaze.draw();
 	 	bullet1.bulletReload = false;
+	 	bullet1.leftClick = false;
+	 	if (bullet1.shoot === false) document.getElementById('demo').innerHTML = "Relax";
 		// for debugging
 	//	document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet" + bullet1.bulletX + bullet1.leftClick + bullet1.bulletReload;
 	}
@@ -698,11 +701,29 @@ function shootBullet() {
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
 	bullet1.shoot = true;
+	bullet1.shootBegin = true;
 	Shoot();
 }
 function Shoot(){
 		var i = Math.floor(bullet1.bulletX / theMaze.gridsize)
 		var j = Math.floor(bullet1.bulletY / theMaze.gridsize)
+		if (bullet1.shootBegin === true){
+			if (i < 0 || i >= theMaze.columns || j < 0 || j >= theMaze.rows) {
+				bullet1.shoot = false;
+				return;
+			}
+			var iTank = Math.floor(tank.tankCenterX / theMaze.gridsize)
+			var jTank = Math.floor(tank.tankCenterY / theMaze.gridsize)
+			if (i != iTank){
+				i = iTank;
+				bullet1.bulletX = tank.tankCenterX;
+			}
+			if (j != jTank) {
+				j = jTank;
+				bullet1.bulletY = tank.tankCenterY;
+			}
+			bullet1.shootBegin = false;
+		}
 	//	console.log(bullet1.bulletX);
 	//	document.getElementById('demo').innerHTML = " " + bullet1.bulletX;
 		var currentBulletGrid = theMaze.grid[i][j];
