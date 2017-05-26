@@ -7,18 +7,24 @@ var canvas;
 var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
-
+var bulletPack = 6;
+var tank = null;
+var bullet = null;
 
 function generate() {
 	makeMaze();
 	tank = new Tank();
-	bullet1 = new Bullet();
+	bullet = new Array();
+	for (var i = 0; i < bulletPack; i++)
+    	bullet.push(new Bullet());
+	
 	theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
 		setInterval(theMaze.playGame, 10);
 	}
+	
 	loaded++;
 }
 function reSetTank() {
@@ -410,8 +416,6 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 //function makeTank() {
 var canvas = document.getElementById("maze");
 var ctx = canvas.getContext("2d");
-var tank = null;
-var bullet1 = null;
 
 function Tank(){	
 	// tank parameters
@@ -458,8 +462,6 @@ function Bullet() {
 	this.bulletRadius;
 	this.dbulletX;
 	this.dbulletY;
-	this.bulletReload = false;
-	this.leftClick = false;
 	this.shoot = false;
 	this.collisions = 0;
 	this.shootBegin = false;
@@ -472,12 +474,13 @@ function initializeBullet(aTank, aBullet){
 	aBullet.bulletRadius = aTank.rotorWidth * 3 / 7;
 	aBullet.dbulletX = -2 * aBullet.bulletRadius / 3;
 	aBullet.dbulletY = 2 * aBullet.bulletRadius / 3;
-	aBullet.bulletReload = false;
-	aBullet.leftClick = false;
 	aBullet.shoot = false;
 	aBullet.collisions = 0;
 }
 
+var bulletReload = false;
+var leftClick = false;
+var bulletShot = bulletPack;
 
 // maze parameters
 // border parameters
@@ -541,12 +544,12 @@ function mouseMoveHandler(e) {
 
 function rightclick(event){
 	if(event.button == 2){
-		bullet1.bulletReload = true;
-		bullet1.leftClick = false;
+		bulletReload = true;
+		leftClick = false;
 	}
 	else if(event.button == 0){
-			bullet1.leftClick = true;
-			bullet1.bulletReload = false;
+			leftClick = true;
+			bulletReload = false;
 	}
 }
 
@@ -580,7 +583,8 @@ function drawTank(x, y, radius, length, width,degrees){
 
 maze.prototype.initialize = function() {
 	initializeTank(tank);
-	initializeBullet(tank, bullet1);
+	for (var i = 0; i < bulletPack; i++)
+    	initializeBullet(tank, bullet[i]);
 	if (onceLoaded > 0) {	
 		document.addEventListener("keydown", keyDownHandler, false);
 		document.addEventListener("keyup", keyUpHandler, false);
@@ -588,6 +592,7 @@ maze.prototype.initialize = function() {
 			
 		onceLoaded = -1;
 	}
+	bulletReload = true;
 }
 
 
@@ -687,28 +692,50 @@ maze.prototype.drawing = function(aTank) {
 	aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
  	theMaze.draw();
  	
- 	
-	if (bullet1.shoot) {
-		if (bullet1.bulletReload){
-			bullet1.collisions = 0;
-			bullet1.shoot = false;
-			bullet1.bulletReload = false;
-			document.getElementById('demo').innerHTML = "Relax";
+	
+	// Some Shooting....
+	if (bulletReload){
+		// reset each bullet and fill bulletPack
+	/*	for (var i = bulletPack - 1; i >=0 ; i--){
+				bullet[i].collisions = 0;
+				bullet[i].shoot = false;
+//				bulletReload = false;
+//				document.getElementById('demo').innerHTML = "Relax";
+		}*/
+		bulletShot = bulletPack;
+	}
+	// shoot the bullets ready for shoot
+ 	for (var i = bulletPack - 1; i >=0 ; i--){
+		if (bullet[i].shoot) {
+			/*$
+			  $
+			  $
+			  $
+			  */
+			// $$ Error ->
+	//$		Shoot(bullet[i]);
+// 			drawbullet(bulletX, bulletY);
 		}
-		else Shoot(bullet1);
-// 		drawbullet(bulletX, bulletY);
 	}
- 	else if (bullet1.leftClick){
-		shootBullet(bullet1);
-		bullet1.leftClick = false;
-		document.getElementById('demo').innerHTML = "Beware!";
+	// shoot new bullet if you have
+ 	if (bulletShot > 0 && leftClick){
+			shootBullet(bullet[bulletShot - 1]);
+	//		bullet[bulletShot - 1].shoot = true;
+			leftClick = false;
+			bulletShot -= 1;
+	//		document.getElementById('demo').innerHTML = "Beware!";
 	}
+	// for debugging
+	document.getElementById('demo').innerHTML = bulletShot + " " + leftClick + bulletReload + bullet[0].shoot + bullet[5].shoot;
+	
+	bulletReload = false;
 	drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
  	//theMaze.draw();
- 	bullet1.bulletReload = false;
- 	bullet1.leftClick = false;
- 	if (bullet1.shoot === false) document.getElementById('demo').innerHTML = "Relax";
+ 	bulletReload = false;
+ 	leftClick = false;
+// 	if (bullet[0].shoot === false) document.getElementById('demo').innerHTML = "Relax";
 		// for debugging
+//	document.getElementById('demo').innerHTML = bulletShot;
 	//	document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet" + bullet1.bulletX + bullet1.leftClick + bullet1.bulletReload;
 }
 
@@ -736,7 +763,7 @@ function shootBullet(aBullet) {
 function Shoot(aBullet){
 	var i = Math.floor(aBullet.bulletX / theMaze.gridsize)
 	var j = Math.floor(aBullet.bulletY / theMaze.gridsize)
-	if (aBullet.shootBegin === true){
+/*	if (aBullet.shootBegin === true){
 		if (i < 0 || i >= theMaze.columns || j < 0 || j >= theMaze.rows) {
 			aBullet.shoot = false;
 			return;
@@ -752,7 +779,7 @@ function Shoot(aBullet){
 			aBullet.bulletY = tank.tankCenterY;
 		}
 		aBullet.shootBegin = false;
-	}
+	}*/
 //	console.log(aBullet.bulletX);
 //	document.getElementById('demo').innerHTML = " " + aBullet.bulletX;
 	var currentBulletGrid = theMaze.grid[i][j];
@@ -764,9 +791,10 @@ function Shoot(aBullet){
  	// fine adjustments for bullet
  	if (currentBulletGrid.rightWall && (aBullet.bulletX + aBullet.bulletRadius > wallRight)) {
 		if(aBullet.bulletAngle <= 180){
-		aBullet.bulletAngle -= (2*aBullet.bulletAngle - 180);
-		}else{
-		aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle - 180);
+		}
+		else{
+			aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
 		}
 		aBullet.bulletAngle = aBullet.bulletAngle % 360;
 		aBullet.collisions++;
@@ -774,28 +802,31 @@ function Shoot(aBullet){
  	else if (currentBulletGrid.leftWall && (aBullet.bulletX - aBullet.bulletRadius < wallLeft)) {
 		
 		if(aBullet.bulletAngle <= 180){
-		aBullet.bulletAngle += (180 - 2*aBullet.bulletAngle);
-		}else{
-		aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
+			aBullet.bulletAngle += (180 - 2*aBullet.bulletAngle);
+		}
+		else{
+			aBullet.bulletAngle += (540 - 2*aBullet.bulletAngle);
 		}
 		aBullet.bulletAngle = aBullet.bulletAngle % 360;
 		aBullet.collisions++;
 	}
 	else if (currentBulletGrid.bottomWall && (aBullet.bulletY + aBullet.bulletRadius > wallBottom)) {
 		if(aBullet.bulletAngle <= 270){
-		aBullet.bulletAngle -= (2*aBullet.bulletAngle - 360);
-		}else{
-		aBullet.bulletAngle += (720 - 2*aBullet.bulletAngle);
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle - 360);
+		}
+		else{
+			aBullet.bulletAngle += (720 - 2*aBullet.bulletAngle);
 		}
 		aBullet.bulletAngle = aBullet.bulletAngle % 360;
 		aBullet.collisions++;
 	}
  	else if (currentBulletGrid.topWall && (aBullet.bulletY - aBullet.bulletRadius < wallTop)) {
 		if(aBullet.bulletAngle <= 90){
-		aBullet.bulletAngle -= (2*aBullet.bulletAngle);
-		aBullet.bulletAngle += 360;
-		}else{
-		aBullet.bulletAngle += (360 - 2*aBullet.bulletAngle);
+			aBullet.bulletAngle -= (2*aBullet.bulletAngle);
+			aBullet.bulletAngle += 360;
+		}
+		else{
+			aBullet.bulletAngle += (360 - 2*aBullet.bulletAngle);
 		}
 		aBullet.bulletAngle = aBullet.bulletAngle % 360;
 		aBullet.collisions++;
@@ -808,6 +839,6 @@ function Shoot(aBullet){
 		if(aBullet.collisions > 6){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;
-			}	
+		}	
 }
 	
