@@ -534,8 +534,8 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
-   var X = e.clientX - canvas.offsetLeft;
-   var Y = e.clientY - canvas.offsetTop;
+   var X = e.clientX - canvas.offsetLeft - tank.tankCenterX;
+   var Y = e.clientY - canvas.offsetTop - tank.tankCenterY;
    var Z = Math.sqrt(X*X + Y*Y);
 	if(Y >= 0){
 	tank.rotorAngle = 180 + ((180/3.14132)*Math.acos(X/Z));
@@ -552,14 +552,18 @@ function mouseMoveHandler(e) {
 
 function rightclick(event){
 	if(event.button == 2){
-		bulletReload = true;
-		leftClick = false;
+		setTimeout(Reload,3000);
 	}
 	else if(event.button == 0){
 			leftClick = true;
 			bulletReload = false;
 	}
 }
+
+function Reload(){
+	bulletReload = true;
+	leftClick = false;
+	}
 
 function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
@@ -705,12 +709,6 @@ maze.prototype.drawing = function(aTank) {
 	// Some Shooting....
 	if (bulletReload){
 		// reset each bullet and fill bulletPack
-	/*	for (var i = bulletPack - 1; i >=0 ; i--){
-				bullet[i].collisions = 0;
-				bullet[i].shoot = false;
-//				bulletReload = false;
-//				document.getElementById('demo').innerHTML = "Relax";
-		}*/
 		bulletShot = bulletPack;
 	}
 	
@@ -726,7 +724,6 @@ maze.prototype.drawing = function(aTank) {
 	// shoot the bullets ready for shoot
  	
  	for (var i = bulletPack - 1; i >=0 ; i--){
-		var x = 0;
 		if (bullet[i].shoot) {
 			Shoot(bullet[i]);
 		}
