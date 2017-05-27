@@ -2,7 +2,7 @@ var	canvas = document.getElementById('maze');
 var context = canvas.getContext('2d');	
 	context.font = "bold 20px sans-serif";
 	//$(document).keydown(handleKeypress);
-var canvas;
+//var canvas;
 //var context;
 var theMaze = null;
 var loaded = 0;
@@ -414,7 +414,7 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 
 // javascript for tank
 //function makeTank() {
-var canvas = document.getElementById("maze");
+//var canvas = document.getElementById("maze");
 var ctx = canvas.getContext("2d");
 
 function Tank(){	
@@ -704,19 +704,7 @@ maze.prototype.drawing = function(aTank) {
 		}*/
 		bulletShot = bulletPack;
 	}
-	// shoot the bullets ready for shoot
- 	for (var i = bulletPack - 1; i >=0 ; i--){
-		if (bullet[i].shoot) {
-			/*$
-			  $
-			  $
-			  $
-			  */
-			// $$ Error ->
-	//$		Shoot(bullet[i]);
-// 			drawbullet(bulletX, bulletY);
-		}
-	}
+	
 	// shoot new bullet if you have
  	if (bulletShot > 0 && leftClick){
 			shootBullet(bullet[bulletShot - 1]);
@@ -725,10 +713,20 @@ maze.prototype.drawing = function(aTank) {
 			bulletShot -= 1;
 	//		document.getElementById('demo').innerHTML = "Beware!";
 	}
+	
+	// shoot the bullets ready for shoot
+ 	
+ 	for (var i = bulletPack - 1; i >=0 ; i--){
+		var x = 0;
+		if (bullet[i].shoot) {
+			Shoot(bullet[i]);
+		}
+	}
+	
 	// for debugging
 	document.getElementById('demo').innerHTML = bulletShot + " " + leftClick + bulletReload + bullet[0].shoot + bullet[5].shoot;
 	
-	bulletReload = false;
+	//bulletReload = false;
 	drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
  	//theMaze.draw();
  	bulletReload = false;
@@ -754,10 +752,11 @@ function shootBullet(aBullet) {
 	aBullet.bulletX = tank.tankCenterX - tank.rotorLength * (Math.cos(tank.rotorAngle * Math.PI / 180));
 	aBullet.bulletY = tank.tankCenterY - tank.rotorLength * (Math.sin(tank.rotorAngle * Math.PI / 180));;
 	aBullet.bulletAngle = tank.rotorAngle;
+	aBullet.collisions = 0;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
 	aBullet.shoot = true;
-	aBullet.shootBegin = true;
+	//aBullet.shootBegin = true;
 	Shoot(aBullet);
 }
 function Shoot(aBullet){
