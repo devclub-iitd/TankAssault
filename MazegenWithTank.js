@@ -13,12 +13,13 @@ var bullet = null;
 
 function generate() {
 	makeMaze();
+	theMaze.draw();
 	tank = new Tank();
 	bullet = new Array();
 	for (var i = 0; i < bulletPack; i++)
     	bullet.push(new Bullet());
 	
-	theMaze.draw();
+	//theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
@@ -533,8 +534,15 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
-   var relativeX = e.clientX - canvas.offsetLeft;
-	tank.rotorAngle = relativeX/2;
+   var X = e.clientX - canvas.offsetLeft;
+   var Y = e.clientY - canvas.offsetTop;
+   var Z = Math.sqrt(X*X + Y*Y);
+	if(Y >= 0){
+	tank.rotorAngle = 180 + ((180/3.14132)*Math.acos(X/Z));
+	}
+	else{
+	tank.rotorAngle = 180 - ((180/3.14132)*Math.acos(X/Z));	
+	}
 	if(tank.rotorAngle < 0)
 	{
 		tank.rotorAngle += 360;
@@ -582,9 +590,7 @@ function drawTank(x, y, radius, length, width,degrees){
 	}
 
 maze.prototype.initialize = function() {
-	initializeTank(tank);
-	for (var i = 0; i < bulletPack; i++)
-    	initializeBullet(tank, bullet[i]);
+	
 	if (onceLoaded > 0) {	
 		document.addEventListener("keydown", keyDownHandler, false);
 		document.addEventListener("keyup", keyUpHandler, false);
@@ -592,6 +598,9 @@ maze.prototype.initialize = function() {
 			
 		onceLoaded = -1;
 	}
+	initializeTank(tank);
+	for (var i = 0; i < bulletPack; i++)
+    	initializeBullet(tank, bullet[i]);
 	bulletReload = true;
 }
 
