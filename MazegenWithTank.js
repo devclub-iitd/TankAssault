@@ -482,6 +482,7 @@ function initializeBullet(aTank, aBullet){
 var bulletReload = false;
 var leftClick = false;
 var bulletShot = bulletPack;
+var reloading = false;
 
 // maze parameters
 // border parameters
@@ -552,6 +553,7 @@ function mouseMoveHandler(e) {
 
 function rightclick(event){
 	if(event.button == 2){
+		reloading = true;
 		setTimeout(Reload,3000);
 	}
 	else if(event.button == 0){
@@ -563,7 +565,8 @@ function rightclick(event){
 function Reload(){
 	bulletReload = true;
 	leftClick = false;
-	}
+	reloading = false;
+}
 
 function drawTank(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
@@ -712,6 +715,11 @@ maze.prototype.drawing = function(aTank) {
 		bulletShot = bulletPack;
 	}
 	
+	if (reloading){
+		document.getElementById('demo').innerHTML = "Reloading..." + "<br>";
+	}
+	else document.getElementById('demo').innerHTML = "Enjoy Shooting!" + "<br>";
+	
 	// shoot new bullet if you have
  	if (bulletShot > 0 && leftClick){
 			shootBullet(bullet[bulletShot - 1]);
@@ -730,7 +738,7 @@ maze.prototype.drawing = function(aTank) {
 	}
 	
 	// for debugging
-	document.getElementById('demo').innerHTML = bulletShot + " " + leftClick + bulletReload + bullet[0].shoot + bullet[5].shoot;
+	document.getElementById('demo').innerHTML += "Bullets Left: " + bulletShot;
 	
 	//bulletReload = false;
 	drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
@@ -762,13 +770,13 @@ function shootBullet(aBullet) {
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
 	aBullet.shoot = true;
-	//aBullet.shootBegin = true;
+	aBullet.shootBegin = true;
 	Shoot(aBullet);
 }
 function Shoot(aBullet){
 	var i = Math.floor(aBullet.bulletX / theMaze.gridsize)
 	var j = Math.floor(aBullet.bulletY / theMaze.gridsize)
-/*	if (aBullet.shootBegin === true){
+	if (aBullet.shootBegin === true){
 		if (i < 0 || i >= theMaze.columns || j < 0 || j >= theMaze.rows) {
 			aBullet.shoot = false;
 			return;
@@ -784,7 +792,7 @@ function Shoot(aBullet){
 			aBullet.bulletY = tank.tankCenterY;
 		}
 		aBullet.shootBegin = false;
-	}*/
+	}
 //	console.log(aBullet.bulletX);
 //	document.getElementById('demo').innerHTML = " " + aBullet.bulletX;
 	var currentBulletGrid = theMaze.grid[i][j];
