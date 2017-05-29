@@ -36,7 +36,7 @@ function keyDownHandler(e) {
     else if(e.keyCode == 37) {
         leftPressed = true;
     }
-	if(e.keyCode == 38) {
+	if(e.keyCode == 87) {
 		upPressed = true;
 	}
 	else if(e.keyCode == 40) {
@@ -50,7 +50,7 @@ function keyUpHandler(e) {
     else if(e.keyCode == 37) {
         leftPressed = false;
     }
-	if(e.keyCode == 38) {
+	if(e.keyCode == 87) {
 		upPressed = false;
 	}
 	else if(e.keyCode == 40) {
@@ -64,7 +64,7 @@ function mouseMoveHandler(e) {
 }
 
 
-function drawTank(x, y, radius, length, width,degrees){
+function drawTank1(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
 		grd.addColorStop(.4,"green");
@@ -93,6 +93,44 @@ function drawTank(x, y, radius, length, width,degrees){
 		grd.addColorStop(0,"white");
 		grd.addColorStop(1,"gold");*/
 	    ctx.fillStyle = "yellow";
+
+		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+        
+
+        // restore the context to its untranslated/unrotated state
+        ctx.restore();
+
+    }
+
+function drawTank2(x, y, radius, length, width,degrees){
+		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
+		grd.addColorStop(0,"orange");
+		grd.addColorStop(.4,"red");
+		grd.addColorStop(1, "yellow");
+
+		ctx.beginPath();
+		ctx.fillStyle = grd;
+		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+        // first save the untranslated/unrotated context
+        ctx.save();
+
+        ctx.beginPath();
+        // move the rotation point to the center of the rect
+        ctx.translate( x, y );
+        // rotate the rect
+        ctx.rotate(degrees * Math.PI / 180);
+
+        // draw the rect on the transformed context
+        // Note: after transforming [0,0] is visually [x,y]
+        //       so the rect needs to be offset accordingly when drawn
+        
+
+		/*var grdRect = ctx.createLinearGradient(0, 0, 30, 0);
+		grd.addColorStop(0,"white");
+		grd.addColorStop(1,"gold");*/
+	    ctx.fillStyle = "#E3EF1E";
 
 		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
         
@@ -152,7 +190,7 @@ function draw() {
 	
 	tankCenterX = rotorX + rotorLength / 2;
 	tankCenterY = rotorY + rotorWidth / 2;
-	drawTank(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);
+	drawTank2(tankCenterX, tankCenterY, tankRadius, rotorLength, rotorWidth, rotorAngle);
 	// for debugging
 	//document.getElementById("demo").innerHTML = "" + dAng  + " "+ tankX + " " + tankY + " " + leftPressed;
 }

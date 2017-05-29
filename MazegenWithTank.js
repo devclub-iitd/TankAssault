@@ -8,13 +8,15 @@ var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
 var bulletPack = 6;
-var tank = null;
+var tank1 = null;
+var tank2 = null;
 var bullet = null;
 
 function generate() {
 	makeMaze();
 	theMaze.draw();
-	tank = new Tank();
+	tank1 = new Tank();
+	tank2 = new Tank();
 	bullet = new Array();
 	for (var i = 0; i < bulletPack; i++)
     	bullet.push(new Bullet());
@@ -499,60 +501,96 @@ var wallBottom = 0;
 function keyDownHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			tank.upPressed = true;
+			tank1.upPressed = true;
+			break;
+		case 87:
+			tank2.upPressed = true;
 			break;
 		case 40:
-			tank.downPressed = true;
+			tank1.downPressed = true;
+			break;
+		case 83:
+			tank2.downPressed = true;
 			break;
 		case 39:
-			tank.rightPressed = true;
+			tank1.rightPressed = true;
+			break;
+		case 68:
+			tank2.rightPressed = true;
 			break;
 		case 37:
-			tank.leftPressed = true;
+			tank1.leftPressed = true;
+			break;
+		case 65:
+			tank2.leftPressed = true;
+			break;
+		case 88:
+			setTimeout(rotateClock, 10);
+			break;
+		case 90:
+			setTimeout(rotateAntiClock, 10);
 			break;
 		default:
 			// none of these keys
 			break;
 	}
 }
+function rotateClock(){
+	tank2.rotorAngle -= 10;
+}
+
+function rotateAntiClock(){
+	tank2.rotorAngle += 10;
+}
+
 
 function keyUpHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			tank.upPressed = false;
+			tank1.upPressed = false;
+			break;
+		case 87:
+			tank2.upPressed = false;
 			break;
 		case 40:
-			tank.downPressed = false;
+			tank1.downPressed = false;
+			break;
+		case 83:
+			tank2.downPressed = false;
 			break;
 		case 39:
-			tank.rightPressed = false;
+			tank1.rightPressed = false;
+			break;
+		case 68:
+			tank2.rightPressed = false;
 			break;
 		case 37:
-			tank.leftPressed = false;
+			tank1.leftPressed = false;
+			break;
+		case 65:
+			tank2.leftPressed = false;
 			break;
 		default:
 			// none of these keys
 			break;
 	}
 }
-
 function mouseMoveHandler(e) {
-   var X = e.clientX - canvas.offsetLeft - tank.tankCenterX;
-   var Y = e.clientY - canvas.offsetTop - tank.tankCenterY;
+   var X = e.clientX - canvas.offsetLeft - tank1.tankCenterX;
+   var Y = e.clientY - canvas.offsetTop - tank1.tankCenterY;
    var Z = Math.sqrt(X*X + Y*Y);
 	if(Y >= 0){
-	tank.rotorAngle = 180 + ((180/3.14132)*Math.acos(X/Z));
+	tank1.rotorAngle = 180 + ((180/3.14132)*Math.acos(X/Z));
 	}
 	else{
-	tank.rotorAngle = 180 - ((180/3.14132)*Math.acos(X/Z));	
+	tank1.rotorAngle = 180 - ((180/3.14132)*Math.acos(X/Z));	
 	}
-	if(tank.rotorAngle < 0)
+	if(tank1.rotorAngle < 0)
 	{
-		tank.rotorAngle += 360;
+		tank1.rotorAngle += 360;
 	}
-	tank.rotorAngle = tank.rotorAngle % 360;
+	tank1.rotorAngle = tank1.rotorAngle % 360;
 }
-
 function rightclick(event){
 	if(event.button == 2){
 		reloading = true;
@@ -563,14 +601,13 @@ function rightclick(event){
 			bulletReload = false;
 	}
 }
-
 function Reload(){
 	bulletReload = true;
 	leftClick = false;
 	reloading = false;
 }
 
-function drawTank(x, y, radius, length, width,degrees){
+function drawTank1(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
 		grd.addColorStop(.4,"green");
@@ -597,6 +634,33 @@ function drawTank(x, y, radius, length, width,degrees){
         // restore the context to its untranslated/unrotated state
         ctx.restore();
 	}
+function drawTank2(x, y, radius, length, width,degrees){
+		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
+		grd.addColorStop(0,"orange");
+		grd.addColorStop(.4,"red");
+		grd.addColorStop(1, "yellow");
+
+		ctx.beginPath();
+		ctx.fillStyle = grd;
+		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+        // first save the untranslated/unrotated context
+        ctx.save();
+	    ctx.beginPath();
+        // move the rotation point to the center of the rect
+        ctx.translate( x, y );
+        // rotate the rect
+        ctx.rotate(degrees * Math.PI / 180);
+	    // draw the rect on the transformed context
+        // Note: after transforming [0,0] is visually [x,y]
+        //       so the rect needs to be offset accordingly when drawn
+        
+	    ctx.fillStyle = "#E3EF1E";
+		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+        // restore the context to its untranslated/unrotated state
+        ctx.restore();
+}
 
 maze.prototype.initialize = function() {
 	
@@ -607,19 +671,24 @@ maze.prototype.initialize = function() {
 			
 		onceLoaded = -1;
 	}
-	initializeTank(tank);
+	initializeTank(tank1);
+	initializeTank(tank2);
 	for (var i = 0; i < bulletPack; i++)
-    	initializeBullet(tank, bullet[i]);
+    	initializeBullet(tank1, bullet[i]);
 	bulletReload = true;
 }
 
 
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
-	 theMaze.drawing(tank);
+	 theMaze.moveTank(tank1);
+	 theMaze.moveTank(tank2);
+	 theMaze.draw();
+	 theMaze.shootTank(tank1);
+	 drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
  }
 
-maze.prototype.drawing = function(aTank) {
+maze.prototype.moveTank = function(aTank) {
  	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 	var j = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 	var currentPlayerGrid = theMaze.grid[i][j];
@@ -708,9 +777,9 @@ maze.prototype.drawing = function(aTank) {
  	
  	aTank.tankCenterX = aTank.rotorX + aTank.rotorLength / 2;
 	aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
- 	theMaze.draw();
- 	
-	
+}
+
+maze.prototype.shootTank = function(aTank) {
 	// Some Shooting....
 	if (bulletReload){
 		// reset each bullet and fill bulletPack
@@ -724,7 +793,7 @@ maze.prototype.drawing = function(aTank) {
 	
 	// shoot new bullet if you have
  	if (bulletShot > 0 && leftClick){
-			shootBullet(bullet[bulletShot - 1]);
+			shootBullet(bullet[bulletShot - 1], aTank);
 			leftClick = false;
 			bulletShot -= 1;
 	}
@@ -742,11 +811,11 @@ maze.prototype.drawing = function(aTank) {
 			bulletShot = bulletPack;
 			}	
 		if (bullet[i].shoot) {
-			Shoot(bullet[i]);
+			Shoot(bullet[i], aTank);
 		}
 		if(bulltank >= aTank.tankRadius){
-			drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
-			}
+			if (aTank === tank1) drawTank1(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
+		}
 	}
 	
 	
@@ -768,18 +837,18 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 	leftClick = false;
 	}
 
-function shootBullet(aBullet) {
-	aBullet.bulletX = tank.tankCenterX - tank.rotorLength * (Math.cos(tank.rotorAngle * Math.PI / 180));
-	aBullet.bulletY = tank.tankCenterY - tank.rotorLength * (Math.sin(tank.rotorAngle * Math.PI / 180));;
-	aBullet.bulletAngle = tank.rotorAngle;
+function shootBullet(aBullet, aTank) {
+	aBullet.bulletX = aTank.tankCenterX - aTank.rotorLength * (Math.cos(aTank.rotorAngle * Math.PI / 180));
+	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));;
+	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.collisions = 0;
 	//console.log(rotorAngle);
 //	drawbullet(bulletX,bulletY);
 	aBullet.shoot = true;
 	aBullet.shootBegin = true;
-	Shoot(aBullet);
+	Shoot(aBullet, aTank);
 }
-function Shoot(aBullet){
+function Shoot(aBullet, aTank){
 	var i = Math.floor(aBullet.bulletX / theMaze.gridsize)
 	var j = Math.floor(aBullet.bulletY / theMaze.gridsize)
 	if (aBullet.shootBegin === true){
@@ -788,15 +857,15 @@ function Shoot(aBullet){
 			return;
 		}
 		
-		var iTank = Math.floor(tank.tankCenterX / theMaze.gridsize)
-		var jTank = Math.floor(tank.tankCenterY / theMaze.gridsize)
+		var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
+		var jTank = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 		if (i != iTank){
 			i = iTank;
-			aBullet.bulletX = tank.tankCenterX;
+			aBullet.bulletX = aTank.tankCenterX;
 		}
 		if (j != jTank) {
 			j = jTank;
-			aBullet.bulletY = tank.tankCenterY;
+			aBullet.bulletY = aTank.tankCenterY;
 		}
 		aBullet.shootBegin = false;
 	}
