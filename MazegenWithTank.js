@@ -18,7 +18,6 @@ function generate() {
 	bullet = new Array();
 	for (var i = 0; i < bulletPack; i++)
     	bullet.push(new Bullet());
-	
 	//theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
@@ -628,7 +627,7 @@ maze.prototype.drawing = function(aTank) {
  	wallBottom = (j+1)*theMaze.gridsize;
 	//console.log(i);
 	//console.log(currentPlayerGrid.rightWall);
- 
+ 	
  	// fine adjustments
  	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.tankRadius > wallRight)) {
 		// do something
@@ -723,32 +722,36 @@ maze.prototype.drawing = function(aTank) {
 	// shoot new bullet if you have
  	if (bulletShot > 0 && leftClick){
 			shootBullet(bullet[bulletShot - 1]);
-	//		bullet[bulletShot - 1].shoot = true;
 			leftClick = false;
 			bulletShot -= 1;
-	//		document.getElementById('demo').innerHTML = "Beware!";
 	}
 	
 	// shoot the bullets ready for shoot
  	
  	for (var i = bulletPack - 1; i >=0 ; i--){
+		var bulltank = Math.sqrt(Math.pow((bullet[i].bulletX-aTank.tankCenterX),2) + Math.pow((bullet[i].bulletY-aTank.tankCenterY),2));
+		if((bulltank <= aTank.tankRadius) && (bullet[i].shoot == true)){
+			makeMaze();
+			initializeTank(aTank);
+			for(var j = 0;j<6;j++){
+			initializeBullet(aTank, bullet[j]);
+			}
+			bulletShot = bulletPack;
+			}	
 		if (bullet[i].shoot) {
 			Shoot(bullet[i]);
 		}
+		if(bulltank >= aTank.tankRadius){
+			drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
+			}
 	}
+	
 	
 	// for debugging
 	document.getElementById('demo').innerHTML += "Bullets Left: " + bulletShot;
 	
-	//bulletReload = false;
-	drawTank(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
- 	//theMaze.draw();
  	bulletReload = false;
  	leftClick = false;
-// 	if (bullet[0].shoot === false) document.getElementById('demo').innerHTML = "Relax";
-		// for debugging
-//	document.getElementById('demo').innerHTML = bulletShot;
-	//	document.getElementById("demo").innerHTML = /*" "+ tankX + " " + tankY + " " + leftPressed + rightPressed + " " + upPressed + " " + downPressed + " " + tankCenterX + " " + tankCenterY + " Left:" + currentPlayerGrid.leftWall + " Right:" + currentPlayerGrid.rightWall + " Top:" + currentPlayerGrid.topWall + " Bottom:" + currentPlayerGrid.bottomWall + " " + loaded + Mpressed + " " + shoot + */" " /*+ rotorAngle*/ + "<br>Wait till " + bullet1.collisions + " collisoins or reload to fire next bullet" + bullet1.bulletX + bullet1.leftClick + bullet1.bulletReload;
 }
 
 
@@ -781,6 +784,7 @@ function Shoot(aBullet){
 			aBullet.shoot = false;
 			return;
 		}
+		
 		var iTank = Math.floor(tank.tankCenterX / theMaze.gridsize)
 		var jTank = Math.floor(tank.tankCenterY / theMaze.gridsize)
 		if (i != iTank){
@@ -793,6 +797,7 @@ function Shoot(aBullet){
 		}
 		aBullet.shootBegin = false;
 	}
+	
 //	console.log(aBullet.bulletX);
 //	document.getElementById('demo').innerHTML = " " + aBullet.bulletX;
 	var currentBulletGrid = theMaze.grid[i][j];
