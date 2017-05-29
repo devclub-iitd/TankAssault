@@ -438,8 +438,11 @@ function Tank(){
 
 function initializeTank(aTank) {
 	// tank parameters
-	aTank.tankCenterX = theMaze.gridsize / 30;
-	aTank.tankCenterY = theMaze.gridsize / 30;
+	var randrow = Math.floor(Math.random() * theMaze.rows);
+	var randcolumn = Math.floor(Math.random() * theMaze.columns);
+		
+	aTank.tankCenterX = (randcolumn * theMaze.gridsize) + theMaze.gridsize / 30;
+	aTank.tankCenterY = (randrow * theMaze.gridsize) + theMaze.gridsize / 30;
 	aTank.rotorX = aTank.tankCenterX + 15;
 	aTank.rotorY = aTank.tankCenterY + 15;
 	aTank.rotorAngle;
