@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* Simplify width and height calculations */
+/* for later use
+html {
+	box-sizing: border-box;
+}
+*, *:before,
+*:after {
+	
+}*/
+
+body{
+  margin: 0;
+  background: #222a33;
+  text-align: center;
+}
+	
+#demo {
+	margin-top: 500px;	
+}
+#left{
+	background-color:black;
+	margin-top : -30px;
+	margin-bottom: 0;
+	height : 100vh;
+	width : 283px;
+	position: absolute;
+	//display: inline-block;
+}
+#right{
+	background-color:black;
+	margin-top : -30px;
+	margin-bottom: 0;
+	height : 100vh;
+	width : 283px;
+	position: absolute;
+	margin-left : 400px;
+	display: inline-block;
+}
+/*canvas {
+    width: 600px;
+    height: 450px;
+}*/
+.mazeParameters {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid red;
+	background-color: gray;
+}
+.mazeParameters .infoRow {
+	text-align: center;
+	background-color: black;
+	color: white;
+}
+	
+#demo {
+	color: wheat;
+	margin-top: 600px;
+	position: relative;
+}
