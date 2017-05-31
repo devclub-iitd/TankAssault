@@ -7,10 +7,19 @@ Come and join us.<br>
 Compete with your friends or with our awesome A.I.(undefeated till date) (feature coming soon...)<br>
 <br>
 (Just download and run index.html in the browser)<br>
-Controls:<br>
+<B>Controls for 1 Player game:</B> <br>
 Move: Up, Down, Right, Left, rotate by mouse<br>
 Fire: Mouse left click<br>
 Reload: Mouse right click<br>
 <br>
-
+<B>Controls for 2 Player game: </B><br>
+<B>Player 1 - </B><br> 
+Move: Up & Down arrow key, rotate by left and right arrow key<br>
+Fire: Press M<br>
+Reload: Press N<br>
+<B>Player 2 - </B><br> 
+Move: W(up) & S(Down), rotate by A and D<br>
+Fire: Press X<br>
+Reload: Press Z<br>
+<br>
 Have Fun -:)
