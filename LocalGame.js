@@ -7,19 +7,23 @@ var context = canvas.getContext('2d');
 var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
-var bulletPack = 6;
+//var bulletPack1 = 6;
+//var bulletPack2 = 6;
 var tank1 = null;
 var tank2 = null;
-var bullet = null;
 
 function generate() {
 	makeMaze();
 	theMaze.draw();
 	tank1 = new Tank();
 	tank2 = new Tank();
-	bullet = new Array();
-	for (var i = 0; i < bulletPack; i++)
-    	bullet.push(new Bullet());
+	tank1.bullet = new Array();
+	tank2.bullet = new Array();
+	for (var i = 0; i < tank1.bulletPack; i++)
+    	tank1.bullet.push(new Bullet());
+	
+	for (var i = 0; i < tank2.bulletPack; i++)
+    	tank2.bullet.push(new Bullet());	
 	//theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
@@ -435,6 +439,13 @@ function Tank(){
 	this.leftPressed = false;
 	this.upPressed = false;
 	this.downPressed = false;
+	this.leftClick = false;
+	this.reloading = false;
+	this.bulletReload = false;
+	this.bulletPack = 6;
+	this.bulletShot = this.bulletPack;
+	this.bullet = null;
+	this.bullTank = 100;
 }
 
 function initializeTank(aTank) {
@@ -482,11 +493,6 @@ function initializeBullet(aTank, aBullet){
 	aBullet.collisions = 0;
 }
 
-var bulletReload = false;
-var leftClick = false;
-var bulletShot = bulletPack;
-var reloading = false;
-
 // maze parameters
 // border parameters
 var borX;
@@ -523,32 +529,25 @@ function keyDownHandler(e) {
 		case 65:
 			tank2.leftPressed = true;
 			break;
-		case 88:
-			rotateClock();			
-			break;
-		case 90:
-			rotateAntiClock();			
-			break;
 		default:
 			// none of these keys
 			break;
 	}
 	if(e.keyCode == 77){
-			leftClick = true;
+			tank1.leftClick = true;
+}
+	if(e.keyCode == 88){
+			tank2.leftClick = true;
 }
 	if(e.keyCode == 78){
-		reloading = true;
-		setTimeout(Reload,3000);
+		tank1.reloading = true;
+		setTimeout(Reload(tank1),3000);
+}	
+	if(e.keyCode == 90){
+		tank2.reloading = true;
+		setTimeout(Reload(tank2),3000);
 }
 }
-function rotateClock(){
-	tank2.rotorAngle -= 10;
-}
-
-function rotateAntiClock(){
-	tank2.rotorAngle += 10;
-}
-
 
 function keyUpHandler(e) {
 	switch (e.keyCode) {
@@ -581,14 +580,17 @@ function keyUpHandler(e) {
 			break;
 	}
 	if(e.keyCode == 77){
-			leftClick = false;
+			tank1.leftClick = false;
+}
+	if(e.keyCode == 88){
+			tank2.leftClick = false;
 }
 }
 
-function Reload(){
-	bulletReload = true;
-	leftClick = false;
-	reloading = false;
+function Reload(aTank){
+	aTank.bulletReload = true;
+	aTank.leftClick = false;
+	aTank.reloading = false;
 }
 
 function drawTank1(x, y, radius, length, width,degrees){
@@ -657,9 +659,15 @@ maze.prototype.initialize = function() {
 	}
 	initializeTank(tank1);
 	initializeTank(tank2);
-	for (var i = 0; i < bulletPack; i++)
-    	initializeBullet(tank1, bullet[i]);
-	bulletReload = true;
+	for (var i = 0; i < tank1.bulletPack; i++)
+    	initializeBullet(tank1, tank1.bullet[i]);
+	
+	for (var i = 0; i < tank2.bulletPack; i++)
+    	initializeBullet(tank2, tank2.bullet[i]);	
+	tank1.bulletReload = true;
+	tank2.bulletReload = true;
+	tank1.bulletShot = tank1.bulletPack;
+	tank2.bulletShot = tank2.bulletPack;
 }
 
 
@@ -668,8 +676,10 @@ maze.prototype.playGame = function() {
 	 theMaze.moveTank(tank1);
 	 theMaze.moveTank(tank2);
 	 theMaze.draw();
+	 theMaze.shootTank(tank2);
 	 theMaze.shootTank(tank1);
-	 drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
+	 
+	 //drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
  }
 
 maze.prototype.moveTank = function(aTank) {
@@ -755,49 +765,53 @@ maze.prototype.moveTank = function(aTank) {
 
 maze.prototype.shootTank = function(aTank) {
 	// Some Shooting....
-	if (bulletReload){
+	if (aTank.bulletReload){
 		// reset each bullet and fill bulletPack
-		bulletShot = bulletPack;
+		aTank.bulletShot = aTank.bulletPack;
 	}
 	
-	if (reloading){
+	if (aTank.reloading){
 		document.getElementById('demo').innerHTML = "Reloading..." + "<br>";
 	}
 	else document.getElementById('demo').innerHTML = "Enjoy Shooting!" + "<br>";
 	
 	// shoot new bullet if you have
- 	if (bulletShot > 0 && leftClick){
-			shootBullet(bullet[bulletShot - 1], aTank);
-			leftClick = false;
-			bulletShot -= 1;
+ 	if (aTank.bulletShot > 0 && aTank.leftClick){
+			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
+			aTank.leftClick = false;
+			aTank.bulletShot -= 1;
 	}
 	
 	// shoot the bullets ready for shoot
  	
- 	for (var i = bulletPack - 1; i >=0 ; i--){
-		var bulltank = Math.sqrt(Math.pow((bullet[i].bulletX-aTank.tankCenterX),2) + Math.pow((bullet[i].bulletY-aTank.tankCenterY),2));
-		if((bulltank <= aTank.tankRadius) && (bullet[i].shoot == true)){
+ 	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
+		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
+		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
+		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
 			makeMaze();
-			initializeTank(aTank);
-			for(var j = 0;j<6;j++){
-			initializeBullet(aTank, bullet[j]);
+			theMaze.initialize();
 			}
-			bulletShot = bulletPack;
-			}	
-		if (bullet[i].shoot) {
-			Shoot(bullet[i], aTank);
+		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
+			makeMaze();
+			theMaze.initialize();
+			}		
+		if (aTank.bullet[i].shoot) {
+			Shoot(aTank.bullet[i], aTank);
 		}
-		if(bulltank >= aTank.tankRadius){
-			if (aTank === tank1) drawTank1(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, aTank.rotorLength, aTank.rotorWidth, aTank.rotorAngle);
-		}
+		if(tank1.bulltank >= tank1.tankRadius){
+				drawTank1(tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle);
+			}
+		if(tank2.bulltank >= tank2.tankRadius){
+				drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
+			}
 	}
 	
 	
 	// for debugging
-	document.getElementById('demo').innerHTML += "Bullets Left: " + bulletShot;
+	document.getElementById('demo').innerHTML += "Bullets Left: " + aTank.bulletShot;
 	
- 	bulletReload = false;
- 	leftClick = false;
+ 	aTank.bulletReload = false;
+ 	aTank.leftClick = false;
 }
 
 
@@ -816,8 +830,6 @@ function shootBullet(aBullet, aTank) {
 	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));;
 	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.collisions = 0;
-	//console.log(rotorAngle);
-//	drawbullet(bulletX,bulletY);
 	aBullet.shoot = true;
 	aBullet.shootBegin = true;
 	Shoot(aBullet, aTank);
@@ -844,8 +856,6 @@ function Shoot(aBullet, aTank){
 		aBullet.shootBegin = false;
 	}
 	
-//	console.log(aBullet.bulletX);
-//	document.getElementById('demo').innerHTML = " " + aBullet.bulletX;
 	var currentBulletGrid = theMaze.grid[i][j];
  	wallLeft = i*theMaze.gridsize;
  	wallRight = (i+1)*theMaze.gridsize;
