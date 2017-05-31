@@ -125,7 +125,7 @@ a:hover, a:active, a:focus {
 	height : 100vh;
 	width : 283px;
 	position: absolute;
-	//display: inline-block;
+	display: inline-block;
 }
 #right{
 	background-color:black;
@@ -170,8 +170,20 @@ footer {
 	font-size: 0.8em;
 	text-align: center;
 }
+#squeezed {
+	position: absolute;
+	z-index: -1;
+	display: none;
+}
 
 
+#maze{
+	display: block;
+	margin-top: 50px;
+	margin-left:auto;
+	margin-right:auto;
+	position:fixed;
+}
 /* Media Queries */
 @media (min-width: 700px) {
 #menulink {
@@ -224,5 +236,28 @@ main, aside {
 	float: left;
 	font-size: 0.875em;
 }
+
+}
+
+@media (max-width: 1000px){
+#squeezed {
+	display: block;
+}
+#wrapper {
+	display: none;
+}
+	#squeezed p {
+		color: wheat;
+	}
+footer {
+	width: 100%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: #1E1E1E;
+	color: white;
+	font-size: 0.8em;
+	text-align: center;
+}
+
 
 }
