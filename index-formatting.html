@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Maze</title>
+	<link rel="stylesheet" href="stylesheet.css">
+	<script type='text/javascript' src='functions.js'></script>
+</head>
+<body>
+	<div onmousedown="rightclick(event)">
+		<canvas oncontextmenu='return false;' id="maze" width='100px' height='100px' style="display: block; margin-top: 50px; margin-left:400px; margin-right:auto; position:absolute;" ></canvas>
+	
+		<div id='site'>
+			<div id='page'>
+				<div id='content'>
+					<!--<script src='Online MultiPlayer.js' type='text/javascript'></script>-->
+					<!--<script src="tank.js"></script>-->
+					<script type="application/javascript">
+						function loadJS(file) {
+    						// DOM: Create the script element
+    						var jsElm = document.createElement("script");
+    						// set the type attribute
+    						jsElm.type = "application/javascript";
+    						// make the script element load file
+    						jsElm.src = file;
+    						// finally insert the element to the body element in order to load the script
+    						document.body.appendChild(jsElm);
+						}
+						function show()
+						{ 
+							document.getElementById("mazeParameters").style.display="block";
+						}
+					</script>
+					
+					<button onclick="loadJS('OnlineGame.js');show();">1 Player</button>
+					<button onclick="loadJS('LocalGame.js');show();">2 Player</button>
+					<button onclick="show();"> show </button>
+					
+					<table class="mazeParameters">
+						<tr>
+							<!--<td><input type='button' value='Start Game' id='generate'/></td>
+							<td><input type='button' value='Load Tank' id='tank'/></td>-->
+							<td> <button onclick="generate();">Start Game</button></td>
+							<td> <button onClick="reSetTank();" classs="start">Re Set Tank</button></td>
+						</tr>
+					</table>
+					<div id = 'left'></div>
+					<div id = 'right'></div>
+				</div>
+			</div>
+		</div>
+		<p id="demo" > Controls:<br>
+			   Tank1: up, down, left, right, Mouse: rotate, fire, M: reload<br>
+			   Tank2: w, a, s, d, Rotate: z, x, reload:r<br>
+			   First load maze then tank</p>
+	</div>
+</body>
+</html>
+
