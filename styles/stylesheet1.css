@@ -180,9 +180,9 @@ footer {
 #maze{
 	display: block;
 	margin-top: 50px;
-	margin-left:auto;
-	margin-right:auto;
-	position:fixed;
+	margin-left: auto;
+	margin-right: auto;
+	position: static;
 }
 /* Media Queries */
 @media (min-width: 700px) {
