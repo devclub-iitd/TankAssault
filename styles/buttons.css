@@ -152,6 +152,11 @@ h3 {
     width: 50%;
     float: left;
 }
+#player {
+    width: 50%;
+    margin-left:auto;
+	margin-right:auto;
+}
 #clear {
     clear: both;
 }
