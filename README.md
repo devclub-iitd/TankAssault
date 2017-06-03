@@ -8,9 +8,9 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 <br>
 (Just download and run index.html in the browser)<br>
 <B>Controls for 1 Player game:</B> <br>
-Move: Up, Down, Right, Left, rotate by mouse<br>
-Fire: Mouse left click<br>
-Reload: Mouse right click<br>
+Move: Up & Down arrow key, rotate by left & right arrow key<br>
+Fire: F<br>
+Reload: R<br>
 <br>
 <B>Controls for 2 Player game: </B><br>
 <B>Player 1 - </B><br> 
