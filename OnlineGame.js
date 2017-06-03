@@ -23,7 +23,7 @@ function generate() {
 	
 	loaded++;
 }
-function reSetTank2() {
+function reSetTank() {
 	theMaze.initialize();
 }
 
@@ -734,12 +734,12 @@ maze.prototype.shootTank = function(aTank) {
 		// reset each bullet and fill bulletPack
 		bulletShot = bulletPack;
 	}
-	
+	/*
 	if (reloading){
 		document.getElementById('demo').innerHTML = "Reloading..." + "<br>";
 	}
 	else document.getElementById('demo').innerHTML = "Enjoy Shooting!" + "<br>";
-	
+	*/
 	// shoot new bullet if you have
  	if (bulletShot > 0 && leftClick){
 			shootBullet(bullet[bulletShot - 1], aTank);
@@ -769,7 +769,7 @@ maze.prototype.shootTank = function(aTank) {
 	
 	
 	// for debugging
-	document.getElementById('demo').innerHTML += "Bullets Left: " + bulletShot;
+//	document.getElementById('demo').innerHTML += "Bullets Left: " + bulletShot;
 	
  	bulletReload = false;
  	leftClick = false;
