@@ -12,7 +12,6 @@ var onceLoaded = 0;
 var tank1 = null;
 var tank2 = null;
 
-
 function makeMaze() {
 	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
 	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
@@ -761,14 +760,24 @@ maze.prototype.shootTank = function(aTank) {
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
 		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
+			document.getElementById('audiotank').loop=false;
+			document.getElementById('audiotank').play();
+			//destroyTank(tank1);
+			//setTimeout(function(){
 			makeMaze();
 			theMaze.initialize();
 			tank2.score++;
+			//},2000);
 			}
 		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
+			document.getElementById('audiotank').loop=false;
+			document.getElementById('audiotank').play();
+			//destroyTank(tank2);
+			//setTimeout(function(){
 			makeMaze();
 			theMaze.initialize();
 			tank1.score++;
+			//},2000);
 			}		
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
@@ -795,11 +804,13 @@ var Player1ctx = Player1canvas.getContext('2d');
 Player1ctx.font = "30px Comic Sans MS";
 Player1ctx.fillStyle = "red";
 Player1ctx.textAlign = "center";
+Player1ctx.textBaseline="middle";
 var Player2canvas = document.getElementById("player2stats");
 var Player2ctx = Player2canvas.getContext('2d');
 Player2ctx.font = "30px Comic Sans MS";
 Player2ctx.fillStyle = "red";
 Player2ctx.textAlign = "center";
+Player2ctx.textBaseline="middle";
 
 
 function drawbullet(bulletX,bulletY,bulletRadius){
@@ -939,4 +950,6 @@ function generate() {
 }
 function reSetTank() {
 	theMaze.initialize();
+}
+function destroyTank(aTank){
 }
