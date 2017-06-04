@@ -34,7 +34,25 @@ body{
 }
 
 #player2score {
-	width: 100%;
+	width: 100px;
+	margin-right: 30px;
+	margin-top: -500px;
+	max-width: 100px;
+	/*background-color: snow;*/
+	float: right;
+}
+
+#player1life {
+	width: 100px;
+	height: 200px;
+	margin-left: 30px;
+	margin-top: -500px;
+	/*background-color: snow;*/
+	float: left;
+}
+
+#player2life {
+	width: 100px;
 	margin-right: 30px;
 	margin-top: -500px;
 	max-width: 100px;
