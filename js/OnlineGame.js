@@ -736,7 +736,7 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 
 function shootBullet(aBullet, aTank) {
 	aBullet.bulletX = aTank.tankCenterX - aTank.rotorLength * (Math.cos(aTank.rotorAngle * Math.PI / 180));
-	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));;
+	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));
 	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.collisions = 0;
 	aBullet.shoot = true;
@@ -752,7 +752,7 @@ function Shoot(aBullet, aTank){
 			return;
 		}
 		
-		var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
+		/*var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 		var jTank = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 		if (i != iTank){
 			i = iTank;
@@ -761,7 +761,7 @@ function Shoot(aBullet, aTank){
 		if (j != jTank) {
 			j = jTank;
 			aBullet.bulletY = aTank.tankCenterY;
-		}
+		}*/
 		aBullet.shootBegin = false;
 	}
 	

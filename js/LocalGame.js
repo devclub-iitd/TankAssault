@@ -655,8 +655,8 @@ maze.prototype.initialize = function() {
 
 
 maze.prototype.moveTank = function(aTank) {
- 	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
-	var j = Math.floor(aTank.tankCenterY / theMaze.gridsize)
+ 	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize);
+	var j = Math.floor(aTank.tankCenterY / theMaze.gridsize);
 	var currentPlayerGrid = theMaze.grid[i][j];
 	
  	wallLeft = i*theMaze.gridsize;
@@ -683,6 +683,7 @@ maze.prototype.moveTank = function(aTank) {
 		aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.tankRadius));
 	}
  
+	
 	if (aTank.rightPressed === true){
 		aTank.rotorAngle += 4;
 		aTank.rotorAngle = aTank.rotorAngle % 360;
@@ -828,7 +829,7 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 
 function shootBullet(aBullet, aTank) {
 	aBullet.bulletX = aTank.tankCenterX - aTank.rotorLength * (Math.cos(aTank.rotorAngle * Math.PI / 180));
-	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));;
+	aBullet.bulletY = aTank.tankCenterY - aTank.rotorLength * (Math.sin(aTank.rotorAngle * Math.PI / 180));
 	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.collisions = 0;
 	aBullet.shoot = true;
@@ -844,16 +845,23 @@ function Shoot(aBullet, aTank){
 			return;
 		}
 		
-		var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
+		/*var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 		var jTank = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 		if (i != iTank){
-			i = iTank;
-			aBullet.bulletX = aTank.tankCenterX;
+		//	i = iTank;
+		//	aBullet.bulletX = aTank.tankCenterX;
+			makeMaze();
+			theMaze.initialize();
+		//	tank1.score++;
+		
 		}
 		if (j != jTank) {
-			j = jTank;
-			aBullet.bulletY = aTank.tankCenterY;
-		}
+		//	j = jTank;
+		//	aBullet.bulletY = aTank.tankCenterY;
+			makeMaze();
+			theMaze.initialize();
+		//	tank1.score++;
+		}*/
 		aBullet.shootBegin = false;
 	}
 	
@@ -916,7 +924,7 @@ function Shoot(aBullet, aTank){
 			aBullet.collisions = 0;
 		}	
 }
-	
+	var x = 0;
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
 	 theMaze.moveTank(tank1);
@@ -928,8 +936,7 @@ maze.prototype.playGame = function() {
 	 Player1ctx.fillText("" + tank1.score, Player1canvas.width/2, Player1canvas.height/2);
 	 Player2ctx.clearRect(0, 0, Player2canvas.width, Player2canvas.height);
 	 Player2ctx.fillText("" + tank2.score, Player2canvas.width/2, Player2canvas.height/2);
-	 //drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
- }
+	}
 
 function generate() {
 	makeMaze();
