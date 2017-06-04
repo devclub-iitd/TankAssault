@@ -1,7 +1,7 @@
 var	canvas = document.getElementById('maze');
 var context = canvas.getContext('2d');	
-	context.font = "bold 20px sans-serif";
-	//$(document).keydown(handleKeypress);
+context.font = "bold 20px sans-serif";
+//$(document).keydown(handleKeypress);
 //var canvas;
 //var context;
 var theMaze = null;
@@ -12,30 +12,6 @@ var onceLoaded = 0;
 var tank1 = null;
 var tank2 = null;
 
-function generate() {
-	makeMaze();
-	theMaze.draw();
-	tank1 = new Tank();
-	tank2 = new Tank();
-	tank1.bullet = new Array();
-	tank2.bullet = new Array();
-	for (var i = 0; i < tank1.bulletPack; i++)
-    	tank1.bullet.push(new Bullet());
-	
-	for (var i = 0; i < tank2.bulletPack; i++)
-    	tank2.bullet.push(new Bullet());	
-	//theMaze.draw();
-	if (onceLoaded ==0) onceLoaded++;
-	theMaze.initialize();
-	if (loaded == 0){
-		setInterval(theMaze.playGame, 10);
-	}
-	
-	loaded++;
-}
-function reSetTank() {
-	theMaze.initialize();
-}
 
 function makeMaze() {
 	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
@@ -446,6 +422,7 @@ function Tank(){
 	this.bulletShot = this.bulletPack;
 	this.bullet = null;
 	this.bullTank = 100;
+	this.score = 0;
 }
 
 function initializeTank(aTank) {
@@ -593,6 +570,12 @@ function Reload(aTank){
 	aTank.reloading = false;
 }
 
+var Player1canvas = document.getElementById("maze");
+//var Player1ctx = Player1canvas.getContext('2d');
+/*Player1ctx.font = "30px Comic Sans MS";
+Player1ctx.fillStyle = "red";
+Player1ctx.textAlign = "center";*/
+
 function drawTank1(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
 		grd.addColorStop(0,"blue");
@@ -671,16 +654,6 @@ maze.prototype.initialize = function() {
 }
 
 
-maze.prototype.playGame = function() {
-	// useful when having more than one tank
-	 theMaze.moveTank(tank1);
-	 theMaze.moveTank(tank2);
-	 theMaze.draw();
-	 theMaze.shootTank(tank2);
-	 theMaze.shootTank(tank1);
-	 
-	 //drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
- }
 
 maze.prototype.moveTank = function(aTank) {
  	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
@@ -790,10 +763,12 @@ maze.prototype.shootTank = function(aTank) {
 		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
 			makeMaze();
 			theMaze.initialize();
+			tank2.score++;
 			}
 		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
 			makeMaze();
 			theMaze.initialize();
+			tank1.score++;
 			}		
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
@@ -814,6 +789,17 @@ maze.prototype.shootTank = function(aTank) {
  	aTank.leftClick = false;
 }
 
+
+var Player1canvas = document.getElementById("player1stats");
+var Player1ctx = Player1canvas.getContext('2d');
+Player1ctx.font = "30px Comic Sans MS";
+Player1ctx.fillStyle = "red";
+Player1ctx.textAlign = "center";
+var Player2canvas = document.getElementById("player2stats");
+var Player2ctx = Player2canvas.getContext('2d');
+Player2ctx.font = "30px Comic Sans MS";
+Player2ctx.fillStyle = "red";
+Player2ctx.textAlign = "center";
 
 
 function drawbullet(bulletX,bulletY,bulletRadius){
@@ -916,3 +902,41 @@ function Shoot(aBullet, aTank){
 		}	
 }
 	
+maze.prototype.playGame = function() {
+	// useful when having more than one tank
+	 theMaze.moveTank(tank1);
+	 theMaze.moveTank(tank2);
+	 theMaze.draw();
+	 theMaze.shootTank(tank2);
+	 theMaze.shootTank(tank1);
+	 Player1ctx.clearRect(0, 0, Player1canvas.width, Player1canvas.height);
+	 Player1ctx.fillText("" + tank1.score, Player1canvas.width/2, Player1canvas.height/2);
+	 Player2ctx.clearRect(0, 0, Player2canvas.width, Player2canvas.height);
+	 Player2ctx.fillText("" + tank2.score, Player2canvas.width/2, Player2canvas.height/2);
+	 //drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
+ }
+
+function generate() {
+	makeMaze();
+	theMaze.draw();
+	tank1 = new Tank();
+	tank2 = new Tank();
+	tank1.bullet = new Array();
+	tank2.bullet = new Array();
+	for (var i = 0; i < tank1.bulletPack; i++)
+    	tank1.bullet.push(new Bullet());
+	
+	for (var i = 0; i < tank2.bulletPack; i++)
+    	tank2.bullet.push(new Bullet());	
+	//theMaze.draw();
+	if (onceLoaded ==0) onceLoaded++;
+	theMaze.initialize();
+	if (loaded == 0){
+		setInterval(theMaze.playGame, 10);
+	}
+	
+	loaded++;
+}
+function reSetTank() {
+	theMaze.initialize();
+}

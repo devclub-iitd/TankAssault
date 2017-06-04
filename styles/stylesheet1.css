@@ -1,4 +1,4 @@
-@charset "utf-8";
+player1scoreplayer1scoreplayer1scoreplayer1score@charset "utf-8";
 /* Simplify width and height calculations */
 html {
 	box-sizing: border-box;
@@ -22,6 +22,32 @@ body{
 	margin: 0 auto;
 	max-width: 1000px;
 	background-color: #222a33;
+}
+
+#player1score {
+	width: 100px;
+	height: 200px;
+	margin-left: 30px;
+	margin-top: -500px;
+	/*background-color: snow;*/
+	float: left;
+}
+
+#player2score {
+	width: 100%;
+	margin-right: 30px;
+	margin-top: -500px;
+	max-width: 100px;
+	/*background-color: snow;*/
+	float: right;
+}
+
+#player1stats {
+	margin-top: 100px;
+}
+
+#player2stats {
+	margin-top: 100px;
 }
 
 h1, h2 {
@@ -184,6 +210,8 @@ footer {
 	margin-right: auto;
 	position: static;
 }
+
+
 /* Media Queries */
 @media (min-width: 700px) {
 #menulink {
@@ -239,16 +267,16 @@ main, aside {
 
 }
 
-@media (max-width: 1000px){
+@media (max-width: 1200px){
 #squeezed {
 	display: block;
 }
 #wrapper {
 	display: none;
 }
-	#squeezed p {
-		color: wheat;
-	}
+#squeezed p {
+	color: wheat;
+}
 footer {
 	width: 100%;
 	padding-top: 20px;
