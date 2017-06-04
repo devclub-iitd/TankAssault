@@ -750,6 +750,8 @@ maze.prototype.shootTank = function(aTank) {
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
+			document.getElementById('audiobullet').loop=false;
+			document.getElementById('audiobullet').play();
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
 	}
@@ -760,6 +762,7 @@ maze.prototype.shootTank = function(aTank) {
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
 		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
+			document.getElementById('audiobullet').pause();
 			document.getElementById('audiotank').loop=false;
 			document.getElementById('audiotank').play();
 			//destroyTank(tank1);
@@ -770,6 +773,7 @@ maze.prototype.shootTank = function(aTank) {
 			//},2000);
 			}
 		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
+			document.getElementById('audiobullet').pause();
 			document.getElementById('audiotank').loop=false;
 			document.getElementById('audiotank').play();
 			//destroyTank(tank2);
