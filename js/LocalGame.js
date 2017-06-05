@@ -734,8 +734,9 @@ maze.prototype.moveTank = function(aTank) {
 
 var bullet1canvas=document.getElementById("player1bullets");
 var bullet1ctx=bullet1canvas.getContext("2d");
+var bullet2canvas=document.getElementById("player2bullets");
+var bullet2ctx=bullet2canvas.getContext("2d");
 var img=document.getElementById("bullet");
-var bullet1start = 10;
 
 maze.prototype.shootTank = function(aTank) {
 	// Some Shooting....
@@ -804,15 +805,6 @@ maze.prototype.shootTank = function(aTank) {
 				drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
 			}
 	}
-	
-	// display the remaining bullets
-	bullet1ctx.clearRect(0, 0, bullet1canvas.width, bullet1canvas.height);
-	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
-		bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
-		bullet1start = bullet1start;
-	}
-	
-	
 	
 	// for debugging
 	//document.getElementById('demo').innerHTML += "Bullets Left: " + aTank.bulletShot;
@@ -943,6 +935,29 @@ function Shoot(aBullet, aTank){
 		}	
 }
 	var x = 0;
+
+maze.prototype.maintainStats = function() {
+	Player1ctx.clearRect(0, 0, Player1canvas.width, Player1canvas.height);
+	 Player1ctx.fillText("" + tank1.score, Player1canvas.width/2, Player1canvas.height/2);
+	 Player2ctx.clearRect(0, 0, Player2canvas.width, Player2canvas.height);
+	 Player2ctx.fillText("" + tank2.score, Player2canvas.width/2, Player2canvas.height/2);
+	
+	 // display the remaining bullets
+	 var bullet1start = 10;
+	 bullet1ctx.clearRect(0, 0, bullet1canvas.width, bullet1canvas.height);
+	 for (var i = tank1.bulletShot - 1; i >=0 ; i--){
+	 	bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
+	 	bullet1start = bullet1start + 16;
+	 }
+	 
+	 var bullet2start = 10;
+	 bullet2ctx.clearRect(0, 0, bullet2canvas.width, bullet2canvas.height);
+	 for (var i = tank2.bulletShot - 1; i >=0 ; i--){
+	 	bullet2ctx.drawImage(img, bullet2start, 10, 16, 40);
+	 	bullet2start = bullet2start + 16;
+	 }
+}
+
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
 	 theMaze.moveTank(tank1);
@@ -950,11 +965,8 @@ maze.prototype.playGame = function() {
 	 theMaze.draw();
 	 theMaze.shootTank(tank2);
 	 theMaze.shootTank(tank1);
-	 Player1ctx.clearRect(0, 0, Player1canvas.width, Player1canvas.height);
-	 Player1ctx.fillText("" + tank1.score, Player1canvas.width/2, Player1canvas.height/2);
-	 Player2ctx.clearRect(0, 0, Player2canvas.width, Player2canvas.height);
-	 Player2ctx.fillText("" + tank2.score, Player2canvas.width/2, Player2canvas.height/2);
-	}
+	 theMaze.maintainStats();
+}
 
 function generate() {
 	makeMaze();
