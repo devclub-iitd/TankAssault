@@ -773,7 +773,7 @@ maze.prototype.shootTank = function(aTank) {
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
 		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
-			document.getElementById('audiobullet').pause();
+			//document.getElementById('audiobullet').pause();
 			document.getElementById('audiotank').loop=false;
 			document.getElementById('audiotank').play();
 			//destroyTank(tank1);
