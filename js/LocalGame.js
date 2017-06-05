@@ -479,6 +479,12 @@ var wallRight = 0;
 var wallTop = 0;
 var wallBottom = 0;
 
+function Reload(aTank){
+	aTank.bulletReload = true;
+	aTank.leftClick = false;
+	aTank.reloading = false;
+}
+
 function keyDownHandler(e) {
 	switch (e.keyCode) {
 		case 38:
@@ -511,18 +517,18 @@ function keyDownHandler(e) {
 	}
 	if(e.keyCode == 77){
 			tank1.leftClick = true;
-}
+	}
 	if(e.keyCode == 88){
 			tank2.leftClick = true;
-}
+	}
 	if(e.keyCode == 78){
 		tank1.reloading = true;
 		setTimeout(Reload(tank1),3000);
-}	
+	}	
 	if(e.keyCode == 90){
 		tank2.reloading = true;
 		setTimeout(Reload(tank2),3000);
-}
+	}
 }
 
 function keyUpHandler(e) {
@@ -563,17 +569,6 @@ function keyUpHandler(e) {
 }
 }
 
-function Reload(aTank){
-	aTank.bulletReload = true;
-	aTank.leftClick = false;
-	aTank.reloading = false;
-}
-
-var Player1canvas = document.getElementById("maze");
-//var Player1ctx = Player1canvas.getContext('2d');
-/*Player1ctx.font = "30px Comic Sans MS";
-Player1ctx.fillStyle = "red";
-Player1ctx.textAlign = "center";*/
 
 function drawTank1(x, y, radius, length, width,degrees){
 		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
@@ -736,6 +731,12 @@ maze.prototype.moveTank = function(aTank) {
 	aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
 }
 
+
+var bullet1canvas=document.getElementById("player1bullets");
+var bullet1ctx=bullet1canvas.getContext("2d");
+var img=document.getElementById("bullet");
+var bullet1start = 10;
+
 maze.prototype.shootTank = function(aTank) {
 	// Some Shooting....
 	if (aTank.bulletReload){
@@ -743,7 +744,7 @@ maze.prototype.shootTank = function(aTank) {
 		aTank.bulletShot = aTank.bulletPack;
 	}
 	
-	if (aTank.reloading){
+	/*if (aTank.reloading){
 		document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
 		if (aTank === tank1)
 			document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
@@ -755,7 +756,7 @@ maze.prototype.shootTank = function(aTank) {
 			document.getElementById("reload1").innerHTML = "Enjoy Shooting!" + "<br>";
 		else if(aTank === tank2)
 			document.getElementById("reload2").innerHTML = "Enjoy Shooting!" + "<br>";
-	}
+	}*/
 	
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
@@ -804,6 +805,14 @@ maze.prototype.shootTank = function(aTank) {
 			}
 	}
 	
+	// display the remaining bullets
+	bullet1ctx.clearRect(0, 0, bullet1canvas.width, bullet1canvas.height);
+	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
+		bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
+		bullet1start = bullet1start;
+	}
+	
+	
 	
 	// for debugging
 	//document.getElementById('demo').innerHTML += "Bullets Left: " + aTank.bulletShot;
@@ -834,7 +843,7 @@ function drawbullet(bulletX,bulletY,bulletRadius){
 	context.fill();
 	context.closePath();
 	leftClick = false;
-	}
+}
 
 function shootBullet(aBullet, aTank) {
 	aBullet.bulletX = aTank.tankCenterX - aTank.rotorLength * (Math.cos(aTank.rotorAngle * Math.PI / 180));
