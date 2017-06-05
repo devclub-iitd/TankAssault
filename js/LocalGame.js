@@ -745,19 +745,26 @@ maze.prototype.shootTank = function(aTank) {
 		aTank.bulletShot = aTank.bulletPack;
 	}
 	
-	/*if (aTank.reloading){
-		document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
-		if (aTank === tank1)
+	if (aTank.reloading){
+		if (aTank === tank1){
+			document.getElementById("reload1").style.color = "yellow";
 			document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
-		else if(aTank === tank2)
+		}
+		else if(aTank === tank2){
+			document.getElementById("reload2").style.color = "yellow";
 			document.getElementById("reload2").innerHTML = "Reloading..." + "<br>";
+		}
 	}
 	else {
-		if (aTank === tank1)
+		if (aTank === tank1){
+			document.getElementById("reload1").style.color = "rgba(190,1,5,1.00)";
 			document.getElementById("reload1").innerHTML = "Enjoy Shooting!" + "<br>";
-		else if(aTank === tank2)
+		}
+		else if(aTank === tank2){
+			document.getElementById("reload2").style.color = "rgba(190,1,5,1.00)";
 			document.getElementById("reload2").innerHTML = "Enjoy Shooting!" + "<br>";
-	}*/
+		}
+	}
 	
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
@@ -934,7 +941,6 @@ function Shoot(aBullet, aTank){
 			aBullet.collisions = 0;
 		}	
 }
-	var x = 0;
 
 maze.prototype.maintainStats = function() {
 	Player1ctx.clearRect(0, 0, Player1canvas.width, Player1canvas.height);
@@ -949,12 +955,22 @@ maze.prototype.maintainStats = function() {
 	 	bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
 	 	bullet1start = bullet1start + 16;
 	 }
+	 if(tank1.bulletShot == 0){
+		 bullet1ctx.drawImage(bulletOver, bullet1canvas.width / 2 - 30, 0, 50, 50);
+		 document.getElementById("reload1").style.color = "green";
+		 document.getElementById("reload1").innerHTML = "Reload Required..." + "<br>";
+	 }
 	 
 	 var bullet2start = 10;
 	 bullet2ctx.clearRect(0, 0, bullet2canvas.width, bullet2canvas.height);
 	 for (var i = tank2.bulletShot - 1; i >=0 ; i--){
 	 	bullet2ctx.drawImage(img, bullet2start, 10, 16, 40);
 	 	bullet2start = bullet2start + 16;
+	 }
+	 if(tank2.bulletShot == 0){
+	 	 bullet2ctx.drawImage(bulletOver, bullet2canvas.width / 2 - 30, 0, 50, 50);
+		 document.getElementById("reload2").style.color = "green";
+		 document.getElementById("reload2").innerHTML = "Reload Required..." + "<br>";
 	 }
 }
 

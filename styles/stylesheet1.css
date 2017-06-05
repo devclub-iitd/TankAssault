@@ -10,7 +10,7 @@ html {
 
 body{
   margin: 0;
-  background-color: black;
+  background-color: #000000;
   text-align: center;
   font-style: normal;
   font-weight: 400;
@@ -42,7 +42,7 @@ body{
 	color: rgba(236,247,50,0.92);
 }
 #reload1 {
-	color: rgba(190,1,5,1.00);
+	color:rgba(45,248,238,0.93);
 	font-size: 20px;
 }
 #player2score {
@@ -63,7 +63,7 @@ body{
 	color: rgba(236,247,50,0.92);
 }
 #reload2 {
-	color: rgba(190,1,5,1.00);
+	color:rgba(45,248,238,0.93);
 	font-size: 20px;
 }
 #player1life {
