@@ -743,11 +743,20 @@ maze.prototype.shootTank = function(aTank) {
 		aTank.bulletShot = aTank.bulletPack;
 	}
 	
-	/*if (aTank.reloading){
-		document.getElementById('demo').innerHTML = "Reloading..." + "<br>";
+	if (aTank.reloading){
+		document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
+		if (aTank === tank1)
+			document.getElementById("reload1").innerHTML = "Reloading..." + "<br>";
+		else if(aTank === tank2)
+			document.getElementById("reload2").innerHTML = "Reloading..." + "<br>";
 	}
-	else document.getElementById('demo').innerHTML = "Enjoy Shooting!" + "<br>";
-	*/
+	else {
+		if (aTank === tank1)
+			document.getElementById("reload1").innerHTML = "Enjoy Shooting!" + "<br>";
+		else if(aTank === tank2)
+			document.getElementById("reload2").innerHTML = "Enjoy Shooting!" + "<br>";
+	}
+	
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);

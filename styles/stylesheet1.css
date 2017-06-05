@@ -26,13 +26,25 @@ body{
 
 #player1score {
 	width: 100px;
-	height: 200px;
+	/*height: 200px;*/
 	margin-left: 30px;
 	margin-top: -500px;
 	/*background-color: snow;*/
 	float: left;
 }
-
+#player1score figure{
+	width: inherit;
+	margin: 0px;
+}
+#player1score h2{
+	margin: 0px;
+	margin-bottom: 2px;
+	color: rgba(236,247,50,0.92);
+}
+#reload1 {
+	color: rgba(190,1,5,1.00);
+	font-size: 20px;
+}
 #player2score {
 	width: 100px;
 	margin-right: 30px;
@@ -41,7 +53,19 @@ body{
 	/*background-color: snow;*/
 	float: right;
 }
-
+#player2score figure{
+	width: inherit;
+	margin: 0px;
+}
+#player2score h2{
+	margin: 0px;
+	margin-bottom: 2px;
+	color: rgba(236,247,50,0.92);
+}
+#reload2 {
+	color: rgba(190,1,5,1.00);
+	font-size: 20px;
+}
 #player1life {
 	width: 100px;
 	height: 200px;
@@ -61,11 +85,11 @@ body{
 }
 
 #player1stats {
-	margin-top: 100px;
+	/*margin-top: 100px;*/
 }
 
 #player2stats {
-	margin-top: 100px;
+	/*margin-top: 100px;*/
 }
 
 h1, h2 {
