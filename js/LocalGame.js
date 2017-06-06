@@ -1,7 +1,8 @@
 // javascript for tank Movement and shooting
 // var canvas already declared
 var ctx = canvas.getContext("2d");
-
+var bulletAudio = document.getElementById('audiobullet');
+var endAudio = document.getElementById('audiotank');
 function Tank(){	
 	// tank parameters
 	this.tankCenterX = 0;
@@ -61,6 +62,7 @@ function Bullet() {
 	this.shoot = false;
 	this.collisions = 0;
 	this.shootBegin = false;
+//	this.audio = new Audio('media/bullet.mp3');
 }
 
 function initializeBullet(aTank, aBullet){
@@ -342,12 +344,12 @@ maze.prototype.shootTank = function(aTank) {
 			document.getElementById("reload2").innerHTML = "Enjoy Shooting!" + "<br>";
 		}
 	}
-	
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
-			document.getElementById('audiobullet').loop=false;
-			document.getElementById('audiobullet').play();
+			bulletAudio.pause();
+			bulletAudio.currentTime = 0;
+			bulletAudio.play()
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
 	}
@@ -359,8 +361,8 @@ maze.prototype.shootTank = function(aTank) {
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
 		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
 			//document.getElementById('audiobullet').pause();
-			document.getElementById('audiotank').loop=false;
-			document.getElementById('audiotank').play();
+			endAudio.currentTime = 0;
+			endAudio.play();
 			//destroyTank(tank1);
 			//setTimeout(function(){
 			makeMaze();
@@ -369,9 +371,10 @@ maze.prototype.shootTank = function(aTank) {
 			//},2000);
 			}
 		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
-			document.getElementById('audiobullet').pause();
-			document.getElementById('audiotank').loop=false;
-			document.getElementById('audiotank').play();
+		//	document.getElementById('audiobullet').pause();
+			endAudio.currentTime = 0;
+			endAudio.play();
+			
 			//destroyTank(tank2);
 			//setTimeout(function(){
 			makeMaze();
