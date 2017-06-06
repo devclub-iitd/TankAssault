@@ -195,22 +195,22 @@ maze.prototype.moveTank = function(aTank) {
  	wallBottom = (j+1)*theMaze.gridsize;
  	
  	// fine adjustments
- 	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.tankRadius > wallRight)) {
+ 	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.rotorLength > wallRight)) {
 		// do something
-		aTank.rotorX -= ((aTank.tankCenterX + aTank.tankRadius) - wallRight);
+		aTank.rotorX -= ((aTank.tankCenterX + aTank.rotorLength) - wallRight);
 	}
- 	else if (currentPlayerGrid.leftWall && (aTank.tankCenterX - aTank.tankRadius < wallLeft)) {
+ 	else if (currentPlayerGrid.leftWall && (aTank.tankCenterX - aTank.rotorLength < wallLeft)) {
 		// do something
-		aTank.rotorX += (wallLeft - (aTank.tankCenterX - aTank.tankRadius));
+		aTank.rotorX += (wallLeft - (aTank.tankCenterX - aTank.rotorLength));
 	}
  
- 	if (currentPlayerGrid.bottomWall && (aTank.tankCenterY + aTank.tankRadius > wallBottom)) {
+ 	if (currentPlayerGrid.bottomWall && (aTank.tankCenterY + aTank.rotorLength > wallBottom)) {
 		// do something
-		aTank.rotorY -= ((aTank.tankCenterY + aTank.tankRadius) - wallBottom);
+		aTank.rotorY -= ((aTank.tankCenterY + aTank.rotorLength) - wallBottom);
 	}
- 	else if (currentPlayerGrid.topWall && (aTank.tankCenterY - aTank.tankRadius < wallTop)) {
+ 	else if (currentPlayerGrid.topWall && (aTank.tankCenterY - aTank.rotorLength < wallTop)) {
 		// do something
-		aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.tankRadius));
+		aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.rotorLength));
 	}
  
 	if (aTank.rightPressed === true){
@@ -226,16 +226,16 @@ maze.prototype.moveTank = function(aTank) {
 		aTank.rotorAngle = aTank.rotorAngle % 360;	 	
  	}
  	if (aTank.upPressed) {
-	 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.tankRadius > wallTop + aTank.dDist)) {
+	 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.rotorLength > wallTop + aTank.dDist)) {
 			// Move the tank left
 			aTank.rotorY -= Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 			aTank.rotorX -= Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 		}
-		else if (aTank.tankCenterY - aTank.tankRadius > wallTop) {
-			aTank.rotorY += ((aTank.tankCenterY - aTank.tankRadius) - wallTop );
+		else if (aTank.tankCenterY - aTank.rotorLength > wallTop) {
+			aTank.rotorY += ((aTank.tankCenterY - aTank.rotorLength) - wallTop );
 		}
-		else if (aTank.tankCenterY + aTank.tankRadius < wallBottom) {
-			aTank.rotorY += (wallBottom - (aTank.tankCenterY + aTank.tankRadius));
+		else if (aTank.tankCenterY + aTank.rotorLength < wallBottom) {
+			aTank.rotorY += (wallBottom - (aTank.tankCenterY + aTank.rotorLength));
 		}
 		else {
 			// tank boundary on wall
@@ -243,17 +243,17 @@ maze.prototype.moveTank = function(aTank) {
 		}
  	}
  	else if (aTank.downPressed) {
-	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.tankRadius < wallBottom - aTank.dDist)) {
+	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.rotorLength < wallBottom - aTank.dDist)) {
 			// Move the tank left
 			
 			aTank.rotorY += Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 			aTank.rotorX += Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 		}
-		else if (aTank.tankCenterY + aTank.tankRadius < wallBottom) {
-			aTank.rotorY -= (wallBottom - (aTank.tankCenterY + aTank.tankRadius));
+		else if (aTank.tankCenterY + aTank.rotorLength < wallBottom) {
+			aTank.rotorY -= (wallBottom - (aTank.tankCenterY + aTank.rotorLength));
 		}
-		else if (aTank.tankCenterY - aTank.tankRadius > wallTop) {
-			aTank.rotorY -= ((aTank.tankCenterY - aTank.tankRadius) - wallTop );
+		else if (aTank.tankCenterY - aTank.rotorLength > wallTop) {
+			aTank.rotorY -= ((aTank.tankCenterY - aTank.rotorLength) - wallTop );
 		}
 		else {
 			// tank boundary on wall
@@ -404,7 +404,7 @@ function Shoot(aBullet, aTank){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180)); 
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
 		drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
-		if(aBullet.collisions > 6){
+		if(aBullet.collisions > 12){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;
 		}	
