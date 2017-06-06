@@ -517,8 +517,8 @@ function keyDownHandler(e) {
 		tank1.reloading = true;
 		//add audio
 		setTimeout(Reload,3000);
-		//document.getElementById('audioreload').loop=false;
-		//document.getElementById('audioreload').play();
+		document.getElementById('audioreload').loop=false;
+		document.getElementById('audioreload').play();
 		
 }
 }

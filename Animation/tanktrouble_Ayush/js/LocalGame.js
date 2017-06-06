@@ -526,10 +526,16 @@ function keyDownHandler(e) {
 	if(e.keyCode == 78){
 		tank1.reloading = true;
 		setTimeout(Reload(tank1),3000);
+		document.getElementById('audioreload').loop=false;
+		document.getElementById('audioreload').play();
+		
 	}	
 	if(e.keyCode == 90){
 		tank2.reloading = true;
 		setTimeout(Reload(tank2),3000);
+		document.getElementById('audioreload').loop=false;
+		document.getElementById('audioreload').play();
+		
 	}
 }
 
