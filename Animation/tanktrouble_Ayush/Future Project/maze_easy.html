@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta name='viewport' content='width:device-width initial-sale:1.0'>
+<title>maze</title>
+</head>
+
+
+<body>
+<canvas id='maze' width='1260' height='630'  ></canvas>
+
+
+</form>
+
+<script>
+
+
+var canvas
+var context
+const width = 1280
+const height = 640
+const cw=width/15
+const ch=height/15
+var p = [1]
+var q = [1]
+const tw = width/40
+const th = height/40
+var dir = 6
+
+
+for (var i =1; i<(width/cw);i++){
+	p[i]=0;
+}
+for (var i =1; i<(height/ch);i++){
+	q[i]=0;
+}
+
+
+
+
+canvas=document.getElementById('maze');
+context=canvas.getContext('2d');
+context.lineWidth=3
+context.fillStyle='#EEEEEE';
+context.fillRect(0,0,width,height);
+
+context.strokeStyle='#000000';
+
+/*for(var i =0;i<width;i+=(width/20)){
+
+	context.beginPath();
+	context.moveTo(i,0);
+	context.lineTo(i,height);
+	context.stroke();
+
+}
+
+for(var i =0;i<height;i+=(height/20)){
+
+	context.beginPath();
+	context.moveTo(0,i);
+	context.lineTo(width,i);
+	context.stroke();
+
+}*/
+function line_h(x,y){
+
+	context.beginPath();
+	context.moveTo(x,y);
+	context.lineTo(x+cw,y);
+	context.stroke();
+
+}
+function line_w(x,y){
+
+	context.beginPath();
+	context.moveTo(x,y);
+	context.lineTo(x,y+ch);
+	context.stroke();
+
+}
+
+
+for(var i=0;i<width-cw;i+=cw){
+
+	for(var j=0;j<height-ch;j+=ch){
+
+		var x = Math.floor(Math.random()*10)%3;
+		
+		if(i==0 || j==0){
+
+
+		}
+
+		else if (x==0 && (p[i+1]==0 || q[j+1]==0)){
+			line_h(i,j);
+			line_w(i,j);
+			p[i]+=1;
+			q[j]+=1;
+		}
+		else if (x==1){
+			line_h(i,j);
+			p[i]+=1;
+		}
+		else if (x==2){
+			line_w(i,j);
+			q[j]+=1;
+		}
+
+	}
+
+}
+
+/*defining tank zone*/
+context.fillStyle='#DDDDFF';
+context.fillRect(0,0,cw,height);
+context.fillRect(0,0,width,ch);
+context.fillStyle='#000055'
+context.fillRect(0,0,cw,ch)
+context.strokeStyle='#DDDDFF'
+context.font='25px Calibre'
+context.textAlign='center'
+context.strokeText("Start",cw/2,ch*2/3)
+
+var tank = function(){
+
+	this.update=function(x,y){
+
+		context.lineWidth=2;
+		context.fillStyle='blue';
+		context.strokeStyle='black';
+		context.beginPath();
+		context.moveTo(x-tw/2,y-tw/4);
+		context.lineTo(x-tw/2,y+tw/4);
+		context.lineTo(x-tw/4,y+tw/2);
+		context.lineTo(x+tw/4,y+tw/2);
+		context.lineTo(x+tw/2,y+tw/4);
+		context.lineTo(x+tw/2,y-tw/4);
+		context.lineTo(x+tw/4,y-tw/2);
+		context.lineTo(x-tw/4,y-tw/2);
+		context.lineTo(x-tw/2,y-tw/4);
+		context.closePath();
+		context.fill();
+		context.beginPath();
+		context.moveTo(x-tw/2,y-tw/4);
+		context.lineTo(x-tw/2,y+tw/4);
+		context.lineTo(x-tw/4,y+tw/2);
+		context.lineTo(x+tw/4,y+tw/2);
+		context.lineTo(x+tw/2,y+tw/4);
+		context.lineTo(x+tw/2,y-tw/4);
+		context.lineTo(x+tw/4,y-tw/2);
+		context.lineTo(x-tw/4,y-tw/2);
+		context.lineTo(x-tw/2,y-tw/4);
+		context.moveTo(x-tw/2,y-th/4);
+		context.lineTo(x+tw/2,y-th/4);
+		context.moveTo(x-tw/4,y-th/2);
+		context.lineTo(x-tw/4,y+th/2);
+		context.moveTo(x+tw/4,y+th/2);
+		context.lineTo(x+tw/4,y-th/2);
+		context.moveTo(x-tw/2,y+th/4);
+		context.lineTo(x+tw/2,y+th/4);
+		context.closePath();
+		context.stroke();
+
+	}
+
+
+}
+
+tank1=new tank();
+tank1.update(cw/2,ch*3/2);
+
+
+
+
+
+</script>
+</body>
+<html>
