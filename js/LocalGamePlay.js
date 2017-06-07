@@ -3,21 +3,21 @@
 
 // initialising game Play
 maze.prototype.initialize = function() {
-	
-	if (onceLoaded > 0) {	
+
+	if (onceLoaded > 0) {
 		document.addEventListener("keydown", keyDownHandler, false);
 		document.addEventListener("keyup", keyUpHandler, false);
 		//document.addEventListener("mousemove", mouseMoveHandler, false);
-			
+
 		onceLoaded = -1;
 	}
 	initializeTank(tank1);
 	initializeTank(tank2);
 	for (var i = 0; i < tank1.bulletPack; i++)
     	initializeBullet(tank1, tank1.bullet[i]);
-	
+
 	for (var i = 0; i < tank2.bulletPack; i++)
-    	initializeBullet(tank2, tank2.bullet[i]);	
+    	initializeBullet(tank2, tank2.bullet[i]);
 	tank1.bulletReload = true;
 	tank2.bulletReload = true;
 	tank1.bulletShot = tank1.bulletPack;
@@ -50,7 +50,7 @@ maze.prototype.maintainStats = function() {
 	 Player1ctx.fillText("" + tank1.score, Player1canvas.width/2, Player1canvas.height/2);
 	 Player2ctx.clearRect(0, 0, Player2canvas.width, Player2canvas.height);
 	 Player2ctx.fillText("" + tank2.score, Player2canvas.width/2, Player2canvas.height/2);
-	
+
 	 // display the remaining bullets
 	 var bullet1start = 10;
 	 bullet1ctx.clearRect(0, 0, bullet1canvas.width, bullet1canvas.height);
@@ -63,7 +63,7 @@ maze.prototype.maintainStats = function() {
 		 document.getElementById("reload1").style.color = "green";
 		 document.getElementById("reload1").innerHTML = "Reload Required..." + "<br>";
 	 }
-	 
+
 	 var bullet2start = 10;
 	 bullet2ctx.clearRect(0, 0, bullet2canvas.width, bullet2canvas.height);
 	 for (var i = tank2.bulletShot - 1; i >=0 ; i--){
@@ -96,20 +96,33 @@ function generate() {
 	tank2.bullet = new Array();
 	for (var i = 0; i < tank1.bulletPack; i++)
     	tank1.bullet.push(new Bullet());
-	
+
 	for (var i = 0; i < tank2.bulletPack; i++)
-    	tank2.bullet.push(new Bullet());	
+    	tank2.bullet.push(new Bullet());
 	//theMaze.draw();
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
 		setInterval(theMaze.playGame, 10);
 	}
-	
+
 	loaded++;
 }
 function reSetTank() {
 	theMaze.initialize();
 }
 function destroyTank(aTank){
+	ax=aTank.tankCenterX;
+	ay=aTank.tankCenterY;
+	context.beginPath();
+	context.arc(ax,ay,boom_r,0,2*Math.PI);
+	context.closePath;
+	context.fill();
+	if(boom_r<50){
+	boom_r=boom_r+20;
+	timx+=1
+	}
+	else{
+	boom_r=10;
+	}
 }
