@@ -130,11 +130,11 @@ function keyDownHandler(e) {
 	}
 	if(e.keyCode == 78){
 		tank1.reloading = true;
-		setTimeout(Reload(tank1),3000);
+		setTimeout(function(){Reload(tank1)},3000);
 	}	
 	if(e.keyCode == 90){
 		tank2.reloading = true;
-		setTimeout(Reload(tank2),3000);
+		setTimeout(function(){Reload(tank2)},3000);
 	}
 }
 
@@ -322,6 +322,7 @@ maze.prototype.shootTank = function(aTank) {
 	if (aTank.bulletReload){
 		// reset each bullet and fill bulletPack
 		aTank.bulletShot = aTank.bulletPack;
+		aTank.bulletReload = false;
 	}
 	
 	if (aTank.reloading){
@@ -345,7 +346,7 @@ maze.prototype.shootTank = function(aTank) {
 		}
 	}
 	// shoot new bullet if you have
- 	if (aTank.bulletShot > 0 && aTank.leftClick){
+ 	if ((aTank.bulletShot > 0) && (aTank.leftClick) && (!aTank.reloading)){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
 			bulletAudio.pause();
 			bulletAudio.currentTime = 0;
@@ -396,7 +397,7 @@ maze.prototype.shootTank = function(aTank) {
 	// for debugging
 	//document.getElementById('demo').innerHTML += "Bullets Left: " + aTank.bulletShot;
 	
- 	aTank.bulletReload = false;
+ //	aTank.bulletReload = false;
  	aTank.leftClick = false;
 }
 

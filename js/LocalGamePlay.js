@@ -58,7 +58,7 @@ maze.prototype.maintainStats = function() {
 	 	bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
 	 	bullet1start = bullet1start + 16;
 	 }
-	 if(tank1.bulletShot == 0){
+	 if((tank1.bulletShot == 0) && (!tank1.reloading)){
 		 bullet1ctx.drawImage(bulletOver, bullet1canvas.width / 2 - 30, 0, 50, 50);
 		 document.getElementById("reload1").style.color = "green";
 		 document.getElementById("reload1").innerHTML = "Reload Required..." + "<br>";
@@ -70,7 +70,7 @@ maze.prototype.maintainStats = function() {
 	 	bullet2ctx.drawImage(img, bullet2start, 10, 16, 40);
 	 	bullet2start = bullet2start + 16;
 	 }
-	 if(tank2.bulletShot == 0){
+	 if((tank2.bulletShot == 0) && (!tank2.reloading)){
 	 	 bullet2ctx.drawImage(bulletOver, bullet2canvas.width / 2 - 30, 0, 50, 50);
 		 document.getElementById("reload2").style.color = "green";
 		 document.getElementById("reload2").innerHTML = "Reload Required..." + "<br>";
