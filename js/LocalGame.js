@@ -245,6 +245,130 @@ maze.prototype.moveTank = function(aTank) {
  	wallTop = j*theMaze.gridsize;
  	wallBottom = (j+1)*theMaze.gridsize;
 
+	/* New Code 
+	 * Under Work
+	 */
+	/*
+			// course adjustments
+	if (aTank.rightPressed === true)
+	{
+		aTank.rotorAngle += 4;
+		aTank.rotorAngle = aTank.rotorAngle % 360;
+	}
+ 
+ 	else if (aTank.leftPressed === true)
+	{
+	 	aTank.rotorAngle -= 4;
+	 	if(aTank.rotorAngle < 0){
+			aTank.rotorAngle+=360;
+		}
+		aTank.rotorAngle = aTank.rotorAngle % 360;
+ 	}
+	// code for movement
+		var dx = -1 * Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
+		var dy = -1 * Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
+		var right, left, up, down;
+		right = left = up = down = null;
+		if (aTank.rotorAngle >= 0 && aTank.rotorAngle < 90){
+			// top left corner
+			if(aTank.upPressed){
+				up = left = true;
+				down = right = false;
+			}
+			else if(aTank.downPressed){
+				up = left = false;
+				down = right = true;
+			}
+		}
+		else if (aTank.rotorAngle >= 90 && aTank.rotorAngle < 180){
+			// top right corner
+			if(aTank.upPressed){
+				up = right = true;
+				down = left = false;
+			}
+			else if(aTank.downPressed){
+				up = right = false;
+				down = left = true;
+			}
+		}
+		else if (aTank.rotorAngle >= 180 && aTank.rotorAngle < 270){
+			// bottom right coener
+			if(aTank.upPressed){
+				down = right = true;
+				up = left = false;
+			}
+			else if(aTank.downPressed){
+				down = right = false;
+				up = left = true;
+			}
+		}
+		else {
+			// bottom left corner
+			if(aTank.upPressed){
+				down = left = true;
+				up = right = false;
+			}
+			else if(aTank.downPressed){
+				down = left = false;
+				up = right = true;
+			}
+		}
+		
+		if (right === true){
+			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && aTank.tankCenterX  + aTank.rotorLength < wallRight - dx)) {
+				// Move the tank right
+				aTank.rotorX += dx;
+			}
+			else if (aTank.tankCenterX + aTank.rotorLength < wallRight) {
+				aTank.rotorX += (wallRight - (aTank.tankCenterX + aTank.rotorLength));
+			}
+			else {
+				// tank boundary on wall or beyond it
+				// do nothing
+			}
+		
+		}
+ 
+ 	else if (left === true) {
+	 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && aTank.tankCenterX  - aTank.rotorLength > wallLeft - dx)) {
+			// Move the tank left
+			aTank.rotorX += dx;
+		}
+		else if (aTank.tankCenterX - aTank.rotorLength > wallLeft) {
+			aTank.rotorX -= ((aTank.tankCenterX - aTank.rotorLength) - wallLeft );
+		}
+		else {
+			// tank boundary on wall
+			// do nothing
+		}
+ 	}
+ 	if (up === true) {
+	 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.rotorLength > wallTop - dy)) {
+			// Move the tank up
+			aTank.rotorY += dy;
+		}
+		else if (aTank.tankCenterY - aTank.rotorLength > wallTop) {
+			aTank.rotorY -= ((aTank.tankCenterY - aTank.rotorLength) - wallTop );
+		}
+		else {
+			// tank boundary on wall
+			// do nothing
+		}
+ 	}
+ 	else if (down === true) {
+	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.rotorLength < wallBottom + dy)) {
+			// Move the tank down
+			aTank.rotorY += dy;
+		}
+		else if (aTank.tankCenterY + aTank.rotorLength < wallBottom) {
+			aTank.rotorY += (wallBottom - (aTank.tankCenterY + aTank.rotorLength));
+		}
+		else {
+			// tank boundary on wall
+			// do nothing
+		}
+ 	}
+	*/
  	// fine adjustments
  	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.rotorLength > wallRight)) {
 		// do something
