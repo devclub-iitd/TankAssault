@@ -120,7 +120,7 @@ function destroyTank(aTank){
 	context.fill();
 	if(boom_r<50){
 	boom_r=boom_r+20;
-	timx+=1
+	//timx+=1
 	}
 	else{
 	boom_r=10;

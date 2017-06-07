@@ -490,9 +490,10 @@ maze.prototype.shootTank = function(aTank) {
 			//document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
-			timx=1
-			while(timx<=10 && timx>=1){
-				if (timx<10) {
+			//timx=1
+			date1= new Date().getTime();
+			//while(timx<=10 && timx>=1){
+			/*	if (timx<10) {
 					destroyTank(tank1);
 				}
 				else {
@@ -506,7 +507,33 @@ maze.prototype.shootTank = function(aTank) {
 						//}
 						timx=0;
 				}
-			}
+			}*/
+			var xboom = 0
+			var ct = document.getElementById('maze').getContext("2d");
+			//ct.fillRect(0,0,450,500);
+			destroyTank(tank1);
+			//while(new Date().getTime() - date1<3000){
+				/*ax=tank1.tankCenterX;
+				ay=tank1.tankCenterY;
+				ct.beginPath();
+				ct.arc(ax,ay,boom_r,0,2*Math.PI);
+				ct.closePath;
+				ct.fill();*/
+			//	alert(date1);
+				//ct.fillRect(0,0,450,500);
+				//xboom+=1;
+			//}
+			setTimeout(function(){
+				makeMaze();
+			theMaze.initialize();
+			//if(aTank==tank2){
+				tank2.score++;
+			},100);
+
+			//}
+			//else {
+			//	tank1.score++;
+			//}
 
 			//destroyTank(tank1);
 			//setTimeout(function(){
@@ -519,23 +546,50 @@ maze.prototype.shootTank = function(aTank) {
 		//	document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
-			timx=1
-			while(timx<=10 && timx>=1){
-				if (timx<10) {
-					destroyTank(tank2);
+			//timx=1
+			date1= new Date().getTime();
+			//while(timx<=10 && timx>=1){
+			/*	if (timx<10) {
+					destroyTank(tank1);
 				}
 				else {
 						makeMaze();
 						theMaze.initialize();
-						//if(aTank==tank1){
-							tank1.score++;
+						//if(aTank==tank2){
+							tank2.score++;
 						//}
 						//else {
-						//	tank2.score++;
+						//	tank1.score++;
 						//}
 						timx=0;
 				}
-			}
+			}*/
+			var xboom = 0
+			var ct = document.getElementById('maze').getContext("2d");
+			//ct.fillRect(0,0,450,500);
+			destroyTank(tank2);
+			//while(new Date().getTime() - date1<3000){
+				/*ax=tank1.tankCenterX;
+				ay=tank1.tankCenterY;
+				ct.beginPath();
+				ct.arc(ax,ay,boom_r,0,2*Math.PI);
+				ct.closePath;
+				ct.fill();*/
+			//	alert(date1);
+				//ct.fillRect(0,0,450,500);
+				//xboom+=1;
+			//}
+			setTimeout(function(){
+				makeMaze();
+			theMaze.initialize();
+			//if(aTank==tank2){
+				tank1.score++;
+			},100);
+
+			//}
+			//else {
+			//	tank1.score++;
+			//}
 
 			//destroyTank(tank2);
 			//setTimeout(function(){
