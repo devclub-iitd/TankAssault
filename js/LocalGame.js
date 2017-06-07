@@ -245,7 +245,7 @@ maze.prototype.moveTank = function(aTank) {
  	wallTop = j*theMaze.gridsize;
  	wallBottom = (j+1)*theMaze.gridsize;
 
-	/* New Code 
+	/* New Code
 	 * Under Work
 	 */
 	/*
@@ -255,7 +255,7 @@ maze.prototype.moveTank = function(aTank) {
 		aTank.rotorAngle += 4;
 		aTank.rotorAngle = aTank.rotorAngle % 360;
 	}
- 
+
  	else if (aTank.leftPressed === true)
 	{
 	 	aTank.rotorAngle -= 4;
@@ -313,7 +313,7 @@ maze.prototype.moveTank = function(aTank) {
 				up = right = true;
 			}
 		}
-		
+
 		if (right === true){
 			if (!currentPlayerGrid.rightWall || (currentPlayerGrid.rightWall && aTank.tankCenterX  + aTank.rotorLength < wallRight - dx)) {
 				// Move the tank right
@@ -326,9 +326,9 @@ maze.prototype.moveTank = function(aTank) {
 				// tank boundary on wall or beyond it
 				// do nothing
 			}
-		
+
 		}
- 
+
  	else if (left === true) {
 	 	if (!currentPlayerGrid.leftWall || (currentPlayerGrid.leftWall && aTank.tankCenterX  - aTank.rotorLength > wallLeft - dx)) {
 			// Move the tank left
@@ -498,9 +498,9 @@ maze.prototype.shootTank = function(aTank) {
 				else {
 						makeMaze();
 						theMaze.initialize();
-						if(aTank==tank2){
+						//if(aTank==tank2){
 							tank2.score++;
-						}
+						//}
 						//else {
 						//	tank1.score++;
 						//}
@@ -527,9 +527,9 @@ maze.prototype.shootTank = function(aTank) {
 				else {
 						makeMaze();
 						theMaze.initialize();
-						if(aTank==tank1){
+						//if(aTank==tank1){
 							tank1.score++;
-						}
+						//}
 						//else {
 						//	tank2.score++;
 						//}
