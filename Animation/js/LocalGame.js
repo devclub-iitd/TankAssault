@@ -5,6 +5,7 @@ var boom_r=10;
 var ctx = canvas.getContext("2d");
 var bulletAudio = document.getElementById('audiobullet');
 var endAudio = document.getElementById('audiotank');
+var xxxx=0;
 
 var b = 0;
 function Tank(){
@@ -488,36 +489,143 @@ maze.prototype.shootTank = function(aTank) {
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
-		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
+		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 			//document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
-			
+			//timx=1
+			date1= new Date().getTime();
+			//while(timx<=10 && timx>=1){
+			/*	if (timx<10) {
+					destroyTank(tank1);
+				}
+				else {
+						makeMaze();
+						theMaze.initialize();
+						//if(aTank==tank2){
+							tank2.score++;
+						//}
+						//else {
+						//	tank1.score++;
+						//}
+						timx=0;
+				}
+			}*/
+			var xboom = 0
+			var ct = document.getElementById('maze').getContext("2d");
+			//ct.fillRect(0,0,450,500);
+			xxxx=1
 			// Creating circles for animation
 			for (var i = 0; i < 500; i++) {
-				circles.push(new create(aTank));
-			}		
-			
+				circles.push(new create(tank1));
+			}
+
 			b = 0;
 			destroyTank(tank1);
+			//while(new Date().getTime() - date1<3000){
+				/*ax=tank1.tankCenterX;
+				ay=tank1.tankCenterY;
+				ct.beginPath();
+				ct.arc(ax,ay,boom_r,0,2*Math.PI);
+				ct.closePath;
+				ct.fill();*/
+			//	alert(date1);
+				//ct.fillRect(0,0,450,500);
+				//xboom+=1;
+			//}
+			setTimeout(function(){
+				makeMaze();
 			theMaze.initialize();
-			setTimeout(makeMaze,1000);	
-			tank2.score++;
+			//if(aTank==tank2){
+				tank2.score++;
+				xxxx=0;
+			},200);
+
+			//}
+			//else {
+			//	tank1.score++;
+			//}
+
+			//destroyTank(tank1);
+			//setTimeout(function(){
+			//makeMaze();
+			//theMaze.initialize();
+			//tank2.score++;
+			//},2000);
+
+
+			//theMaze.initialize();
+			//setTimeout(makeMaze,1000);
+			//tank2.score++;
 			}
-		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
-		//	document.getElementById('audiobullet').pause();
+		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+			//document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
-			
+			//timx=1
+			date1= new Date().getTime();
+			//while(timx<=10 && timx>=1){
+			/*	if (timx<10) {
+					destroyTank(tank1);
+				}
+				else {
+						makeMaze();
+						theMaze.initialize();
+						//if(aTank==tank2){
+							tank2.score++;
+						//}
+						//else {
+						//	tank1.score++;
+						//}
+						timx=0;
+				}
+			}*/
+			var xboom = 0
+			var ct = document.getElementById('maze').getContext("2d");
+			//ct.fillRect(0,0,450,500);
+			xxxx=2
+			// Creating circles for animation
 			for (var i = 0; i < 500; i++) {
-				circles.push(new create(aTank));
-			}		
+				circles.push(new create(tank2));
+			}
+
 			b = 0;
-			
 			destroyTank(tank2);
-		theMaze.initialize();	
-		setTimeout(makeMaze,1000);
+			//while(new Date().getTime() - date1<3000){
+				/*ax=tank1.tankCenterX;
+				ay=tank1.tankCenterY;
+				ct.beginPath();
+				ct.arc(ax,ay,boom_r,0,2*Math.PI);
+				ct.closePath;
+				ct.fill();*/
+			//	alert(date1);
+				//ct.fillRect(0,0,450,500);
+				//xboom+=1;
+			//}
+			setTimeout(function(){
+				makeMaze();
+			theMaze.initialize();
+			//if(aTank==tank2){
 				tank1.score++;
+				xxxx=0;
+			},200);
+
+			//}
+			//else {
+			//	tank1.score++;
+			//}
+
+			//destroyTank(tank1);
+			//setTimeout(function(){
+			//makeMaze();
+			//theMaze.initialize();
+			//tank2.score++;
+			//},2000);
+
+
+			//theMaze.initialize();
+			//setTimeout(makeMaze,1000);
+			//tank2.score++;
 			}
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
@@ -651,11 +759,11 @@ function doAdelay(){
 }
 
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
-		  window.webkitRequestAnimationFrame || 
-		  window.mozRequestAnimationFrame    || 
-		  window.oRequestAnimationFrame      || 
-		  window.msRequestAnimationFrame     || 
+  return  window.requestAnimationFrame       ||
+		  window.webkitRequestAnimationFrame ||
+		  window.mozRequestAnimationFrame    ||
+		  window.oRequestAnimationFrame      ||
+		  window.msRequestAnimationFrame     ||
 		  function( callback ){
 			window.setTimeout(callback, 1000 / 60);
 		  };
@@ -665,44 +773,44 @@ window.requestAnimFrame = (function(){
 circles = [];
 
 function create(aTank) {
-	
+
 	//Place the circles at the center
 	//console.log(aTank.tankCenterX);
 	this.x = aTank.tankCenterX;
 	this.y = aTank.tankCenterY;
 
-	
+
 	//Random radius between 2 and 6
-	this.radius = 2 + Math.random()*3; 
-	
+	this.radius = 2 + Math.random()*3;
+
 	//Random velocities
 	this.vx = -5 + Math.random()*10;
 	this.vy = -5 + Math.random()*10;
-	
+
 	//Random colors
 	this.r = Math.round(Math.random())*255;
 	this.g = Math.round(Math.random())*255;
 	this.b = Math.round(Math.random())*255;
-	
+
 }
 
 function draw(aTank) {
-	
+
 	//Fill canvas with black color
     ctx.globalCompositeOperation = "source-over";
     //ctx.fillStyle = "rgba(0,0,0,0.15)";
    // ctx.fillRect(0, 0, 30, 30);
-	
+
 	//Fill the canvas with circles
 	for(var j = 0; j < circles.length; j++){
 		var c = circles[j];
-		
+
 		//Create the circles
 		ctx.beginPath();
 		ctx.arc(c.x, c.y, c.radius, 0, Math.PI*2, true);
         ctx.fillStyle = "rgba("+c.r+", "+c.g+", "+c.b+", 1)";
 		ctx.fill();
-		
+
 		c.x += c.vx;
 		c.y += c.vy;
 		if(c.radius > 0.02){
