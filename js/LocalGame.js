@@ -528,7 +528,7 @@ maze.prototype.shootTank = function(aTank) {
 			theMaze.initialize();
 			//if(aTank==tank2){
 				tank2.score++;
-			},100);
+			},1000);
 
 			//}
 			//else {
@@ -584,7 +584,7 @@ maze.prototype.shootTank = function(aTank) {
 			theMaze.initialize();
 			//if(aTank==tank2){
 				tank1.score++;
-			},100);
+			},1000);
 
 			//}
 			//else {
