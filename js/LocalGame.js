@@ -5,6 +5,7 @@ var boom_r=10;
 var ctx = canvas.getContext("2d");
 var bulletAudio = document.getElementById('audiobullet');
 var endAudio = document.getElementById('audiotank');
+var xxxx=0;
 function Tank(){
 	// tank parameters
 	this.tankCenterX = 0;
@@ -486,7 +487,7 @@ maze.prototype.shootTank = function(aTank) {
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
 		tank2.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank2.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank2.tankCenterY),2));
-		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
+		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 			//document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
@@ -511,6 +512,7 @@ maze.prototype.shootTank = function(aTank) {
 			var xboom = 0
 			var ct = document.getElementById('maze').getContext("2d");
 			//ct.fillRect(0,0,450,500);
+			xxxx=1
 			destroyTank(tank1);
 			//while(new Date().getTime() - date1<3000){
 				/*ax=tank1.tankCenterX;
@@ -528,7 +530,8 @@ maze.prototype.shootTank = function(aTank) {
 			theMaze.initialize();
 			//if(aTank==tank2){
 				tank2.score++;
-			},1000);
+				xxxx=0;
+			},200);
 
 			//}
 			//else {
@@ -542,7 +545,13 @@ maze.prototype.shootTank = function(aTank) {
 			//tank2.score++;
 			//},2000);
 			}
-		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true)){
+		if (xxxx==1){
+			destroyTank(tank1);
+		}
+		if (xxxx==2){
+			destroyTank(tank2);
+		}
+		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 		//	document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
@@ -567,6 +576,7 @@ maze.prototype.shootTank = function(aTank) {
 			var xboom = 0
 			var ct = document.getElementById('maze').getContext("2d");
 			//ct.fillRect(0,0,450,500);
+			xxxx=2
 			destroyTank(tank2);
 			//while(new Date().getTime() - date1<3000){
 				/*ax=tank1.tankCenterX;
@@ -584,7 +594,8 @@ maze.prototype.shootTank = function(aTank) {
 			theMaze.initialize();
 			//if(aTank==tank2){
 				tank1.score++;
-			},1000);
+				xxxx=0;
+			},200);
 
 			//}
 			//else {

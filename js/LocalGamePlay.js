@@ -126,3 +126,11 @@ function destroyTank(aTank){
 	boom_r=10;
 	}
 }
+/*function destroyTank(aTank){
+	ax=aTank.tankCenterX;
+	ay=aTank.tankCenterY;
+	context.beginPath();
+	context.arc(ax,ay,50,0,2*Math.PI);
+	context.closePath;
+	context.fill();
+}*/
