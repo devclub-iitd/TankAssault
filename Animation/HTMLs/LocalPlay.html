@@ -9,10 +9,10 @@
 </head>
 
 <body>
+	<!--<script src="../lib/jquery-3.1.0.js"></script>
+    <script src="../dist/jquery.imgexplode.min.js"></script>-->
 	<audio id="audiotank" src="../media/tank.mp3" preload="auto"></audio>
 	<audio id="audiobullet" src="../media/bullet.mp3" preload="auto"></audio>
-	<audio id="audioreload" src="../media/reload.mp3" preload="auto"></audio>
-
 	<div id="wrapper">
 		<header>
 			<h1>Let's Trouble...</h1>
@@ -46,8 +46,8 @@
 		<canvas id="player1stats" width="100px" height="50px" ></canvas>
 		<br><br>
 		<h2>Bullets</h2>
-		<canvas id="player1bullets" width="100px" height="50px" ></canvas>
-		<p id="reload1">Enjoy Shooting!</p>
+		<canvas id="player1bullets" width="120px" height="50px" ></canvas>
+		<p id="reload1">Let's Start</p>
 	</div>
 	<div id="player2score">
 		<figure>
@@ -57,11 +57,12 @@
 		<canvas oncontextmenu="return false;" id="player2stats" width="100px" height="50px" ></canvas>
 		<br><br>
 		<h2>Bullets</h2>
-		<canvas id="player2bullets" width="100px" height="50px"></canvas>
-		<p id="reload2">Enjoy Shooting!</p>
+		<canvas id="player2bullets" width="120px" height="50px"></canvas>
+		<p id="reload2">Let's Start</p>
 	</div>
 	<div>
-		<img src="../images/bullet.jpg" alt="" width="16" id="bullet" style="display: none">
+		<img src="../images/bullet.jpg" alt="" width="15" id="bullet" style="display: none">
+		<img src="../images/bulletOver.jpg" alt="" id="bulletOver" height="50px" style="display: none">
 	</div>
 
 	<!--Life --><!--
@@ -76,6 +77,10 @@
 
 
 	--><!--Life over-->
+	<script src="../js/MazeGeneration.js" type="text/javascript"></script>
 	<script src="../js/LocalGame.js" type="text/javascript"></script>
+	<script src="../js/LocalGamePlay.js" type="text/javascript"></script>
+  <!--  <script src="../js/Explosion.js" type="text/javascript"></script>-->
+	
 </body>
 </html>
