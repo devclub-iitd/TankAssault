@@ -76,18 +76,12 @@ maze.prototype.maintainStats = function() {
 		 document.getElementById("reload2").innerHTML = "Reload Required..." + "<br>";
 	 }
 }
-var a = 0;
+
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
 	 theMaze.moveTank(tank1);
 	 theMaze.moveTank(tank2);
-	 //if(a == 0){
 	 theMaze.draw();
-	 /*}else if(a == 1){
-	 destroyTank(tank1);	 
-	 }else if(a == 2){
-	 destroyTank(tank2);	 
-	 }*/
 	 theMaze.shootTank(tank2);
 	 theMaze.shootTank(tank1);
 	 theMaze.maintainStats();
@@ -117,26 +111,8 @@ function generate() {
 function reSetTank() {
 	theMaze.initialize();
 }
-/*function explode(aTank) {
-    //        aTank.explodeRestore();
-            setTimeout(function () {
-                aTank.explode({
-                    maxWidth: 15,
-                    minWidth: 5,
-                    radius: 231,
-                    release: false,
-                    recycle: false,
-                    explodeTime: 320,
-                    canvas: true,
-                    round: false,
-                    maxAngle: 360,
-                    gravity: 10,
-                    groundDistance: 150,
-                });
-            }, 300)
-        }*/
 function destroyTank(aTank){
-	/*ax=aTank.tankCenterX;
+	ax=aTank.tankCenterX;
 	ay=aTank.tankCenterY;
 	context.beginPath();
 	context.arc(ax,ay,boom_r,0,2*Math.PI);
@@ -148,14 +124,13 @@ function destroyTank(aTank){
 	}
 	else{
 	boom_r=10;
-	}*/
-	console.log("Called");
-//	create(aTank);
-//	draw(aTank);
-		//	a = 0;
-	animate(aTank);
-	/*  setTimeout(function (){
-		animate(aTank);
-            }, 300);*/
-	
+	}
 }
+/*function destroyTank(aTank){
+	ax=aTank.tankCenterX;
+	ay=aTank.tankCenterY;
+	context.beginPath();
+	context.arc(ax,ay,50,0,2*Math.PI);
+	context.closePath;
+	context.fill();
+}*/

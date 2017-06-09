@@ -6,8 +6,6 @@ var ctx = canvas.getContext("2d");
 var bulletAudio = document.getElementById('audiobullet');
 var endAudio = document.getElementById('audiotank');
 var xxxx=0;
-
-var b = 0;
 function Tank(){
 	// tank parameters
 	this.tankCenterX = 0;
@@ -515,12 +513,6 @@ maze.prototype.shootTank = function(aTank) {
 			var ct = document.getElementById('maze').getContext("2d");
 			//ct.fillRect(0,0,450,500);
 			xxxx=1
-			// Creating circles for animation
-			for (var i = 0; i < 500; i++) {
-				circles.push(new create(tank1));
-			}
-
-			b = 0;
 			destroyTank(tank1);
 			//while(new Date().getTime() - date1<3000){
 				/*ax=tank1.tankCenterX;
@@ -552,14 +544,15 @@ maze.prototype.shootTank = function(aTank) {
 			//theMaze.initialize();
 			//tank2.score++;
 			//},2000);
-
-
-			//theMaze.initialize();
-			//setTimeout(makeMaze,1000);
-			//tank2.score++;
 			}
+		if (xxxx==1){
+			destroyTank(tank1);
+		}
+		if (xxxx==2){
+			destroyTank(tank2);
+		}
 		if((tank2.bulltank <= tank2.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
-			//document.getElementById('audiobullet').pause();
+		//	document.getElementById('audiobullet').pause();
 			endAudio.currentTime = 0;
 			endAudio.play();
 			//timx=1
@@ -584,12 +577,6 @@ maze.prototype.shootTank = function(aTank) {
 			var ct = document.getElementById('maze').getContext("2d");
 			//ct.fillRect(0,0,450,500);
 			xxxx=2
-			// Creating circles for animation
-			for (var i = 0; i < 500; i++) {
-				circles.push(new create(tank2));
-			}
-
-			b = 0;
 			destroyTank(tank2);
 			//while(new Date().getTime() - date1<3000){
 				/*ax=tank1.tankCenterX;
@@ -615,17 +602,12 @@ maze.prototype.shootTank = function(aTank) {
 			//	tank1.score++;
 			//}
 
-			//destroyTank(tank1);
+			//destroyTank(tank2);
 			//setTimeout(function(){
 			//makeMaze();
 			//theMaze.initialize();
-			//tank2.score++;
+			//tank1.score++;
 			//},2000);
-
-
-			//theMaze.initialize();
-			//setTimeout(makeMaze,1000);
-			//tank2.score++;
 			}
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
@@ -752,80 +734,4 @@ function Shoot(aBullet, aTank){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;
 		}
-}
-
-function doAdelay(){
- setTimeout(function(){return true;},3000);
-}
-
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-		  window.webkitRequestAnimationFrame ||
-		  window.mozRequestAnimationFrame    ||
-		  window.oRequestAnimationFrame      ||
-		  window.msRequestAnimationFrame     ||
-		  function( callback ){
-			window.setTimeout(callback, 1000 / 60);
-		  };
-})();
-
-
-circles = [];
-
-function create(aTank) {
-
-	//Place the circles at the center
-	//console.log(aTank.tankCenterX);
-	this.x = aTank.tankCenterX;
-	this.y = aTank.tankCenterY;
-
-
-	//Random radius between 2 and 6
-	this.radius = 2 + Math.random()*3;
-
-	//Random velocities
-	this.vx = -5 + Math.random()*10;
-	this.vy = -5 + Math.random()*10;
-
-	//Random colors
-	this.r = Math.round(Math.random())*255;
-	this.g = Math.round(Math.random())*255;
-	this.b = Math.round(Math.random())*255;
-
-}
-
-function draw(aTank) {
-
-	//Fill canvas with black color
-    ctx.globalCompositeOperation = "source-over";
-    //ctx.fillStyle = "rgba(0,0,0,0.15)";
-   // ctx.fillRect(0, 0, 30, 30);
-
-	//Fill the canvas with circles
-	for(var j = 0; j < circles.length; j++){
-		var c = circles[j];
-
-		//Create the circles
-		ctx.beginPath();
-		ctx.arc(c.x, c.y, c.radius, 0, Math.PI*2, true);
-        ctx.fillStyle = "rgba("+c.r+", "+c.g+", "+c.b+", 1)";
-		ctx.fill();
-
-		c.x += c.vx;
-		c.y += c.vy;
-		if(c.radius > 0.02){
-		c.radius -= .02;
-		}
-		if(c.radius > 3)
-			circles[j] = new create(aTank);
-	}
-}
-
-function animate(aTank) {
-	console.log("AA gya");
-	b++;
-	if(b<300){
-	requestAnimFrame(animate);
-	draw(aTank);
-	}
 }
