@@ -84,9 +84,9 @@ maze.prototype.playGame = function() {
 	 //if(a == 0){
 	 theMaze.draw();
 	 /*}else if(a == 1){
-	 destroyTank(tank1);	 
+	 destroyTank(tank1);
 	 }else if(a == 2){
-	 destroyTank(tank2);	 
+	 destroyTank(tank2);
 	 }*/
 	 theMaze.shootTank(tank2);
 	 theMaze.shootTank(tank1);
@@ -157,5 +157,5 @@ function destroyTank(aTank){
 	/*  setTimeout(function (){
 		animate(aTank);
             }, 300);*/
-	
+
 }

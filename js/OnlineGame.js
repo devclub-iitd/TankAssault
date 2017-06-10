@@ -1,8 +1,15 @@
 // javascript for tank Movement and shooting
 // var canvas already declared
+var timx=0;
+var boom_r=10;
 var ctx = canvas.getContext("2d");
+var bulletAudio = document.getElementById('audiobullet');
+var endAudio = document.getElementById('audiotank');
+var xxxx=0;
 
-function Tank(){	
+var b = 0;
+
+function Tank(){
 	// tank parameters
 	this.tankCenterX = 0;
 	this.tankCenterY = 0;
@@ -32,7 +39,7 @@ function initializeTank(aTank) {
 	// tank parameters
 	var randrow = Math.floor(Math.random() * theMaze.rows);
 	var randcolumn = Math.floor(Math.random() * theMaze.columns);
-		
+
 	aTank.tankCenterX = (randcolumn * theMaze.gridsize) + theMaze.gridsize / 30;
 	aTank.tankCenterY = (randrow * theMaze.gridsize) + theMaze.gridsize / 30;
 	aTank.rotorX = aTank.tankCenterX + 15;
@@ -160,7 +167,7 @@ function drawTank1(x, y, radius, length, width,degrees){
 	    // draw the rect on the transformed context
         // Note: after transforming [0,0] is visually [x,y]
         //       so the rect needs to be offset accordingly when drawn
-        
+
 	    ctx.fillStyle = "yellow";
 		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
         // restore the context to its untranslated/unrotated state
@@ -168,16 +175,16 @@ function drawTank1(x, y, radius, length, width,degrees){
 	}
 
 maze.prototype.initialize = function() {
-	
-	if (onceLoaded > 0) {	
+
+	if (onceLoaded > 0) {
 		document.addEventListener("keydown", keyDownHandler, false);
-		document.addEventListener("keyup", keyUpHandler, false);			
+		document.addEventListener("keyup", keyUpHandler, false);
 		onceLoaded = -1;
 	}
 	initializeTank(tank1);
 	for (var i = 0; i < tank1.bulletPack; i++)
     	initializeBullet(tank1, tank1.bullet[i]);
-			
+
 	tank1.bulletReload = true;
 	tank1.bulletShot = tank1.bulletPack;
 }
@@ -188,12 +195,12 @@ maze.prototype.moveTank = function(aTank) {
  	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 	var j = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 	var currentPlayerGrid = theMaze.grid[i][j];
-	
+
  	wallLeft = i*theMaze.gridsize;
  	wallRight = (i+1)*theMaze.gridsize;
  	wallTop = j*theMaze.gridsize;
  	wallBottom = (j+1)*theMaze.gridsize;
- 	
+
  	// fine adjustments
  	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.rotorLength > wallRight)) {
 		// do something
@@ -203,7 +210,7 @@ maze.prototype.moveTank = function(aTank) {
 		// do something
 		aTank.rotorX += (wallLeft - (aTank.tankCenterX - aTank.rotorLength));
 	}
- 
+
  	if (currentPlayerGrid.bottomWall && (aTank.tankCenterY + aTank.rotorLength > wallBottom)) {
 		// do something
 		aTank.rotorY -= ((aTank.tankCenterY + aTank.rotorLength) - wallBottom);
@@ -212,18 +219,18 @@ maze.prototype.moveTank = function(aTank) {
 		// do something
 		aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.rotorLength));
 	}
- 
+
 	if (aTank.rightPressed === true){
 		aTank.rotorAngle += 4;
 		aTank.rotorAngle = aTank.rotorAngle % 360;
 			}
- 
+
  	else if (aTank.leftPressed === true) {
 	 	aTank.rotorAngle -= 4;
 	 	if(aTank.rotorAngle < 0){
 			aTank.rotorAngle+=360;
 			}
-		aTank.rotorAngle = aTank.rotorAngle % 360;	 	
+		aTank.rotorAngle = aTank.rotorAngle % 360;
  	}
  	if (aTank.upPressed) {
 	 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.rotorLength > wallTop + aTank.dDist)) {
@@ -245,7 +252,7 @@ maze.prototype.moveTank = function(aTank) {
  	else if (aTank.downPressed) {
 	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.rotorLength < wallBottom - aTank.dDist)) {
 			// Move the tank left
-			
+
 			aTank.rotorY += Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 			aTank.rotorX += Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 		}
@@ -260,7 +267,7 @@ maze.prototype.moveTank = function(aTank) {
 			// do nothing
 		}
  	}
- 	
+
  	aTank.tankCenterX = aTank.rotorX + aTank.rotorLength / 2;
 	aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
 }
@@ -271,7 +278,7 @@ maze.prototype.shootTank = function(aTank) {
 		// reset each bullet and fill bulletPack
 		aTank.bulletShot = aTank.bulletPack;
 	}
-	
+
 	/*if (aTank.reloading){
 		document.getElementById('demo').innerHTML = "Reloading..." + "<br>";
 	}
@@ -280,17 +287,86 @@ maze.prototype.shootTank = function(aTank) {
 	// shoot new bullet if you have
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
+			bulletAudio.pause();
+			bulletAudio.currentTime = 0;
+			bulletAudio.play()
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
 	}
-	
+
 	// shoot the bullets ready for shoot
- 	
+
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
 		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
-		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true)){
-			makeMaze();
-			theMaze.initialize();
+		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+
+				//document.getElementById('audiobullet').pause();
+				endAudio.currentTime = 0;
+				endAudio.play();
+				//timx=1
+				date1= new Date().getTime();
+				//while(timx<=10 && timx>=1){
+				/*	if (timx<10) {
+						destroyTank(tank1);
+					}
+					else {
+							makeMaze();
+							theMaze.initialize();
+							//if(aTank==tank2){
+								tank2.score++;
+							//}
+							//else {
+							//	tank1.score++;
+							//}
+							timx=0;
+					}
+				}*/
+				var xboom = 0
+				var ct = document.getElementById('maze').getContext("2d");
+				//ct.fillRect(0,0,450,500);
+				xxxx=1
+				// Creating circles for animation
+				for (var i = 0; i < 500; i++) {
+					circles.push(new create(tank1));
+				}
+
+				b = 0;
+				destroyTank(tank1);
+				//while(new Date().getTime() - date1<3000){
+					/*ax=tank1.tankCenterX;
+					ay=tank1.tankCenterY;
+					ct.beginPath();
+					ct.arc(ax,ay,boom_r,0,2*Math.PI);
+					ct.closePath;
+					ct.fill();*/
+				//	alert(date1);
+					//ct.fillRect(0,0,450,500);
+					//xboom+=1;
+				//}
+				setTimeout(function(){
+					makeMaze();
+				theMaze.initialize();
+				//if(aTank==tank2){
+					//tank2.score++;
+					xxxx=0;
+				},200);
+
+				//}
+				//else {
+				//	tank1.score++;
+				//}
+
+				//destroyTank(tank1);
+				//setTimeout(function(){
+				//makeMaze();
+				//theMaze.initialize();
+				//tank2.score++;
+				//},2000);
+
+
+				//theMaze.initialize();
+				//setTimeout(makeMaze,1000);
+				//tank2.score++;
 			}
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
@@ -299,11 +375,11 @@ maze.prototype.shootTank = function(aTank) {
 				drawTank1(tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle);
 			}
 	}
-	
-	
+
+
 	// for debugging
 	//document.getElementById('demo').innerHTML += "Bullets Left: " + aTank.bulletShot;
-	
+
  	aTank.bulletReload = false;
  	aTank.leftClick = false;
 }
@@ -336,7 +412,7 @@ function Shoot(aBullet, aTank){
 			aBullet.shoot = false;
 			return;
 		}
-		
+
 		/*var iTank = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 		var jTank = Math.floor(aTank.tankCenterY / theMaze.gridsize)
 		if (i != iTank){
@@ -349,7 +425,7 @@ function Shoot(aBullet, aTank){
 		}*/
 		aBullet.shootBegin = false;
 	}
-	
+
 	var currentBulletGrid = theMaze.grid[i][j];
  	wallLeft = i*theMaze.gridsize;
  	wallRight = (i+1)*theMaze.gridsize;
@@ -368,7 +444,7 @@ function Shoot(aBullet, aTank){
 		aBullet.collisions++;
 	}
  	else if (currentBulletGrid.leftWall && (aBullet.bulletX - aBullet.bulletRadius < wallLeft)) {
-		
+
 		if(aBullet.bulletAngle <= 180){
 			aBullet.bulletAngle += (180 - 2*aBullet.bulletAngle);
 		}
@@ -399,14 +475,89 @@ function Shoot(aBullet, aTank){
 		aBullet.bulletAngle = aBullet.bulletAngle % 360;
 		aBullet.collisions++;
 	}
-		
-		
-		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180)); 
+
+
+		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
 		drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;
-		}	
+		}
 }
-	
+
+function doAdelay(){
+ setTimeout(function(){return true;},3000);
+}
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+		  window.webkitRequestAnimationFrame ||
+		  window.mozRequestAnimationFrame    ||
+		  window.oRequestAnimationFrame      ||
+		  window.msRequestAnimationFrame     ||
+		  function( callback ){
+			window.setTimeout(callback, 1000 / 60);
+		  };
+})();
+
+
+circles = [];
+
+function create(aTank) {
+
+	//Place the circles at the center
+	//console.log(aTank.tankCenterX);
+	this.x = aTank.tankCenterX;
+	this.y = aTank.tankCenterY;
+
+
+	//Random radius between 2 and 6
+	this.radius = 2 + Math.random()*3;
+
+	//Random velocities
+	this.vx = -5 + Math.random()*10;
+	this.vy = -5 + Math.random()*10;
+
+	//Random colors
+	this.r = Math.round(Math.random())*255;
+	this.g = Math.round(Math.random())*255;
+	this.b = Math.round(Math.random())*255;
+
+}
+
+function draw(aTank) {
+
+	//Fill canvas with black color
+    ctx.globalCompositeOperation = "source-over";
+    //ctx.fillStyle = "rgba(0,0,0,0.15)";
+   // ctx.fillRect(0, 0, 30, 30);
+
+	//Fill the canvas with circles
+	for(var j = 0; j < circles.length; j++){
+		var c = circles[j];
+
+		//Create the circles
+		ctx.beginPath();
+		ctx.arc(c.x, c.y, c.radius, 0, Math.PI*2, true);
+        ctx.fillStyle = "rgba("+c.r+", "+c.g+", "+c.b+", 1)";
+		ctx.fill();
+
+		c.x += c.vx;
+		c.y += c.vy;
+		if(c.radius > 0.02){
+		c.radius -= .02;
+		}
+		if(c.radius > 3)
+			circles[j] = new create(aTank);
+	}
+}
+
+function animate(aTank) {
+	console.log("AA gya");
+	b++;
+	if(b<300){
+	requestAnimFrame(animate);
+	draw(aTank);
+	}
+}
