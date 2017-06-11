@@ -18,7 +18,7 @@ function Tank(){
 	this.tankRadius = theMaze.gridsize/ 4;
 	this.rotorLength = this.tankRadius * 20 / 15;
 	this.rotorWidth = this.tankRadius * 7 / 15;
-	this.dDist = this.tankRadius / 15;
+	this.dDist = this.tankRadius/15	;
 	this.dAng = 1;
 	// tank  controls
 	this.rightPressed = false;
@@ -48,7 +48,7 @@ function initializeTank(aTank) {
 	aTank.tankRadius = theMaze.gridsize/ 4;
 	aTank.rotorLength = aTank.tankRadius * 20 / 15;
 	aTank.rotorWidth = aTank.tankRadius * 7 / 15;
-	aTank.dDist = aTank.tankRadius / 15;
+	aTank.dDist = aTank.tankRadius/11.5;
 	aTank.dAng = 1;
 	// tank  controls
 	aTank.rightPressed = false;
@@ -136,10 +136,14 @@ function keyDownHandler(e) {
 	if(e.keyCode == 78){
 		tank1.reloading = true;
 		setTimeout(function(){Reload(tank1)},3000);
+		document.getElementById('audioreload').loop=false;
+ 		document.getElementById('audioreload').play();
 	}
 	if(e.keyCode == 90){
 		tank2.reloading = true;
 		setTimeout(function(){Reload(tank2)},3000);
+		document.getElementById('audioreload').loop=false;
+ 		document.getElementById('audioreload').play();
 	}
 }
 
@@ -393,12 +397,12 @@ maze.prototype.moveTank = function(aTank) {
 
 
 	if (aTank.rightPressed === true){
-		aTank.rotorAngle += 4;
+		aTank.rotorAngle += 3;
 		aTank.rotorAngle = aTank.rotorAngle % 360;
 			}
 
  	else if (aTank.leftPressed === true) {
-	 	aTank.rotorAngle -= 4;
+	 	aTank.rotorAngle -= 3;
 	 	if(aTank.rotorAngle < 0){
 			aTank.rotorAngle+=360;
 			}
@@ -424,7 +428,6 @@ maze.prototype.moveTank = function(aTank) {
  	else if (aTank.downPressed) {
 	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.rotorLength < wallBottom - aTank.dDist)) {
 			// Move the tank left
-
 			aTank.rotorY += Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 			aTank.rotorX += Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
 		}
