@@ -7,6 +7,9 @@ var bulletAudio = document.getElementById('audiobullet');
 var endAudio = document.getElementById('audiotank');
 var xxxx=0;
 
+var shootx=true;
+var shoot1=true;
+
 var b = 0;
 
 function Tank(){
@@ -334,6 +337,8 @@ maze.prototype.shootTank = function(aTank) {
 				}
 
 				b = 0;
+				shootx=false;
+				shoot1=false;
 				destroyTank(tank1);
 				//while(new Date().getTime() - date1<3000){
 					/*ax=tank1.tankCenterX;
@@ -352,7 +357,9 @@ maze.prototype.shootTank = function(aTank) {
 				//if(aTank==tank2){
 					//tank2.score++;
 					xxxx=0;
-				},200);
+					shoot1=true;
+					shootx=true;
+				},1000);
 
 				//}
 				//else {
@@ -375,7 +382,9 @@ maze.prototype.shootTank = function(aTank) {
 			Shoot(aTank.bullet[i], aTank);
 		}
 		if(tank1.bulltank >= tank1.tankRadius){
+			if (shoot1==true){
 				drawTank1(tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle);
+			}
 			}
 	}
 
@@ -479,10 +488,11 @@ function Shoot(aBullet, aTank){
 		aBullet.collisions++;
 	}
 
-
+	if (shootx==true){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
 		drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
+	}
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;

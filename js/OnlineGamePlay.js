@@ -1,4 +1,5 @@
 // JavaScript Document for main Play
+var timxxx;
 
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
@@ -18,7 +19,7 @@ function generate() {
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
-		setInterval(theMaze.playGame, 10);
+		var timxxx = setInterval(theMaze.playGame, 10);
 	}
 
 	loaded++;
