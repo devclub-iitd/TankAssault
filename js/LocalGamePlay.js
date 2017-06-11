@@ -1,5 +1,5 @@
 // JavaScript Document for main Play
-
+var timxxx;
 
 // initialising game Play
 maze.prototype.initialize = function() {
@@ -109,7 +109,7 @@ function generate() {
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
-		setInterval(theMaze.playGame, 10);
+	var timxxx =	setInterval(theMaze.playGame, 10);
 	}
 
 	loaded++;
