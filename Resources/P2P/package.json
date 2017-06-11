@@ -1,0 +1,13 @@
+{
+  "name": "memory-webrtc-data-channel",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "coffee-script": "^1.12.6",
+    "coffeescript": "^1.12.6",
+    "connect": "^3.6.2",
+    "ejs": "2.x",
+    "express": "^4.15.3",
+    "express.io": "^1.1.13"
+  }
+}
