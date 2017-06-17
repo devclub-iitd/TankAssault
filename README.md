@@ -22,4 +22,8 @@ Move: W(up) & S(Down), rotate by A and D<br>
 Fire: Press X<br>
 Reload: Press Z<br>
 <br>
+<B>To start server<B><br>
+1) Install node in your system. <br>
+2) Type node Server.js <br>
+3) Go to http://localhost:3000/ <br> 
 Have Fun -:)
