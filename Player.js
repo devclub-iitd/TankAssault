@@ -1,0 +1,393 @@
+//var context;
+var theMaze = null;
+var loaded = 0;
+var onceLoaded = 0;
+
+function makeMaze() {
+	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
+	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
+	var gridsize = 400 / rows; // grid size of maze
+	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
+	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
+	if(mazeStyledecision == 1){
+		var mazeStyle = 'straight';
+	}else{
+		var mazeStyle = 'normal';
+	}
+	var startColumn = 0;
+	var startRow = 0;
+	var endColumn = columns - 1;
+	var endRow = rows - 1;
+	var wallR = 0;
+	var wallG = 0;
+	var wallB = 0;
+	var backgroundR = 255;
+	var backgroundG = 255;
+	var backgroundB = 255;
+	var solutionR = 0;//$('#solutionR').val();
+	var solutionG = 0;//$('#solutionG').val();
+	var solutionB = 0;//$('#solutionB').val();
+	
+	var wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
+	var backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
+	var solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
+	theMaze.generate();
+	//theMaze.draw();
+}
+
+function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor) {
+	this.rows = rows;
+	this.columns = columns;
+	this.gridsize = gridsize;
+	this.mazeStyle = mazeStyle;
+	this.sizex = gridsize * rows;
+	this.sizey = gridsize * columns;
+	this.halfgridsize = this.gridsize / 2;
+	this.grid = new Array(this.columns);
+	this.history = new Array();
+	this.startColumn = parseInt(startColumn);
+	this.startRow = parseInt(startRow);
+	this.endColumn = parseInt(endColumn);
+	this.endRow = parseInt(endRow);
+	this.wallColor = wallColor;
+	this.backgroundColor = backgroundColor;
+	this.solutionColor = solutionColor;
+	this.lineWidth = this.gridsize / 60;
+	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
+	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
+	this.cellCount = this.columns * this.rows;
+	this.generatedCellCount = 0;
+	for (i = 0; i < columns; i++) {
+		this.grid[i] = new Array(rows);		
+	}
+	for (j = 0; j < this.columns; j++) {
+		for (k = 0; k < this.rows; k++) {
+			var isStart = false;
+			var isEnd = false;
+			var partOfMaze = false;
+			var isGenStart = false;
+			if (j == this.startColumn && k == this.startRow) {
+				isStart = true;
+			}
+			if (j == this.genStartColumn && k == this.genStartRow) {
+				partOfMaze = true;
+				isGenStart = true;
+			}
+			if (j == this.endColumn && k == this.endRow) {
+				isEnd = true;		
+			}
+			this.grid[j][k] = new cell(j, k, partOfMaze, isStart, isEnd, isGenStart);
+		}
+	}
+}
+maze.prototype.generate = function() {
+	var theMaze = this;
+	var currentCell = this.grid[this.genStartColumn][this.genStartRow];
+	var nextCell;
+	var leftCellPartOfMaze = false;
+	var topCellPartOfMaze = false;
+	var rightCellPartOfMaze = false;
+	var bottomCellPartOfMaze = false;
+	var currentX = this.genStartColumn;
+	var currentY = this.genStartRow;
+	var changeX = 0;
+	var changeY = 0;
+	var previousChangeX = 0;
+	var previousChangeY = 0;
+	var leftCell;
+	var topCell;
+	var rightCell;
+	var bottomCell;
+	var direction;
+	var leftChoices;
+	var rightChoices;
+	var downChoices;
+	var upChoices;
+	var biasDirection;
+	var choices;
+	while (this.generatedCellCount < this.cellCount - 1) {
+		doGeneration();	
+	}
+	function chooseCell() {
+		changeX = 0;
+		changeY = 0;
+		choices = [];
+		biasDirection = '';
+		if (previousChangeX == -1) {
+			biasDirection = 'left';	
+		} else if (previousChangeX == 1) {
+			biasDirection = 'right';
+		} else if (previousChangeY == -1) {
+			biasDirection = 'up';
+		} else if (previousChangeY == 1) {
+			biasDirection = 'down';
+		}
+		direction = '';
+		leftChoices = [0, 0, 0, 0, 0];
+		upChoices = [1, 1, 1, 1, 1];
+		rightChoices = [2, 2, 2, 2, 2];
+		downChoices = [3, 3, 3, 3, 3];
+		switch (theMaze.mazeStyle) {
+		case "straight": {
+			leftChoices = [0];
+			upChoices = [1];
+			rightChoices = [2];
+			downChoices = [3];		
+			if (biasDirection == 'left') {
+				leftChoices = [0, 0, 0, 0, 0, 0, 0, 0];				
+			} else if (biasDirection == 'right') {
+				rightChoices = [2, 2, 2, 2, 2, 2, 2, 2];		
+			} else if (biasDirection == 'down') {
+				downChoices = [3, 3, 3, 3, 3, 3, 3, 3];	
+			} else if (biasDirection == 'up') {
+				upChoices = [1, 1, 1, 1, 1, 1, 1, 1]		
+			}
+			break;
+		}
+		case "normal": {
+			leftChoices = [0];
+			upChoices = [1];
+			rightChoices = [2];
+			downChoices = [3];
+			break;
+		}
+		}
+		choices = leftChoices.concat(rightChoices.concat(downChoices.concat(upChoices)));
+		var rand = Math.floor(Math.random() * choices.length);
+		var weightedRand = choices[rand];
+		switch(weightedRand) {
+		case 0: {
+			nextCell = leftCell;
+			changeX = -1;
+			direction = 'left';
+			break;				
+		}
+		case 1: {
+			nextCell = topCell;
+			changeY = -1;
+			direction = 'up';
+			break;	
+		}
+		case 2: {
+			nextCell = rightCell;
+			changeX = 1;
+			direction = 'right';
+			break;
+		}
+		case 3: {
+			nextCell = bottomCell;
+			changeY = 1;
+			direction = 'down';
+			break;	
+		}
+		default: {
+			nextCell = null;
+			changeY = 0;
+			changeX = 0;
+			break;		
+		}
+		}
+
+		if (nextCell == null || nextCell.partOfMaze == true) {
+			chooseCell();	
+		} else {
+			currentX += changeX;
+			currentY += changeY;
+			previousChangeX = changeX;
+			previousChangeY = changeY;
+			theMaze.history.push(direction);
+		}
+	}
+	function addToMaze() {
+		nextCell.partOfMaze = true;
+		if (changeX == -1) {
+			currentCell.leftWall = false;
+			nextCell.rightWall = false;
+		}
+		if (changeY == -1) {
+			currentCell.topWall = false;
+			nextCell.bottomWall = false;
+		}
+		if (changeX == 1) {
+			currentCell.rightWall = false;
+			nextCell.leftWall = false;
+		}
+		if (changeY == 1) {
+			currentCell.bottomWall = false;
+			nextCell.topWall = false;
+		}
+	}
+	function doGeneration() {
+		//stop generation if the maze is full
+		if (theMaze.generatedCellCount == theMaze.cellCount - 1) {
+			return;		
+		}
+		//do actual generation
+		changeX = 0;
+		changeY = 0;
+		if (currentX > 0) {
+			leftCell = theMaze.grid[currentX - 1][currentY];
+			leftCellPartOfMaze = leftCell.partOfMaze;
+		} else {
+			leftCell = null;
+			leftCellPartOfMaze = true;
+		}	
+		if (currentY > 0) {
+			topCell = theMaze.grid[currentX][currentY - 1];
+			topCellPartOfMaze = topCell.partOfMaze;
+			
+		} else {
+			topCell = null;	
+			topCellPartOfMaze = true;
+		}
+		if (currentX < (theMaze.columns - 1)) {
+			rightCell = theMaze.grid[currentX + 1][currentY];
+			rightCellPartOfMaze = rightCell.partOfMaze;
+		} else {
+			rightCell = null;
+			rightCellPartOfMaze = true;
+		}
+		if (currentY < (theMaze.rows - 1)) {
+			bottomCell = theMaze.grid[currentX][currentY + 1];
+			bottomCellPartOfMaze = bottomCell.partOfMaze;
+		} else {
+			bottomCell = null;
+			bottomCellPartOfMaze = true;
+		}
+		if (leftCellPartOfMaze == true && topCellPartOfMaze == true && rightCellPartOfMaze == true && bottomCellPartOfMaze == true) {
+			//go back and check previous cell for generation
+			var lastDirection = theMaze.history.pop();
+			changeX = 0;
+			changeY = 0;
+			switch (lastDirection) {
+			case 'left': {
+				changeX = 1;
+				break;			
+			}
+			case 'up': {
+				changeY = 1;
+				break;				
+			}			
+			case 'right': {
+				changeX = -1;
+				break;				
+			}
+			case 'down': {
+				changeY = -1;
+				break;
+			}
+			}
+			nextCell = theMaze.grid[currentX + changeX][currentY + changeY];
+			currentX += changeX;
+			currentY += changeY;
+			currentCell = nextCell;
+				doGeneration();
+
+		} else {
+			chooseCell();
+			addToMaze();	
+			currentCell = nextCell;
+			theMaze.generatedCellCount += 1;
+			//doGeneration();
+		}
+	}
+}
+/*********************************************************************
+* I have erased draw maze function as no need to draw maze on server.
+* We just need the values of maze to calculate and drawing can be done locally.
+***********************************************************************/
+
+function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
+	this.x = column;
+	this.y = row;
+	this.leftWall = true;
+	this.topWall = true;
+	this.rightWall = true;
+	this.bottomWall = true;
+	this.partOfMaze = partOfMaze;
+}
+
+
+
+
+
+function Tank(){
+	// tank parameters
+	this.tankCenterX = 0;
+	this.tankCenterY = 0;
+	this.rotorX = 15;
+	this.rotorY = 15;
+	this.rotorAngle;
+	this.tankRadius = theMaze.gridsize/ 4;
+	this.rotorLength = this.tankRadius * 20 / 15;
+	this.rotorWidth = this.tankRadius * 7 / 15;
+	this.dDist = this.tankRadius / 15;
+	this.dAng = 1;
+	// tank  controls
+	this.rightPressed = false;
+	this.leftPressed = false;
+	this.upPressed = false;
+	this.downPressed = false;
+	this.leftClick = false;
+	this.reloading = false;
+	this.bulletReload = false;
+	this.bulletPack = 6;
+	this.bulletShot = this.bulletPack;
+	this.bullet = null;
+	this.bullTank = 100;
+	this.id = 0
+}
+
+function initializeTank(aTank) {
+	// tank parameters
+	var randrow = Math.floor(Math.random() * theMaze.rows);
+	var randcolumn = Math.floor(Math.random() * theMaze.columns);
+
+	aTank.tankCenterX = (randcolumn * theMaze.gridsize) + theMaze.gridsize / 30;
+	aTank.tankCenterY = (randrow * theMaze.gridsize) + theMaze.gridsize / 30;
+	aTank.rotorX = aTank.tankCenterX + 15;
+	aTank.rotorY = aTank.tankCenterY + 15;
+	aTank.rotorAngle = 0;
+	aTank.tankRadius = theMaze.gridsize/ 4;
+	aTank.rotorLength = aTank.tankRadius * 20 / 15;
+	aTank.rotorWidth = aTank.tankRadius * 7 / 15;
+	aTank.dDist = aTank.tankRadius / 11.5;
+	aTank.dAng = 1;
+	// tank  controls
+	aTank.rightPressed = false;
+	aTank.leftPressed = false;
+	aTank.upPressed = false;
+	aTank.downPressed = false;
+}
+
+
+function Bullet() {
+	this.bulletX = 0;
+	this.bulletY = 0;
+	this.bulletAngle;
+	this.bulletRadius;
+	this.dbulletX;
+	this.dbulletY;
+	this.shoot = false;
+	this.collisions = 0;
+	this.shootBegin = false;
+}
+
+function initializeBullet(aTank, aBullet){
+	aBullet.bulletX = aTank.tankCenterX;
+	aBullet.bulletY = aTank.tankCenterY;
+	aBullet.bulletAngle = aTank.rotorAngle;
+	aBullet.bulletRadius = aTank.rotorWidth * 3 / 7;
+	aBullet.dbulletX = -2 * aBullet.bulletRadius / 3;
+	aBullet.dbulletY = 2 * aBullet.bulletRadius / 3;
+	aBullet.shoot = false;
+	aBullet.collisions = 0;
+}
+
+
+// Export the Player class so you can use it in
+// other files by using require("Player").Player
+makeMaze();
+exports.Player = Tank;
+exports.Tank =initializeTank;
