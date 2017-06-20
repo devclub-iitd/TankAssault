@@ -303,6 +303,7 @@ maze.prototype.generate = function() {
 		}
 	}
 }
+
 maze.prototype.draw = function() {
 	var totalWidth = this.columns * this.gridsize;
 	var totalHeight = this.rows * this.gridsize;
@@ -386,4 +387,3 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.bottomWall = true;
 	this.partOfMaze = partOfMaze;
 }
-exports.theMaze = maze();

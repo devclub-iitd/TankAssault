@@ -3,6 +3,7 @@ var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
 
+
 function makeMaze() {
 	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
 	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
@@ -297,6 +298,80 @@ maze.prototype.generate = function() {
 * I have erased draw maze function as no need to draw maze on server.
 * We just need the values of maze to calculate and drawing can be done locally.
 ***********************************************************************/
+maze.prototype.draw = function() {
+	var totalWidth = this.columns * this.gridsize;
+	var totalHeight = this.rows * this.gridsize;
+	$('#maze').attr("width", totalWidth);
+	$('#maze').attr("height", totalHeight);
+	//document.getElementById("maze").style.margin-left = "600";
+	context.clearRect(0, 0, totalWidth, totalHeight);
+	for (j = 0; j < this.columns; j++) {
+		for (k = 0; k < this.rows; k++) {
+			var limit = this.lineWidth;
+			var drawX = (j * this.gridsize);
+			var drawY = (k * this.gridsize);
+			var pastX = parseInt(drawX) + parseInt(this.gridsize);
+			var pastY = parseInt(drawY) + parseInt(this.gridsize);
+			var theCell = this.grid[j][k];
+			//this.drawColors(theCell);
+			context.lineWidth = this.lineWidth;
+			context.fillStyle = this.backgroundColor;
+			context.strokeStyle = this.wallColor;
+			context.fillRect(drawX, drawY, this.gridsize, this.gridsize);	
+			
+			context.beginPath();
+			if (theCell.leftWall == true) {
+				//context.strokeRect(drawX, drawY, 1, this.gridsize);
+				context.moveTo(drawX, drawY - limit);
+				context.lineTo(drawX, pastY + limit);
+			}
+			if (theCell.topWall == true) {
+				//context.strokeRect(drawX, drawY, this.gridsize, 1);
+				context.moveTo(drawX - limit, drawY);
+				context.lineTo(pastX + limit, drawY);
+			}
+			if (theCell.rightWall == true) {
+				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+				context.moveTo(pastX, drawY - limit);
+				context.lineTo(pastX, pastY + limit);
+			}
+			if (theCell.bottomWall == true) {
+				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+				context.moveTo(drawX - limit, pastY);
+				context.lineTo(pastX + limit, pastY);
+			}
+			context.closePath();
+			context.stroke();
+			
+			context.lineWidth = this.lineWidth + 1;
+			context.strokeStyle = this.backgroundColor;
+			context.beginPath();
+			if (theCell.leftWall == false) {
+				//context.strokeRect(drawX, drawY, 1, this.gridsize);
+				context.moveTo(drawX, drawY + limit);
+				context.lineTo(drawX, pastY - limit);
+			}
+			if (theCell.topWall == false) {
+				//context.strokeRect(drawX, drawY, this.gridsize, 1);
+				context.moveTo(drawX + limit, drawY);
+				context.lineTo(pastX - limit, drawY);
+			}
+			if (theCell.rightWall == false) {
+				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+				context.moveTo(pastX, drawY + limit);
+				context.lineTo(pastX, pastY - limit);
+			}
+			if (theCell.bottomWall == false) {
+				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+				context.moveTo(drawX + limit, pastY);
+				context.lineTo(pastX - limit, pastY);
+			}
+			context.closePath();
+			context.stroke();
+		}
+	}
+}
+
 
 function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.x = column;
@@ -388,6 +463,9 @@ function initializeBullet(aTank, aBullet){
 
 // Export the Player class so you can use it in
 // other files by using require("Player").Player
-makeMaze();
+//makeMaze();
 exports.Player = Tank;
 exports.Tank =initializeTank;
+exports.maze = makeMaze;
+//exports.drawing = theMaze.draw;
+	

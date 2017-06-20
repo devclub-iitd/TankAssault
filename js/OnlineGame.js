@@ -1,3 +1,13 @@
+
+// JavaScript Document for Generation of Maze
+var	canvas = document.getElementById('maze');
+var context = canvas.getContext('2d');	
+context.font = "bold 20px sans-serif";
+var tank1 = null;
+var tank2 = null;
+
+
+
 // javascript for tank Movement and shooting
 // var canvas already declared
 var timx=0;
@@ -85,20 +95,21 @@ function onMovePlayer(data) {
 	var movePlayer = playerById(data.id);
 
 	// for debugging
-	console.log("Move!!! "+movePlayer.tankCenterX);
+//	console.log("Move!!! "+movePlayer.tankCenterY);
 	
 	// Player not found
 	if (!movePlayer) {
 		console.log("Player not found: "+data.id);
 		return;
 	};
-
+	
+//	console.log("data.y = " + data.y);
 	// Update player position
 	movePlayer.tankCenterX = data.x;
-	movePlayer.tankenterY = data.y;
+	movePlayer.tankCenterY = data.y;
 	
 	// Broadcast updated position to connected socket clients
-	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
+	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.tankCenterX, y: movePlayer.tankCenterY});
 };
 
 // Remove player
@@ -124,7 +135,7 @@ function update() {
 		// Send local player data to the game server
 		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
 	// for debugging
-	console.log("move emitted" + tank1.tankCenterX);
+//	console.log("move emitted" + tank1.tankCenterX);
 //	};
 };
 

@@ -5,6 +5,7 @@ var canvas,
 	remotePlayers,
 	localPlayer;
 var alreadygenerated = 0;
+//var mazemake = require(".././Player.js");
 maze.prototype.playGame = function() {
 	// useful when having more than one tank
 	 theMaze.moveTank(tank1);
@@ -20,7 +21,8 @@ maze.prototype.playGame = function() {
 
 function generate() {
 	if(alreadygenerated == 0){
-	makeMaze();
+//	makeMaze();
+//	theMaze = mazemake.drawing();
 	theMaze.draw();
 	alreadygenerated++;
 	}
