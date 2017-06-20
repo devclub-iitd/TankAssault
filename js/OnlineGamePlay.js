@@ -10,9 +10,11 @@ maze.prototype.playGame = function() {
 	 theMaze.moveTank(tank1);
 	 theMaze.draw();
 	 theMaze.shootTank(tank1);
+	 update();
+	 
 	 var i;
 	 for (i = 0; i < remotePlayers.length; i++) {
-			drawTank1(remotePlayers[i].tankCenterX,remotePlayers[i].tankCenterY,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
+			drawTank2(remotePlayers[i].tankCenterX+50,remotePlayers[i].tankCenterY+50,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
 		};
 }
 

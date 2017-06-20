@@ -180,6 +180,41 @@ function drawTank1(x, y, radius, length, width,degrees){
 		};*/
 	}
 
+function drawTank2(x, y, radius, length, width,degrees){
+		
+		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
+		grd.addColorStop(0,"red");
+		grd.addColorStop(.4,"yellow");
+		grd.addColorStop(1, "blue");
+
+		ctx.beginPath();
+		ctx.fillStyle = grd;
+		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+        // first save the untranslated/unrotated context
+        ctx.save();
+	    ctx.beginPath();
+        // move the rotation point to the center of the rect
+        ctx.translate( x, y );
+        // rotate the rect
+        ctx.rotate(degrees * Math.PI / 180);
+	    // draw the rect on the transformed context
+        // Note: after transforming [0,0] is visually [x,y]
+        //       so the rect needs to be offset accordingly when drawn
+
+	    ctx.fillStyle = "yellow";
+		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+        // restore the context to its untranslated/unrotated state
+        ctx.restore();
+		// Draw the remote players
+/*		var i;
+		//console.log(remotePlayers.length);
+		for (i = 0; i < remotePlayers.length; i++) {
+			drawTank1(remotePlayers[i].tankCenterX,remotePlayers[i].tankCenterY,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
+		};*/
+	}
+
 maze.prototype.moveTank = function(aTank) {
  	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize)
 	var j = Math.floor(aTank.tankCenterY / theMaze.gridsize)

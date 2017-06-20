@@ -73,6 +73,7 @@ function onNewPlayer(data) {
 
 	// Initialise the new player
 	var newPlayer = new Tank();
+	initializeTank(newPlayer);
 	newPlayer.id = data.id;
 
 	// Add new player to the remote players array
@@ -83,6 +84,9 @@ function onNewPlayer(data) {
 function onMovePlayer(data) {
 	var movePlayer = playerById(data.id);
 
+	// for debugging
+	console.log("Move!!! "+movePlayer.tankCenterX);
+	
 	// Player not found
 	if (!movePlayer) {
 		console.log("Player not found: "+data.id);
@@ -92,6 +96,9 @@ function onMovePlayer(data) {
 	// Update player position
 	movePlayer.tankCenterX = data.x;
 	movePlayer.tankenterY = data.y;
+	
+	// Broadcast updated position to connected socket clients
+	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
 };
 
 // Remove player
@@ -106,6 +113,19 @@ function onRemovePlayer(data) {
 
 	// Remove player from array
 	remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
+};
+
+/**************************************************
+** GAME UPDATE
+**************************************************/
+function update() {
+	// Update local player and check for change
+//	if (tank1.update(keys)) {
+		// Send local player data to the game server
+		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
+	// for debugging
+	console.log("move emitted" + tank1.tankCenterX);
+//	};
 };
 
 
