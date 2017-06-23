@@ -46,11 +46,12 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 
 ### To start server
 
- - Install node in your system.
+ - Install node and socket in your system.
 ```sh
     $ npm install
+    $ npm install socket.io@0.9
     $ node Server.js 
  ```
- - Go to http://localhost:3000/ 
+ - Open the one player in different windows to play! 
 
-**Have Fun -:)**
+**Have Fun :-)**
