@@ -31,7 +31,7 @@ var wallLeft = 0;
 var wallRight = 0;
 var wallTop = 0;
 var wallBottom = 0;
-
+//var theMaze = null;
 maze.prototype.initialize = function() {
 
 	initializeTank(tank1);
@@ -44,12 +44,15 @@ maze.prototype.initialize = function() {
 }
 
 function setEventHandlers() {
+		// Socket maze
+	socket.on("Player", onMazeForm);
+	
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	// Socket connection successful
-	socket.on("connect", onSocketConnected);
-
+	socket.on("connect", onSocketConnected);	
+	
 	// Socket disconnection
 	socket.on("disconnect", onSocketDisconnect);
 
@@ -63,11 +66,30 @@ function setEventHandlers() {
 	socket.on("remove player", onRemovePlayer);	
 };
 
+// Maze form
+function onMazeForm(Player){
+	/*maze.theMaze.draw();
+	theMaze = maze.theMaze;	
+	console.log("HIHIHI");
+	socket.emit("Maze", {theMaze: theMaze});*/
+	rows1 = Player.rows;
+	columns1 = Player.columns;
+	backgroundColor1 = Player.backgroundColor;
+	wallColor1 = Player.wallColor;
+	grid1 = Player.grid;
+	//mazeStyledecision1 = Player.mazeStyledecision;
+	//rand1 = Player.rand;
+	//genStartColumn1 = Player.genStartColumn;
+	//genStartRow1 = Player.genStartRow;
+	//choices1 = Player.choices;
+	//theMaze = Player.theMaze;
+	//theMaze.draw() = Player.draw();
+	}
 
 // Socket connected
 function onSocketConnected() {
 	console.log("Connected to socket server");
-
+	
 	// Send local player data to the game server
 	socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
 };
@@ -80,13 +102,12 @@ function onSocketDisconnect() {
 // New player
 function onNewPlayer(data) {
 	console.log("New player connected: "+data.id);
-
+	console.log("New Maze row: "+data.rows);
+	
 	// Initialise the new player
-	var newPlayer = new Tank();
+	var newPlayer = new Tank(data.x,data.y);
 	initializeTank(newPlayer);
 	newPlayer.id = data.id;
-
-	// Add new player to the remote players array
 	remotePlayers.push(newPlayer);
 };
 
@@ -94,22 +115,15 @@ function onNewPlayer(data) {
 function onMovePlayer(data) {
 	var movePlayer = playerById(data.id);
 
-	// for debugging
-//	console.log("Move!!! "+movePlayer.tankCenterY);
-	
 	// Player not found
 	if (!movePlayer) {
 		console.log("Player not found: "+data.id);
 		return;
 	};
 	
-//	console.log("data.y = " + data.y);
 	// Update player position
 	movePlayer.tankCenterX = data.x;
 	movePlayer.tankCenterY = data.y;
-	
-	// Broadcast updated position to connected socket clients
-	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.tankCenterX, y: movePlayer.tankCenterY});
 };
 
 // Remove player

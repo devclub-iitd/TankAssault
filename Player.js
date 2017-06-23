@@ -1,12 +1,13 @@
-//var context;
 var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
+//var rows,columns,mazeStyledecision,rand,genStartColumn,genStartRow,choices;
 
+var rows,columns,backgroundColor,wallColor;//grid;
 
 function makeMaze() {
-	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
-	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
+	rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
+	columns = Math.floor(Math.random() * 5) + 5; // columns of maze
 	var gridsize = 400 / rows; // grid size of maze
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
@@ -29,8 +30,8 @@ function makeMaze() {
 	var solutionG = 0;//$('#solutionG').val();
 	var solutionB = 0;//$('#solutionB').val();
 	
-	var wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
-	var backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
+	wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
+	backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
 	var solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
 	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
 	theMaze.generate();
@@ -294,10 +295,6 @@ maze.prototype.generate = function() {
 		}
 	}
 }
-/*********************************************************************
-* I have erased draw maze function as no need to draw maze on server.
-* We just need the values of maze to calculate and drawing can be done locally.
-***********************************************************************/
 maze.prototype.draw = function() {
 	var totalWidth = this.columns * this.gridsize;
 	var totalHeight = this.rows * this.gridsize;
@@ -372,7 +369,6 @@ maze.prototype.draw = function() {
 	}
 }
 
-
 function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.x = column;
 	this.y = row;
@@ -382,7 +378,6 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.bottomWall = true;
 	this.partOfMaze = partOfMaze;
 }
-
 
 
 
@@ -463,9 +458,22 @@ function initializeBullet(aTank, aBullet){
 
 // Export the Player class so you can use it in
 // other files by using require("Player").Player
-//makeMaze();
+makeMaze();
 exports.Player = Tank;
 exports.Tank =initializeTank;
-exports.maze = makeMaze;
+exports.rows =rows;
+exports.columns =columns;
+exports.backgroundColor =backgroundColor;
+exports.wallColor =wallColor;
+//exports.lineWidth =lineWidth;
+exports.grid = theMaze.grid;
+//exports.mazeStyledecision = mazeStyledecision;//Math.floor(Math.random() * 2) + 1;//mazeStyledecision;
+//exports.rand =rand;
+//exports.genStartColumn = genStartColumn;
+//exports.genStartRow = genStartRow;
+//exports.choices = choices;
+//exports.theMaze = theMaze;
+//exports.theMaze.draw = theMaze.draw;
+//exports.maze = makeMaze;
 //exports.drawing = theMaze.draw;
 	
