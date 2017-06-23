@@ -41,6 +41,7 @@ function Tank(){
 
 function initializeTank(aTank) {
 	// tank parameters
+//	console.log("inside initialize tank rows1 = "+rows1);
 	var randrow = Math.floor(Math.random() * rows1);//theMaze.rows);
 	var randcolumn = Math.floor(Math.random() * columns1);//theMaze.columns);
 	var gridsize = 400/rows1;
@@ -205,9 +206,10 @@ function drawTank2(x, y, radius, length, width,degrees){
 
 function moveTank(aTank) {
  	var gridsize = 400/rows1;
-	var i = Math.floor(aTank.tankCenterX / gridsize)
-	var j = Math.floor(aTank.tankCenterY / gridsize)
-	var currentPlayerGrid = grid1[i][j];
+	var i = Math.floor(aTank.tankCenterX / gridsize);
+	var j = Math.floor(aTank.tankCenterY / gridsize);
+	var currentPlayerGrid = grid1[0][0];
+	if(!isNaN(i) && !isNaN(j)) currentPlayerGrid = grid1[i][j];
 	
  	wallLeft = i*gridsize;
  	wallRight = (i+1)*gridsize;

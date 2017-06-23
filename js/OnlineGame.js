@@ -33,20 +33,27 @@ var wallTop = 0;
 var wallBottom = 0;
 //var theMaze = null;
 maze.prototype.initialize = function() {
-
+	console.log("Got into maze.initialize tankCenterX = " +tank1.tankCenterX);
 	initializeTank(tank1);
+	console.log("after initialize tank tankCenterX = " +tank1.tankCenterX);
 	for (var i = 0; i < tank1.bulletPack; i++)
     	initializeBullet(tank1, tank1.bullet[i]);
 
 	tank1.bulletReload = true;
 	tank1.bulletShot = tank1.bulletPack;
-	init();
+//	init();
 }
 
-function setEventHandlers() {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function setEventHandlers() {
 		// Socket maze
+	console.log("entered setEventHandlers");
 	socket.on("Player", onMazeForm);
-	
+//	await sleep(2000);
+	console.log("onMazeForm completed");
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
@@ -72,7 +79,9 @@ function onMazeForm(Player){
 	theMaze = maze.theMaze;	
 	console.log("HIHIHI");
 	socket.emit("Maze", {theMaze: theMaze});*/
+	console.log("Maze'1' info loaded");
 	rows1 = Player.rows;
+	console.log("row1 initialised: row1 = "+rows1);
 	columns1 = Player.columns;
 	backgroundColor1 = Player.backgroundColor;
 	wallColor1 = Player.wallColor;
@@ -91,7 +100,9 @@ function onSocketConnected() {
 	console.log("Connected to socket server");
 	
 	// Send local player data to the game server
-	socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
+//	if (!isNaN(tank1.tankCenterX) && !isNaN(tank1.tankCenterY))
+		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
+	console.log("new player emmited " + tank1.tankCenterX+" "+tank1.tankCenterY);
 };
 
 // Socket disconnected
@@ -102,13 +113,17 @@ function onSocketDisconnect() {
 // New player
 function onNewPlayer(data) {
 	console.log("New player connected: "+data.id);
-	console.log("New Maze row: "+data.rows);
+	
+	// check if data has its values
+/*	if (!(typeof data.rows != 'undefined' && undefined != data.rows)) return;
+	console.log("New Maze row: "+data.rows);*/
 	
 	// Initialise the new player
 	var newPlayer = new Tank(data.x,data.y);
 	initializeTank(newPlayer);
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
+	console.log("pushed");
 };
 
 // Move player

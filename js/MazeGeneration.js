@@ -401,7 +401,7 @@ function drawmaze(){
 	this.grid = grid1;
 	this.gridsize = 400/rows1;
 	this.lineWidth = gridsize/60;
-	console.log("all" + rows + " " + backgroundColor + " " + wallColor + " " + grid + " " + columns);
+	//console.log("all" + rows + " " + backgroundColor + " " + wallColor + " " + grid + " " + columns);
 	var totalWidth = this.columns * this.gridsize;
 	var totalHeight = this.rows * this.gridsize;
 	$('#maze').attr("width", totalWidth);

@@ -36,7 +36,7 @@ function init() {
 	});
 	// Start listening for events
 	setEventHandlers();
-};
+}
 
 /**************************************************
 ** GAME EVENT HANDLERS
@@ -48,7 +48,7 @@ var setEventHandlers = function() {
 
 // New socket connection
 function onSocketConnection(client) {
-	util.log("New player has connected: "+client.id);
+	util.log("New player has connected: "+client.id+"server.js message");
 	//util.log("Playerrows: " + Player.rows);
 	
 	// Listen for maze design
@@ -68,13 +68,13 @@ function onSocketConnection(client) {
 
 // Socket client has disconnected
 function onClientDisconnect() {
-	util.log("Player has disconnected: "+this.id);
+	util.log("Player has disconnected: "+this.id+"server.js message");
 
 	var removePlayer = playerById(this.id);
 
 	// Player not found
 	if (!removePlayer) {
-		util.log("Player not found: "+this.id);
+		util.log("Player not found: "+this.id+"server.js message");
 		return;
 	};
 
@@ -114,7 +114,7 @@ function onMovePlayer(data) {
 
 	// Player not found
 	if (!movePlayer) {
-		util.log("Player not found: "+this.id);
+		util.log("Player not found: "+this.id+"server.js message");
 		return;
 	};
 
