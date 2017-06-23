@@ -8,42 +8,51 @@ context.font = "bold 20px sans-serif";
 var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
-//var bulletPack1 = 6;
-//var bulletPack2 = 6;
-var tank1 = null;
-var tank2 = null;
+
+
+// maze parameter from server
+var rows1,
+	columns1,
+	lineWidth1,
+	backgroundColor1,
+	wallColor1,
+	grid1;
 
 function makeMaze() {
-	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
-	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
-	var gridsize = 400 / rows; // grid size of maze
-	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
-	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
-	if(mazeStyledecision == 1){
-		var mazeStyle = 'straight';
-	}else{
-		var mazeStyle = 'normal';
-	}
-	var startColumn = 0;
-	var startRow = 0;
-	var endColumn = columns - 1;
-	var endRow = rows - 1;
-	var wallR = 0;
-	var wallG = 0;
-	var wallB = 0;
-	var backgroundR = 255;
-	var backgroundG = 255;
-	var backgroundB = 255;
-	var solutionR = $('#solutionR').val();
-	var solutionG = $('#solutionG').val();
-	var solutionB = $('#solutionB').val();
+	// maze parameters
+	var rows =  Math.floor(Math.random() * 5) + 5,  // rows of maze
+		columns = Math.floor(Math.random() * 5) + 5, // columns of maze
+	 	gridsize = (400 / rows),
+	 	mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	
-	var wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
-	var backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
-	var solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+	var mazeStyle;
+	if(mazeStyledecision == 1){
+		mazeStyle = 'straight';
+	}else{
+		mazeStyle = 'normal';
+	}
+	var startColumn = 0,
+		startRow = 0,
+		endColumn = columns - 1,
+		endRow = rows - 1,
+		wallR = 0,
+		wallG = 0,
+		wallB = 0,
+		backgroundR = 255,
+		backgroundG = 255,
+		backgroundB = 255,
+		solutionR = $('#solutionR').val(),
+		solutionG = $('#solutionG').val(),
+		solutionB = $('#solutionB').val(),
+	
+		wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")",
+		backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")",
+		solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+	
+	// actual maze
 	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
 	theMaze.generate();
-	theMaze.draw();
+	//theMaze.draw();
 }
 
 function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor) {
@@ -92,30 +101,31 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	}
 }
 maze.prototype.generate = function() {
-	var theMaze = this;
-	var currentCell = this.grid[this.genStartColumn][this.genStartRow];
-	var nextCell;
-	var leftCellPartOfMaze = false;
-	var topCellPartOfMaze = false;
-	var rightCellPartOfMaze = false;
-	var bottomCellPartOfMaze = false;
-	var currentX = this.genStartColumn;
-	var currentY = this.genStartRow;
-	var changeX = 0;
-	var changeY = 0;
-	var previousChangeX = 0;
-	var previousChangeY = 0;
-	var leftCell;
-	var topCell;
-	var rightCell;
-	var bottomCell;
-	var direction;
-	var leftChoices;
-	var rightChoices;
-	var downChoices;
-	var upChoices;
-	var biasDirection;
-	var choices;
+	var theMaze = this,
+		currentCell = this.grid[this.genStartColumn][this.genStartRow],
+		nextCell,
+		leftCellPartOfMaze = false,
+		topCellPartOfMaze = false,
+		rightCellPartOfMaze = false,
+		bottomCellPartOfMaze = false,
+		currentX = this.genStartColumn,
+		currentY = this.genStartRow,
+		changeX = 0,
+		changeY = 0,
+		previousChangeX = 0,
+		previousChangeY = 0,
+		leftCell,
+		topCell,
+		rightCell,
+		bottomCell,
+		direction,
+		leftChoices,
+		rightChoices,
+		downChoices,
+		upChoices,
+		biasDirection,
+		choices;
+	
 	while (this.generatedCellCount < this.cellCount - 1) {
 		doGeneration();	
 	}
@@ -165,6 +175,7 @@ maze.prototype.generate = function() {
 		}
 		choices = leftChoices.concat(rightChoices.concat(downChoices.concat(upChoices)));
 		var rand = Math.floor(Math.random() * choices.length);
+		//console.log("rosss " + choices);
 		var weightedRand = choices[rand];
 		switch(weightedRand) {
 		case 0: {
@@ -385,4 +396,86 @@ function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.rightWall = true;
 	this.bottomWall = true;
 	this.partOfMaze = partOfMaze;
+}
+
+function drawmaze(){
+	this.rows = rows1;
+	this.columns = columns1;
+	this.backgroundColor = backgroundColor1;
+	this.wallColor = wallColor1;
+	this.grid = grid1;
+	this.gridsize = 400/rows1;
+	this.lineWidth = gridsize/60;
+	//console.log("all" + rows + " " + backgroundColor + " " + wallColor + " " + grid + " " + columns);
+	var totalWidth = this.columns * this.gridsize;
+	var totalHeight = this.rows * this.gridsize;
+	$('#maze').attr("width", totalWidth);
+	$('#maze').attr("height", totalHeight);
+	//document.getElementById("maze").style.margin-left = "600";
+	context.clearRect(0, 0, totalWidth, totalHeight);
+	for (j = 0; j < this.columns; j++) {
+		for (k = 0; k < this.rows; k++) {
+			var limit = this.lineWidth;
+			var drawX = (j * this.gridsize);
+			var drawY = (k * this.gridsize);
+			var pastX = parseInt(drawX) + parseInt(this.gridsize);
+			var pastY = parseInt(drawY) + parseInt(this.gridsize);
+			var theCell = this.grid[j][k];
+			//this.drawColors(theCell);
+			context.lineWidth = this.lineWidth;
+			context.fillStyle = this.backgroundColor;
+			context.strokeStyle = this.wallColor;
+			context.fillRect(drawX, drawY, this.gridsize, this.gridsize);	
+			
+			context.beginPath();
+			if (theCell.leftWall == true) {
+				//context.strokeRect(drawX, drawY, 1, this.gridsize);
+				context.moveTo(drawX, drawY - limit);
+				context.lineTo(drawX, pastY + limit);
+			}
+			if (theCell.topWall == true) {
+				//context.strokeRect(drawX, drawY, this.gridsize, 1);
+				context.moveTo(drawX - limit, drawY);
+				context.lineTo(pastX + limit, drawY);
+			}
+			if (theCell.rightWall == true) {
+				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+				context.moveTo(pastX, drawY - limit);
+				context.lineTo(pastX, pastY + limit);
+			}
+			if (theCell.bottomWall == true) {
+				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+				context.moveTo(drawX - limit, pastY);
+				context.lineTo(pastX + limit, pastY);
+			}
+			context.closePath();
+			context.stroke();
+			
+			context.lineWidth = this.lineWidth + 1;
+			context.strokeStyle = this.backgroundColor;
+			context.beginPath();
+			if (theCell.leftWall == false) {
+				//context.strokeRect(drawX, drawY, 1, this.gridsize);
+				context.moveTo(drawX, drawY + limit);
+				context.lineTo(drawX, pastY - limit);
+			}
+			if (theCell.topWall == false) {
+				//context.strokeRect(drawX, drawY, this.gridsize, 1);
+				context.moveTo(drawX + limit, drawY);
+				context.lineTo(pastX - limit, drawY);
+			}
+			if (theCell.rightWall == false) {
+				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
+				context.moveTo(pastX, drawY + limit);
+				context.lineTo(pastX, pastY - limit);
+			}
+			if (theCell.bottomWall == false) {
+				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
+				context.moveTo(drawX + limit, pastY);
+				context.lineTo(pastX - limit, pastY);
+			}
+			context.closePath();
+			context.stroke();
+		}
+	}
 }
