@@ -8,44 +8,48 @@ context.font = "bold 20px sans-serif";
 var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
-//var bulletPack1 = 6;
-//var bulletPack2 = 6;
-var tank1 = null;
-var tank2 = null;
-//var rows1,columns1,mazeStyledecision1,rand1,genStartColumn1,genStartRow1,choices1;
-var rows1,columns1,lineWidth1,backgroundColor1,wallColor1,grid1;
+
+
+// maze parameter from server
+var rows1,
+	columns1,
+	lineWidth1,
+	backgroundColor1,
+	wallColor1,
+	grid1;
 
 function makeMaze() {
+	// maze parameters
+	var rows =  Math.floor(Math.random() * 5) + 5,  // rows of maze
+		columns = Math.floor(Math.random() * 5) + 5, // columns of maze
+	 	gridsize = (400 / rows),
+	 	mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	
-	var rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
-	var columns = Math.floor(Math.random() * 5) + 5; // columns of maze
-	
-	var gridsize = (400 / rows);
-	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
-	//console.log("rows " + theMaze);
-	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
+	var mazeStyle;
 	if(mazeStyledecision == 1){
-		var mazeStyle = 'straight';
+		mazeStyle = 'straight';
 	}else{
-		var mazeStyle = 'normal';
+		mazeStyle = 'normal';
 	}
-	var startColumn = 0;
-	var startRow = 0;
-	var endColumn = columns - 1;
-	var endRow = rows - 1;
-	var wallR = 0;
-	var wallG = 0;
-	var wallB = 0;
-	var backgroundR = 255;
-	var backgroundG = 255;
-	var backgroundB = 255;
-	var solutionR = $('#solutionR').val();
-	var solutionG = $('#solutionG').val();
-	var solutionB = $('#solutionB').val();
+	var startColumn = 0,
+		startRow = 0,
+		endColumn = columns - 1,
+		endRow = rows - 1,
+		wallR = 0,
+		wallG = 0,
+		wallB = 0,
+		backgroundR = 255,
+		backgroundG = 255,
+		backgroundB = 255,
+		solutionR = $('#solutionR').val(),
+		solutionG = $('#solutionG').val(),
+		solutionB = $('#solutionB').val(),
 	
-	var wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
-	var backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
-	var solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+		wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")",
+		backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")",
+		solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+	
+	// actual maze
 	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
 	theMaze.generate();
 	//theMaze.draw();
@@ -97,30 +101,31 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	}
 }
 maze.prototype.generate = function() {
-	var theMaze = this;
-	var currentCell = this.grid[this.genStartColumn][this.genStartRow];
-	var nextCell;
-	var leftCellPartOfMaze = false;
-	var topCellPartOfMaze = false;
-	var rightCellPartOfMaze = false;
-	var bottomCellPartOfMaze = false;
-	var currentX = this.genStartColumn;
-	var currentY = this.genStartRow;
-	var changeX = 0;
-	var changeY = 0;
-	var previousChangeX = 0;
-	var previousChangeY = 0;
-	var leftCell;
-	var topCell;
-	var rightCell;
-	var bottomCell;
-	var direction;
-	var leftChoices;
-	var rightChoices;
-	var downChoices;
-	var upChoices;
-	var biasDirection;
-	var choices;
+	var theMaze = this,
+		currentCell = this.grid[this.genStartColumn][this.genStartRow],
+		nextCell,
+		leftCellPartOfMaze = false,
+		topCellPartOfMaze = false,
+		rightCellPartOfMaze = false,
+		bottomCellPartOfMaze = false,
+		currentX = this.genStartColumn,
+		currentY = this.genStartRow,
+		changeX = 0,
+		changeY = 0,
+		previousChangeX = 0,
+		previousChangeY = 0,
+		leftCell,
+		topCell,
+		rightCell,
+		bottomCell,
+		direction,
+		leftChoices,
+		rightChoices,
+		downChoices,
+		upChoices,
+		biasDirection,
+		choices;
+	
 	while (this.generatedCellCount < this.cellCount - 1) {
 		doGeneration();	
 	}

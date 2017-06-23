@@ -3,7 +3,10 @@ var loaded = 0;
 var onceLoaded = 0;
 //var rows,columns,mazeStyledecision,rand,genStartColumn,genStartRow,choices;
 
-var rows,columns,backgroundColor,wallColor;//grid;
+var rows,
+	columns,
+	backgroundColor,
+	wallColor;
 
 function makeMaze() {
 	rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
@@ -83,31 +86,33 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 		}
 	}
 }
+
 maze.prototype.generate = function() {
-	var theMaze = this;
-	var currentCell = this.grid[this.genStartColumn][this.genStartRow];
-	var nextCell;
-	var leftCellPartOfMaze = false;
-	var topCellPartOfMaze = false;
-	var rightCellPartOfMaze = false;
-	var bottomCellPartOfMaze = false;
-	var currentX = this.genStartColumn;
-	var currentY = this.genStartRow;
-	var changeX = 0;
-	var changeY = 0;
-	var previousChangeX = 0;
-	var previousChangeY = 0;
-	var leftCell;
-	var topCell;
-	var rightCell;
-	var bottomCell;
-	var direction;
-	var leftChoices;
-	var rightChoices;
-	var downChoices;
-	var upChoices;
-	var biasDirection;
-	var choices;
+	var theMaze = this,
+		currentCell = this.grid[this.genStartColumn][this.genStartRow],
+		nextCell,
+		leftCellPartOfMaze = false,
+		topCellPartOfMaze = false,
+		rightCellPartOfMaze = false,
+		bottomCellPartOfMaze = false,
+		currentX = this.genStartColumn,
+		currentY = this.genStartRow,
+		changeX = 0,
+		changeY = 0,
+		previousChangeX = 0,
+		previousChangeY = 0,
+		leftCell,
+		topCell,
+		rightCell,
+		bottomCell,
+		direction,
+		leftChoices,
+		rightChoices,
+		downChoices,
+		upChoices,
+		biasDirection,
+		choices;
+	
 	while (this.generatedCellCount < this.cellCount - 1) {
 		doGeneration();	
 	}

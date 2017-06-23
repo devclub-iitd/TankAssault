@@ -1,13 +1,14 @@
 // JavaScript Document for main Play
-var timxxx;
-var canvas,
-	socket,
-	remotePlayers,
-	localPlayer;
+/**************************************************
+** Controller functions for the game
+**************************************************/
+
 var alreadygenerated = 0;
-//var mazemake = require(".././Player.js");
+var iterationTime = 10; // in milis
+
 function playGame() {
-	// useful when having more than one tank
+	// function which controls the game 
+	// called repeatedly after each 'iterationTime' milisecond
 	 
 	 moveTank(tank1);
 	 //theMaze.draw();
@@ -52,7 +53,7 @@ async function generate() {
 	theMaze.initialize();
 	console.log("after maze.initialize : tankCenterX = "+ tank1.tankCenterX);
 	if (loaded == 0){
-		var timxxx = setInterval(playGame, 10);
+		setInterval(playGame, iterationTime);
 	}
 
 	loaded++;

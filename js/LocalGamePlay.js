@@ -1,5 +1,9 @@
 // JavaScript Document for main Play
-var timxxx;
+/**************************************************
+** Controller functions for the game
+**************************************************/
+
+var iterationTime = 10; // in milis
 
 // initialising game Play
 maze.prototype.initialize = function() {
@@ -31,6 +35,7 @@ Player1ctx.font = "30px Comic Sans MS";
 Player1ctx.fillStyle = "red";
 Player1ctx.textAlign = "center";
 Player1ctx.textBaseline="middle";
+
 var Player2canvas = document.getElementById("player2stats");
 var Player2ctx = Player2canvas.getContext('2d');
 Player2ctx.font = "30px Comic Sans MS";
@@ -78,7 +83,9 @@ maze.prototype.maintainStats = function() {
 }
 var a = 0;
 maze.prototype.playGame = function() {
-	// useful when having more than one tank
+	// function which controls the game 
+	// called repeatedly after each 'iterationTime' milisecond
+	
 	 theMaze.moveTank(tank1);
 	 theMaze.moveTank(tank2);
 	 //if(a == 0){
@@ -109,7 +116,7 @@ function generate() {
 	if (onceLoaded ==0) onceLoaded++;
 	theMaze.initialize();
 	if (loaded == 0){
-	var timxxx =	setInterval(theMaze.playGame, 10);
+	var timxxx =	setInterval(theMaze.playGame, iterationTime);
 	}
 
 	loaded++;

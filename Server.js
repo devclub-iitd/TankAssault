@@ -20,9 +20,7 @@ var socket,		// Socket controller
 function init() {
 	// Create an empty array to store players
 	players = [];
-	//makeMaze();
-	//Player.maze();
-	//console.log("HIHI started");
+
 	// Set up Socket.IO to listen on port 8000
 	socket = io.listen(8000);
 
@@ -48,14 +46,13 @@ var setEventHandlers = function() {
 
 // New socket connection
 function onSocketConnection(client) {
-	util.log("New player has connected: "+client.id+"server.js message");
-	//util.log("Playerrows: " + Player.rows);
+	// Listen for client connection
+	util.log("New player has connected: " + client.id);
+
 	
 	// Listen for maze design
-	//client.on("Maze", onMazeForm);
 	this.emit("Player", {rows: Player.rows, columns: Player.columns, backgroundColor: Player.backgroundColor, wallColor: Player.wallColor, grid: Player.grid});
-	//this.emit("Player", {rows: Player.rows, columns: Player.columns, mazeStyledecision: Player.mazeStyledecision, rand: Player.rand, genStartColumn: Player.genStartColumn, genStartRow: Player.genStartRow, choices: Player.choices});
-	//this.emit("Player", {theMaze: Player.theMaze, draw: Player.theMaze.draw});
+	
 	// Listen for client disconnected
 	client.on("disconnect", onClientDisconnect);
 
@@ -65,6 +62,10 @@ function onSocketConnection(client) {
 	// Listen for move player message
 	client.on("move player", onMovePlayer);
 };
+
+/**************************************************
+** EVENT HANDLERS FUNCTIONS
+**************************************************/
 
 // Socket client has disconnected
 function onClientDisconnect() {
@@ -136,7 +137,7 @@ function playerById(id) {
 	for (i = 0; i < players.length; i++) {
 		if (players[i].id == id)
 			return players[i];
-	};
+	}
 	
 	return false;
 };
