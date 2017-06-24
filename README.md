@@ -49,7 +49,6 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
  - Install node and socket in your system.
 ```sh
     $ npm install
-    $ npm install socket.io@0.9
     $ node Server.js 
  ```
  - Open the one player in different windows to play! 
