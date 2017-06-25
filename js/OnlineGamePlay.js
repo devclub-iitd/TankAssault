@@ -19,12 +19,12 @@ function playGame() {
 	 var i;
 	 for (i = 0; i < remotePlayers.length; i++) {
 			drawTank2(remotePlayers[i].tankCenterX,remotePlayers[i].tankCenterY,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
-		 	//console.log(i);
+		 //	console.log(remotePlayers[i].rotorAngle);
 		};
 }
 
 async function generate() {
-	console.log("got into generate()");
+	//console.log("got into generate()");
 	socket = io.connect("http://localhost", {port: 8000, transports: ["websocket"]});
 	
 	//makeMaze();
@@ -36,7 +36,7 @@ async function generate() {
 	alreadygenerated++;
 	}
 	tank1 = new Tank();
-	console.log("After assigning tank1 : tankCenterX = "+ tank1.tankCenterX);
+	//console.log("After assigning tank1 : tankCenterX = "+ tank1.tankCenterX);
 	tank1.bullet = new Array();
 	for (var i = 0; i < tank1.bulletPack; i++)
     	tank1.bullet.push(new Bullet());
@@ -44,12 +44,15 @@ async function generate() {
 	if (onceLoaded ==0) onceLoaded++;
 	init();
 	
-	console.log("Before calling event handler: tankCenterX = "+ tank1.tankCenterX);
+	//console.log("Before calling event handler: tankCenterX = "+ tank1.tankCenterX);
 	setEventHandlers();
-	await sleep(2000);
-	console.log("After calling event handler: tankCenterX = "+ tank1.tankCenterX+"rows1 = " + rows1);
+	// caution: this time depends on network speed
+	//          when moving to actual online server test and increase this time to avoid previous
+	//          'double start' errors
+	await sleep(50);
+	//console.log("After calling event handler: tankCenterX = "+ tank1.tankCenterX+"rows1 = " + rows1);
 	
-	console.log("before maze.initialize : tankCenterX = "+ tank1.tankCenterX);
+	//console.log("before maze.initialize : tankCenterX = "+ tank1.tankCenterX);
 	theMaze.initialize();
 	console.log("after maze.initialize : tankCenterX = "+ tank1.tankCenterX);
 	if (loaded == 0){

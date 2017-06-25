@@ -40,9 +40,9 @@ function init(){
 }
 
 maze.prototype.initialize = function() {
-	console.log("Got into maze.initialize tankCenterX = " +tank1.tankCenterX);
+	console.log("Got into maze.initialize angle = " +tank1.rotorAngle);
 	initializeTank(tank1);
-	console.log("after initialize tank tankCenterX = " +tank1.tankCenterX);
+	console.log("after initialize tank angle = " +tank1.rotorAngle);
 	for (var i = 0; i < tank1.bulletPack; i++)
     	initializeBullet(tank1, tank1.bullet[i]);
 
@@ -57,10 +57,10 @@ function sleep(ms) {
 
 async function setEventHandlers() {
 		// Socket maze
-	console.log("entered setEventHandlers");
+//	console.log("entered setEventHandlers");
 	socket.on("Player", onMazeForm);
 //	await sleep(2000);
-	console.log("onMazeForm completed");
+	//console.log("onMazeForm completed");
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
@@ -86,9 +86,9 @@ function onMazeForm(Player){
 	theMaze = maze.theMaze;	
 	console.log("HIHIHI");
 	socket.emit("Maze", {theMaze: theMaze});*/
-	console.log("Maze'1' info loaded");
+	//console.log("Maze'1' info loaded");
 	rows1 = Player.rows;
-	console.log("row1 initialised: row1 = "+rows1);
+	//console.log("row1 initialised: row1 = "+rows1);
 	columns1 = Player.columns;
 	backgroundColor1 = Player.backgroundColor;
 	wallColor1 = Player.wallColor;
@@ -108,8 +108,8 @@ function onSocketConnected() {
 	
 	// Send local player data to the game server
 //	if (!isNaN(tank1.tankCenterX) && !isNaN(tank1.tankCenterY))
-		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
-	console.log("new player emmited " + tank1.tankCenterX+" "+tank1.tankCenterY);
+		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle});
+	console.log("new player emmited " + tank1.rotorAngle);
 };
 
 // Socket disconnected
@@ -126,11 +126,13 @@ function onNewPlayer(data) {
 	console.log("New Maze row: "+data.rows);*/
 	
 	// Initialise the new player
-	var newPlayer = new Tank(data.x,data.y);
+	var newPlayer = new Tank(data.x,data.y,data.rotorX, data.rotorY, data.angle);
+	console.log("in new player angle@"+data.angle);
 	initializeTank(newPlayer);
+	console.log("in new player initialised angle@"+newPlayer.rotorAngle);
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
-	console.log("pushed");
+	console.log("pushed & newPlayerAngle="+newPlayer.rotorAngle);
 };
 
 // Move player
@@ -143,9 +145,14 @@ function onMovePlayer(data) {
 		return;
 	};
 	
+	//console.log("In move player angle@"+data.angle+"tank@"+data.x);
 	// Update player position
 	movePlayer.tankCenterX = data.x;
 	movePlayer.tankCenterY = data.y;
+	movePlayer.rotorX = data.rotorX;
+	movePlayer.rotorY = data.rotorY;
+	movePlayer.rotorAngle = data.angle;
+	//console.log("In move player angle@"+movePlayer.rotorAngle+"tank@"+movePlayer.tankCenterX);
 };
 
 // Remove player
@@ -169,7 +176,8 @@ function update() {
 	// Update local player and check for change
 //	if (tank1.update(keys)) {
 		// Send local player data to the game server
-		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY});
+		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle});
+	//console.log("in update rotor@" + tank1.rotorAngle);
 	// for debugging
 //	console.log("move emitted" + tank1.tankCenterX);
 //	};

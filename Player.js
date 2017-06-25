@@ -393,7 +393,7 @@ function Tank(){
 	this.tankCenterY = 0;
 	this.rotorX = 15;
 	this.rotorY = 15;
-	this.rotorAngle;
+	this.rotorAngle = 0;
 	this.tankRadius = theMaze.gridsize/ 4;
 	this.rotorLength = this.tankRadius * 20 / 15;
 	this.rotorWidth = this.tankRadius * 7 / 15;
