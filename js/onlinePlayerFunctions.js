@@ -27,7 +27,7 @@ function Tank(){
 	this.bulletReload = false;
 	this.bulletPack = 6;
 	this.bulletShot = this.bulletPack;
-	this.bullet = null;
+	this.bullet = [];
 	this.bullTank = 100;
 }
 

@@ -19,7 +19,12 @@ function playGame() {
 	 var i;
 	 for (i = 0; i < remotePlayers.length; i++) {
 			drawTank2(remotePlayers[i].tankCenterX,remotePlayers[i].tankCenterY,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
-		 //	console.log(remotePlayers[i].rotorAngle);
+		// 	console.log(typeof(remotePlayers[i].bullet) + " and length@"+remotePlayers[i].bullet.length);
+		 	for(var bulletCount = 0; bulletCount < remotePlayers[i].bullet.length; bulletCount++){
+				// draw the bullets
+		//		console.log(typeof(remotePlayers[i].bullet[bulletCount]));
+				drawbullet(remotePlayers[i].bullet[bulletCount].bulletX, remotePlayers[i].bullet[bulletCount].bulletY, remotePlayers[i].bullet[bulletCount].bulletRadius);
+			}
 		};
 }
 
@@ -37,11 +42,11 @@ async function generate() {
 	}
 	tank1 = new Tank();
 	//console.log("After assigning tank1 : tankCenterX = "+ tank1.tankCenterX);
-	tank1.bullet = new Array();
+//	tank1.bullet = new Array();
 	for (var i = 0; i < tank1.bulletPack; i++)
     	tank1.bullet.push(new Bullet());
 
-	if (onceLoaded ==0) onceLoaded++;
+	if (onceLoaded == 0) onceLoaded++;
 	init();
 	
 	//console.log("Before calling event handler: tankCenterX = "+ tank1.tankCenterX);

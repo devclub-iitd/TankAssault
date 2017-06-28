@@ -96,13 +96,13 @@ function onNewPlayer(data) {
 	// We had to use this new way of initialize because of require and exports method of using functions of other javascript.
 
 	// Broadcast new player to connected socket clients
-	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.tankCenterX, y: newPlayer.tankCenterY, rotorX: newPlayer.rotorX, rotorY: newPlayer.rotorY, angle: newPlayer.rotorAngle});
+	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.tankCenterX, y: newPlayer.tankCenterY, rotorX: newPlayer.rotorX, rotorY: newPlayer.rotorY, angle: newPlayer.rotorAngle, bulletArray: newPlayer.bullet});
 
 	// Send existing players to the new player
 	var i, existingPlayer;
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
-		this.emit("new player", {id: existingPlayer.id, x: existingPlayer.tankCenterX, y: existingPlayer.tankCenterY, rotorX: existingPlayer.rotorX, rotorY: existingPlayer.rotorY, angle: existingPlayer.rotorAngle});
+		this.emit("new player", {id: existingPlayer.id, x: existingPlayer.tankCenterX, y: existingPlayer.tankCenterY, rotorX: existingPlayer.rotorX, rotorY: existingPlayer.rotorY, angle: existingPlayer.rotorAngle, bulletArray: existingPlayer.bullet});
 	};	
 	// Add new player to the players array
 	players.push(newPlayer);
@@ -125,9 +125,10 @@ function onMovePlayer(data) {
 	movePlayer.rotorX = data.rotorX;
 	movePlayer.rotorY = data.rotorY;
 	movePlayer.rotorAngle = data.angle;
+	movePlayer.bullet = data.bulletArray;
 
 	// Broadcast updated position to connected socket clients
-	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.tankCenterX, y: movePlayer.tankCenterY, rotorX: movePlayer.rotorX, rotorY: movePlayer.rotorY, angle: movePlayer.rotorAngle});
+	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.tankCenterX, y: movePlayer.tankCenterY, rotorX: movePlayer.rotorX, rotorY: movePlayer.rotorY, angle: movePlayer.rotorAngle, bulletArray: movePlayer.bullet});
 };
 
 

@@ -108,7 +108,7 @@ function onSocketConnected() {
 	
 	// Send local player data to the game server
 //	if (!isNaN(tank1.tankCenterX) && !isNaN(tank1.tankCenterY))
-		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle});
+		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle, bulletArray: tank1.bullet});
 	console.log("new player emmited " + tank1.rotorAngle);
 };
 
@@ -126,13 +126,13 @@ function onNewPlayer(data) {
 	console.log("New Maze row: "+data.rows);*/
 	
 	// Initialise the new player
-	var newPlayer = new Tank(data.x,data.y,data.rotorX, data.rotorY, data.angle);
-	console.log("in new player angle@"+data.angle);
+	var newPlayer = new Tank(data.x,data.y,data.rotorX, data.rotorY, data.angle, data.bulletArray);
+	console.log("in new player bullet@"+typeof(data.bulletArray));
 	initializeTank(newPlayer);
-	console.log("in new player initialised angle@"+newPlayer.rotorAngle);
+	console.log("in new player initialised bullet@"+typeof(newPlayer.bullet));
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
-	console.log("pushed & newPlayerAngle="+newPlayer.rotorAngle);
+	console.log("pushed & newPlayerAngle="+typeof(newPlayer.bullet));
 };
 
 // Move player
@@ -152,7 +152,8 @@ function onMovePlayer(data) {
 	movePlayer.rotorX = data.rotorX;
 	movePlayer.rotorY = data.rotorY;
 	movePlayer.rotorAngle = data.angle;
-	//console.log("In move player angle@"+movePlayer.rotorAngle+"tank@"+movePlayer.tankCenterX);
+	movePlayer.bullet = data.bulletArray;
+	console.log("In move player bullet@"+typeof(movePlayer.bullet) + " " + typeof(data.bulletArray));
 };
 
 // Remove player
@@ -176,8 +177,8 @@ function update() {
 	// Update local player and check for change
 //	if (tank1.update(keys)) {
 		// Send local player data to the game server
-		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle});
-	//console.log("in update rotor@" + tank1.rotorAngle);
+		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle, bulletArray: tank1.bullet});
+//	console.log("in update bullet@" + typeof(tank1.bullet));
 	// for debugging
 //	console.log("move emitted" + tank1.tankCenterX);
 //	};
