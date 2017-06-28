@@ -21,8 +21,8 @@ function init() {
 	// Create an empty array to store players
 	players = [];
 
-	// Set up Socket.IO to listen on port 5000
-	socket = io.listen(process.env.PORT || 5000);
+	// Set up Socket.IO to listen on port 8000
+	socket = io.listen(process.env.PORT || 8000);
 
 	// Configure Socket.IO
 	socket.configure(function() {
@@ -49,7 +49,7 @@ function onSocketConnection(client) {
 	// Listen for client connection
 	util.log("New player has connected: " + client.id);
 
-	
+
 	// Listen for maze design
 	this.emit("Player", {
 		rows: Player.rows,
@@ -59,7 +59,7 @@ function onSocketConnection(client) {
 		grid: Player.grid,
 		mazeHeight: Player.mazeHeight
 	});
-	
+
 	// Listen for client disconnected
 	client.on("disconnect", onClientDisconnect);
 
@@ -99,7 +99,7 @@ function onNewPlayer(data) {
 	var newPlayer = new Player.Player(); // same as new Tank();
 	newPlayer.id = this.id;
 	Player.Tank(newPlayer); // Same as initializeTank(aTank)
-	
+
 	// We had to use this new way of initialize because of require and exports method of using functions of other javascript.
 
 	// Broadcast new player to connected socket clients
@@ -126,7 +126,7 @@ function onNewPlayer(data) {
 			angle: existingPlayer.rotorAngle,
 			bulletArray: existingPlayer.bullet
 		});
-	};	
+	};
 	// Add new player to the players array
 	players.push(newPlayer);
 };
@@ -173,7 +173,7 @@ function playerById(id) {
 		if (players[i].id == id)
 			return players[i];
 	}
-	
+
 	return false;
 };
 
