@@ -190,62 +190,35 @@ function keyUpHandler(e) {
 }
 }
 
-
-function drawTank1(x, y, radius, length, width,degrees){
-		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
-		grd.addColorStop(0,"blue");
-		grd.addColorStop(.4,"green");
-		grd.addColorStop(1, "yellow");
+//tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle)
+function drawTank(aTank, color1, color2, color3, color4){
+		var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(0.4, color2);
+		grd.addColorStop(1, color3);
 
 		ctx.beginPath();
 		ctx.fillStyle = grd;
-		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.arc(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.closePath();
+	
         // first save the untranslated/unrotated context
         ctx.save();
 	    ctx.beginPath();
         // move the rotation point to the center of the rect
-        ctx.translate( x, y );
+        ctx.translate( aTank.tankCenterX, aTank.tankCenterY );
         // rotate the rect
-        ctx.rotate(degrees * Math.PI / 180);
+        ctx.rotate(aTank.rotorAngle * Math.PI / 180);
 	    // draw the rect on the transformed context
         // Note: after transforming [0,0] is visually [x,y]
         //       so the rect needs to be offset accordingly when drawn
 
-	    ctx.fillStyle = "yellow";
-		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
-        // restore the context to its untranslated/unrotated state
-        ctx.restore();
-	}
-function drawTank2(x, y, radius, length, width,degrees){
-		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
-		grd.addColorStop(0,"orange");
-		grd.addColorStop(.4,"red");
-		grd.addColorStop(1, "yellow");
-
-		ctx.beginPath();
-		ctx.fillStyle = grd;
-		ctx.arc(x, y, radius, 0, 2 * Math.PI);
-		ctx.fill();
-		ctx.closePath();
-        // first save the untranslated/unrotated context
-        ctx.save();
-	    ctx.beginPath();
-        // move the rotation point to the center of the rect
-        ctx.translate( x, y );
-        // rotate the rect
-        ctx.rotate(degrees * Math.PI / 180);
-	    // draw the rect on the transformed context
-        // Note: after transforming [0,0] is visually [x,y]
-        //       so the rect needs to be offset accordingly when drawn
-
-	    ctx.fillStyle = "#E3EF1E";
-		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+	    ctx.fillStyle = color4;
+		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);
         // restore the context to its untranslated/unrotated state
         ctx.restore();
 }
-
 
 maze.prototype.moveTank = function(aTank) {
  	var i = Math.floor(aTank.tankCenterX / theMaze.gridsize);
@@ -650,13 +623,13 @@ maze.prototype.shootTank = function(aTank) {
 		}
 		if(tank1.bulltank >= tank1.tankRadius){
 			if(shoot1==true){
-				drawTank1(tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle);
+				drawTank(tank1, "blue", "green", "yellow", "yellow");
 			}
 			}
 
 		if(tank2.bulltank >= tank2.tankRadius){
 			if (shoot2==true){
-				drawTank2(tank2.tankCenterX, tank2.tankCenterY, tank2.tankRadius, tank2.rotorLength, tank2.rotorWidth, tank2.rotorAngle);
+				drawTank(tank2, "orange", "red", "yellow", "#E3EF1E");
 			}
 			}
 	}
@@ -670,10 +643,10 @@ maze.prototype.shootTank = function(aTank) {
 
 
 
-function drawbullet(bulletX,bulletY,bulletRadius){
+function drawBullet(aBullet){
 	context.beginPath();
 	context.fillStyle = "black";
-	context.arc(bulletX, bulletY, bulletRadius, 0, 2 * Math.PI);
+	context.arc(aBullet.bulletX, aBullet.bulletY, aBullet.bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
 	leftClick = false;
@@ -770,7 +743,7 @@ function Shoot(aBullet, aTank){
 	if(shootx==true){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
-		drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
+		drawBullet(aBullet);
 	}
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;

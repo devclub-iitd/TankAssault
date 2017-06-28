@@ -2,8 +2,7 @@
 ** Defines the tank object and its methods
 **************************************************/
 // the tanks
-var tank1 = null,
-	tank2 = null;
+var theTank = null;
 
 function Tank(){
 	// tank parameters
@@ -82,26 +81,26 @@ function initializeBullet(aTank, aBullet){
 function keyDownHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			tank1.upPressed = true;
+			theTank.upPressed = true;
 			break;
 		case 40:
-			tank1.downPressed = true;
+			theTank.downPressed = true;
 			break;
 		case 39:
-			tank1.rightPressed = true;
+			theTank.rightPressed = true;
 			break;
 		case 37:
-			tank1.leftPressed = true;
+			theTank.leftPressed = true;
 			break;
 		default:
 			// none of these keys
 			break;
 	}
 	if(e.keyCode == 70){
-			tank1.leftClick = true;
+			theTank.leftClick = true;
 }
 	if(e.keyCode == 82){
-		tank1.reloading = true;
+		theTank.reloading = true;
 		setTimeout(Reload,3000);
 		document.getElementById('audioreload').loop=false;
  		document.getElementById('audioreload').play();
@@ -112,89 +111,59 @@ function keyDownHandler(e) {
 function keyUpHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			tank1.upPressed = false;
+			theTank.upPressed = false;
 			break;
 		case 40:
-			tank1.downPressed = false;
+			theTank.downPressed = false;
 			break;
 		case 39:
-			tank1.rightPressed = false;
+			theTank.rightPressed = false;
 			break;
 		case 37:
-			tank1.leftPressed = false;
+			theTank.leftPressed = false;
 			break;
 		default:
 			// none of these keys
 			break;
 	}
 	if(e.keyCode == 77){
-			tank1.leftClick = false;
+			theTank.leftClick = false;
 }
 }
 
 function Reload(){
-	tank1.bulletReload = true;
-	tank1.leftClick = false;
-	tank1.reloading = false;
+	theTank.bulletReload = true;
+	theTank.leftClick = false;
+	theTank.reloading = false;
 }
-
-function drawTank1(x, y, radius, length, width,degrees){
-		
-		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
-		grd.addColorStop(0,"blue");
-		grd.addColorStop(.4,"green");
-		grd.addColorStop(1, "yellow");
+function drawTank(aTank, color1, color2, color3, color4){
+		var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(0.4, color2);
+		grd.addColorStop(1, color3);
 
 		ctx.beginPath();
 		ctx.fillStyle = grd;
-		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.arc(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.closePath();
+	
         // first save the untranslated/unrotated context
         ctx.save();
 	    ctx.beginPath();
         // move the rotation point to the center of the rect
-        ctx.translate( x, y );
+        ctx.translate( aTank.tankCenterX, aTank.tankCenterY );
         // rotate the rect
-        ctx.rotate(degrees * Math.PI / 180);
+        ctx.rotate(aTank.rotorAngle * Math.PI / 180);
 	    // draw the rect on the transformed context
         // Note: after transforming [0,0] is visually [x,y]
         //       so the rect needs to be offset accordingly when drawn
 
-	    ctx.fillStyle = "yellow";
-		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
+	    ctx.fillStyle = color4;
+		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);
         // restore the context to its untranslated/unrotated state
         ctx.restore();
-	}
-
-function drawTank2(x, y, radius, length, width,degrees){
-		
-		var grd=ctx.createRadialGradient(x, y, radius / 6, x, y, radius);
-		grd.addColorStop(0,"orange");
-		grd.addColorStop(.4,"red");
-		grd.addColorStop(1, "yellow");
-
-		ctx.beginPath();
-		ctx.fillStyle = grd;
-		ctx.arc(x, y, radius, 0, 2 * Math.PI);
-		ctx.fill();
-		ctx.closePath();
-        // first save the untranslated/unrotated context
-        ctx.save();
-	    ctx.beginPath();
-        // move the rotation point to the center of the rect
-        ctx.translate( x, y );
-        // rotate the rect
-        ctx.rotate(degrees * Math.PI / 180);
-	    // draw the rect on the transformed context
-        // Note: after transforming [0,0] is visually [x,y]
-        //       so the rect needs to be offset accordingly when drawn
-
-	    ctx.fillStyle = "E3EF1E";
-		ctx.fillRect( -length / 2 - 10, -width / 2, length, width);
-        // restore the context to its untranslated/unrotated state
-        ctx.restore();
-	}
+}
 
 function moveTank(aTank) {
  	var gridsize = 400/rows1;
@@ -298,8 +267,8 @@ function shootTank(aTank) {
 	// shoot the bullets ready for shoot
 
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
-		tank1.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-tank1.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-tank1.tankCenterY),2));
-		if((tank1.bulltank <= tank1.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+		theTank.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-theTank.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-theTank.tankCenterY),2));
+		if((theTank.bulltank <= theTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 
 				endAudio.currentTime = 0;
 				endAudio.play();
@@ -309,13 +278,13 @@ function shootTank(aTank) {
 				xxxx=1
 				// Creating circles for animation
 				for (var i = 0; i < 500; i++) {
-					circles.push(new create(tank1));
+					circles.push(new create(theTank));
 				}
 
 				b = 0;
 				shootx=false;
 				shoot1=false;
-				destroyTank(tank1);
+				destroyTank(theTank);
 				
 				setTimeout(function(){
 					makeMaze();
@@ -330,11 +299,11 @@ function shootTank(aTank) {
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
 		}
-		if(tank1.bulltank >= tank1.tankRadius){
+		if(theTank.bulltank >= theTank.tankRadius){
 			if (shoot1==true){
-				drawTank1(tank1.tankCenterX, tank1.tankCenterY, tank1.tankRadius, tank1.rotorLength, tank1.rotorWidth, tank1.rotorAngle);
+				drawTank(theTank, "blue", "green", "yellow", "yellow");
 			}
-			}
+		}
 	}
 
 
@@ -344,14 +313,14 @@ function shootTank(aTank) {
 
 
 
-function drawbullet(bulletX,bulletY,bulletRadius){
+function drawBullet(aBullet){
 	context.beginPath();
 	context.fillStyle = "black";
-	context.arc(bulletX, bulletY, bulletRadius, 0, 2 * Math.PI);
+	context.arc(aBullet.bulletX, aBullet.bulletY, aBullet.bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
 	leftClick = false;
-	}
+}
 
 function shootBullet(aBullet, aTank) {
 	aBullet.bulletX = aTank.tankCenterX - aTank.rotorLength * (Math.cos(aTank.rotorAngle * Math.PI / 180));
@@ -427,7 +396,7 @@ function Shoot(aBullet, aTank){
 	if (shootx==true){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
-		drawbullet(aBullet.bulletX,aBullet.bulletY,aBullet.bulletRadius);
+		drawBullet(aBullet);
 	}
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;

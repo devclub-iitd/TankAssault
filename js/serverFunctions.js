@@ -40,14 +40,14 @@ function init(){
 }
 
 maze.prototype.initialize = function() {
-	console.log("Got into maze.initialize angle = " +tank1.rotorAngle);
-	initializeTank(tank1);
-	console.log("after initialize tank angle = " +tank1.rotorAngle);
-	for (var i = 0; i < tank1.bulletPack; i++)
-    	initializeBullet(tank1, tank1.bullet[i]);
+	console.log("Got into maze.initialize angle = " +theTank.rotorAngle);
+	initializeTank(theTank);
+	console.log("after initialize tank angle = " +theTank.rotorAngle);
+	for (var i = 0; i < theTank.bulletPack; i++)
+    	initializeBullet(theTank, theTank.bullet[i]);
 
-	tank1.bulletReload = true;
-	tank1.bulletShot = tank1.bulletPack;
+	theTank.bulletReload = true;
+	theTank.bulletShot = theTank.bulletPack;
 //	init();
 }
 
@@ -107,9 +107,16 @@ function onSocketConnected() {
 	console.log("Connected to socket server");
 	
 	// Send local player data to the game server
-//	if (!isNaN(tank1.tankCenterX) && !isNaN(tank1.tankCenterY))
-		socket.emit("new player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle, bulletArray: tank1.bullet});
-	console.log("new player emmited " + tank1.rotorAngle);
+//	if (!isNaN(theTank.tankCenterX) && !isNaN(theTank.tankCenterY))
+		socket.emit("new player", {
+			x: theTank.tankCenterX,
+			y: theTank.tankCenterY,
+			rotorX: theTank.rotorX,
+			rotorY: theTank.rotorY,
+			angle: theTank.rotorAngle,
+			bulletArray: theTank.bullet
+		});
+	console.log("new player emmited " + theTank.rotorAngle);
 };
 
 // Socket disconnected
@@ -126,7 +133,7 @@ function onNewPlayer(data) {
 	console.log("New Maze row: "+data.rows);*/
 	
 	// Initialise the new player
-	var newPlayer = new Tank(data.x,data.y,data.rotorX, data.rotorY, data.angle, data.bulletArray);
+	var newPlayer = new Tank(data.x, data.y, data.rotorX, data.rotorY, data.angle, data.bulletArray);
 	console.log("in new player bullet@"+typeof(data.bulletArray));
 	initializeTank(newPlayer);
 	console.log("in new player initialised bullet@"+typeof(newPlayer.bullet));
@@ -175,12 +182,19 @@ function onRemovePlayer(data) {
 **************************************************/
 function update() {
 	// Update local player and check for change
-//	if (tank1.update(keys)) {
+//	if (theTank.update(keys)) {
 		// Send local player data to the game server
-		socket.emit("move player", {x: tank1.tankCenterX, y: tank1.tankCenterY, rotorX: tank1.rotorX, rotorY: tank1.rotorY, angle: tank1.rotorAngle, bulletArray: tank1.bullet});
-//	console.log("in update bullet@" + typeof(tank1.bullet));
+		socket.emit("move player", {
+			x: theTank.tankCenterX,
+			y: theTank.tankCenterY,
+			rotorX: theTank.rotorX,
+			rotorY: theTank.rotorY,
+			angle: theTank.rotorAngle,
+			bulletArray: theTank.bullet
+		});
+//	console.log("in update bullet@" + typeof(theTank.bullet));
 	// for debugging
-//	console.log("move emitted" + tank1.tankCenterX);
+//	console.log("move emitted" + theTank.tankCenterX);
 //	};
 }
 

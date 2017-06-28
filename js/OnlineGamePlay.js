@@ -10,20 +10,20 @@ function playGame() {
 	// function which controls the game 
 	// called repeatedly after each 'iterationTime' milisecond
 	 
-	 moveTank(tank1);
+	 moveTank(theTank);
 	 //theMaze.draw();
 	 drawmaze();
-	 shootTank(tank1);
+	 shootTank(theTank);
 	 update();
 	 
 	 var i;
 	 for (i = 0; i < remotePlayers.length; i++) {
-			drawTank2(remotePlayers[i].tankCenterX,remotePlayers[i].tankCenterY,remotePlayers[i].tankRadius,remotePlayers[i].rotorLength,remotePlayers[i].rotorWidth,remotePlayers[i].rotorAngle);
+			drawTank(remotePlayers[i], "orange", "red", "yellow", "#E3EF1E");
 		// 	console.log(typeof(remotePlayers[i].bullet) + " and length@"+remotePlayers[i].bullet.length);
 		 	for(var bulletCount = 0; bulletCount < remotePlayers[i].bullet.length; bulletCount++){
 				// draw the bullets
 		//		console.log(typeof(remotePlayers[i].bullet[bulletCount]));
-				drawbullet(remotePlayers[i].bullet[bulletCount].bulletX, remotePlayers[i].bullet[bulletCount].bulletY, remotePlayers[i].bullet[bulletCount].bulletRadius);
+				drawBullet(remotePlayers[i].bullet[bulletCount]);
 			}
 		};
 }
@@ -40,26 +40,26 @@ async function generate() {
 	drawmaze();
 	alreadygenerated++;
 	}
-	tank1 = new Tank();
-	//console.log("After assigning tank1 : tankCenterX = "+ tank1.tankCenterX);
-//	tank1.bullet = new Array();
-	for (var i = 0; i < tank1.bulletPack; i++)
-    	tank1.bullet.push(new Bullet());
+	theTank = new Tank();
+	//console.log("After assigning theTank : tankCenterX = "+ theTank.tankCenterX);
+//	theTank.bullet = new Array();
+	for (var i = 0; i < theTank.bulletPack; i++)
+    	theTank.bullet.push(new Bullet());
 
 	if (onceLoaded == 0) onceLoaded++;
 	init();
 	
-	//console.log("Before calling event handler: tankCenterX = "+ tank1.tankCenterX);
+	//console.log("Before calling event handler: tankCenterX = "+ theTank.tankCenterX);
 	setEventHandlers();
 	// caution: this time depends on network speed
 	//          when moving to actual online server test and increase this time to avoid previous
 	//          'double start' errors
 	await sleep(50);
-	//console.log("After calling event handler: tankCenterX = "+ tank1.tankCenterX+"rows1 = " + rows1);
+	//console.log("After calling event handler: tankCenterX = "+ theTank.tankCenterX+"rows1 = " + rows1);
 	
-	//console.log("before maze.initialize : tankCenterX = "+ tank1.tankCenterX);
+	//console.log("before maze.initialize : tankCenterX = "+ theTank.tankCenterX);
 	theMaze.initialize();
-	console.log("after maze.initialize : tankCenterX = "+ tank1.tankCenterX);
+	console.log("after maze.initialize : tankCenterX = "+ theTank.tankCenterX);
 	if (loaded == 0){
 		setInterval(playGame, iterationTime);
 	}
