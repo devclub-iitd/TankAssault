@@ -2,7 +2,7 @@
   "name": "jungle-fight",
   "version": "1.0.0",
   "description": "Adding network to the game",
-  "main": "Server.js",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^2.0.3",
@@ -17,10 +17,13 @@
     "type": "git",
     "url": "git+https://github.com/devclub-iitd/tankTrouble.git"
   },
-  "author": "",
+  "author": "Dev Club, IITD",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/devclub-iitd/tankTrouble/issues"
+  },
+  "engines": {
+    "node": "6.9.0"
   },
   "homepage": "https://github.com/devclub-iitd/tankTrouble#readme"
 }

@@ -21,8 +21,8 @@ function init() {
 	// Create an empty array to store players
 	players = [];
 
-	// Set up Socket.IO to listen on port 8000
-	socket = io.listen(8000);
+	// Set up Socket.IO to listen on port 5000
+	socket = io.listen(process.env.PORT || 5000);
 
 	// Configure Socket.IO
 	socket.configure(function() {
