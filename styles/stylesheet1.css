@@ -23,6 +23,12 @@ body{
 	max-width: 1000px;
 	background-color: #222a33;
 }
+#wrapperFullScreen {
+	width: 100%;
+	margin: 0 auto;
+	max-width: 1500px;
+	background-color: #d3d3d3;
+}
 
 #player1score {
 	width: 100px;
@@ -210,7 +216,7 @@ a:hover, a:active, a:focus {
     height: 450px;
 }*/
 .mazeParameters {
-	width: 800px;
+	width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
 	border: 1px solid red;
@@ -247,7 +253,7 @@ footer {
 
 #maze{
 	display: block;
-	margin-top: 50px;
+	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	position: static;

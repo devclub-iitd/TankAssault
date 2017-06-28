@@ -160,3 +160,28 @@ h3 {
 #clear {
     clear: both;
 }
+
+/* The Health Bar */
+#myProgress {
+  /* kept absolute */
+  width: 100px;
+  background-color: #ddd;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 2;
+  float: right;
+  margin-top: 20px;
+  margin-right: 50px;
+  margin-left: 1200px;
+}
+
+#myBar {
+  width: 80%;
+  height: 30px;
+  border-radius: 5px 0px 0px 5px;
+  z-index: 2;
+  background-color: #FF1E62;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+}

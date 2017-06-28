@@ -83,9 +83,9 @@ async function setEventHandlers() {
 // Maze form
 function onMazeForm(Player){
 	/*maze.theMaze.draw();
-	theMaze = maze.theMaze;	
+	theMaze = maze.theMaze;	*/
 	console.log("HIHIHI");
-	socket.emit("Maze", {theMaze: theMaze});*/
+	/*socket.emit("Maze", {theMaze: theMaze});*/
 	//console.log("Maze'1' info loaded");
 	rows1 = Player.rows;
 	//console.log("row1 initialised: row1 = "+rows1);
@@ -93,6 +93,9 @@ function onMazeForm(Player){
 	backgroundColor1 = Player.backgroundColor;
 	wallColor1 = Player.wallColor;
 	grid1 = Player.grid;
+	mazeHeight1 = Player.mazeHeight;
+	console.log("row1 is initialised to "+rows1);
+	console.log("mazeHeight1 is initialised to "+mazeHeight1);
 	//mazeStyledecision1 = Player.mazeStyledecision;
 	//rand1 = Player.rand;
 	//genStartColumn1 = Player.genStartColumn;

@@ -10,20 +10,23 @@ var loaded = 0;
 var onceLoaded = 0;
 
 
-// maze parameter from server
+// maze parameters from server
 var rows1,
 	columns1,
 	lineWidth1,
 	backgroundColor1,
 	wallColor1,
-	grid1;
+	grid1,
+	mazeHeight1;
 
 function makeMaze() {
 	// maze parameters
 	var rows =  Math.floor(Math.random() * 5) + 5,  // rows of maze
 		columns = Math.floor(Math.random() * 5) + 5, // columns of maze
-	 	gridsize = (400 / rows),
+	 	gridsize = (mazeHeight / rows),
 	 	mazeStyledecision = Math.floor(Math.random() * 2) + 1;
+	
+	console.log("on client gridsize = "+gridsize);
 	
 	var mazeStyle;
 	if(mazeStyledecision == 1){
@@ -404,7 +407,7 @@ function drawmaze(){
 	this.backgroundColor = backgroundColor1;
 	this.wallColor = wallColor1;
 	this.grid = grid1;
-	this.gridsize = 400/rows1;
+	this.gridsize = mazeHeight1/rows1;
 	this.lineWidth = gridsize/60;
 	//console.log("all" + rows + " " + backgroundColor + " " + wallColor + " " + grid + " " + columns);
 	var totalWidth = this.columns * this.gridsize;

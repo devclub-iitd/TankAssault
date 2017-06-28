@@ -56,7 +56,8 @@ function onSocketConnection(client) {
 		columns: Player.columns,
 		backgroundColor: Player.backgroundColor,
 		wallColor: Player.wallColor,
-		grid: Player.grid
+		grid: Player.grid,
+		mazeHeight: Player.mazeHeight
 	});
 	
 	// Listen for client disconnected

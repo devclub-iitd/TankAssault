@@ -6,12 +6,14 @@ var onceLoaded = 0;
 var rows,
 	columns,
 	backgroundColor,
-	wallColor;
+	wallColor,
+	mazeHeight = 640; // This is the maze width
 
 function makeMaze() {
 	rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
-	columns = Math.floor(Math.random() * 5) + 5; // columns of maze
-	var gridsize = 400 / rows; // grid size of maze
+	columns = Math.floor(Math.random() * 5) + 10; // columns of maze
+	var gridsize = mazeHeight / rows; // grid size of maze
+	console.log("on server gridsize = "+gridsize);
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
 	if(mazeStyledecision == 1){
@@ -465,11 +467,12 @@ function initializeBullet(aTank, aBullet){
 // other files by using require("Player").Player
 makeMaze();
 exports.Player = Tank;
-exports.Tank =initializeTank;
-exports.rows =rows;
-exports.columns =columns;
-exports.backgroundColor =backgroundColor;
-exports.wallColor =wallColor;
+exports.Tank = initializeTank;
+exports.rows = rows;
+exports.columns = columns;
+exports.backgroundColor = backgroundColor;
+exports.wallColor = wallColor;
+exports.mazeHeight = mazeHeight;
 //exports.lineWidth =lineWidth;
 exports.grid = theMaze.grid;
 //exports.mazeStyledecision = mazeStyledecision;//Math.floor(Math.random() * 2) + 1;//mazeStyledecision;

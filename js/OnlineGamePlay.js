@@ -6,6 +6,8 @@
 var alreadygenerated = 0;
 var iterationTime = 10; // in milis
 
+
+  
 function playGame() {
 	// function which controls the game 
 	// called repeatedly after each 'iterationTime' milisecond
@@ -26,6 +28,9 @@ function playGame() {
 				drawBullet(remotePlayers[i].bullet[bulletCount]);
 			}
 		};
+	myScore.text="SCORE: " + 7;
+    myScore.update();
+	changeHealth();
 }
 
 async function generate() {

@@ -35,7 +35,7 @@ function initializeTank(aTank) {
 //	console.log("inside initialize tank rows1 = "+rows1);
 	var randrow = Math.floor(Math.random() * rows1);//theMaze.rows);
 	var randcolumn = Math.floor(Math.random() * columns1);//theMaze.columns);
-	var gridsize = 400/rows1;
+	var gridsize = mazeHeight1/rows1;
 	aTank.tankCenterX = (randcolumn * gridsize) + gridsize / 30;
 	aTank.tankCenterY = (randrow * gridsize) + gridsize / 30;
 	aTank.rotorX = aTank.tankCenterX + 15;
@@ -166,7 +166,7 @@ function drawTank(aTank, color1, color2, color3, color4){
 }
 
 function moveTank(aTank) {
- 	var gridsize = 400/rows1;
+ 	var gridsize = mazeHeight1/rows1;
 	var i = Math.floor(aTank.tankCenterX / gridsize);
 	var j = Math.floor(aTank.tankCenterY / gridsize);
 	var currentPlayerGrid = grid1[0][0];
@@ -332,7 +332,7 @@ function shootBullet(aBullet, aTank) {
 	Shoot(aBullet, aTank);
 }
 function Shoot(aBullet, aTank){
-	var gridsize = 400/rows1;
+	var gridsize = mazeHeight1/rows1;
 	var i = Math.floor(aBullet.bulletX / gridsize)
 	var j = Math.floor(aBullet.bulletY / gridsize)
 	if (aBullet.shootBegin === true){
