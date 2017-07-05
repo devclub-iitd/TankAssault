@@ -3,11 +3,21 @@
 <head>
 <meta charset="utf-8">
 <title>TankTrouble</title>
-<link href="styles/stylesheet1.css" rel="stylesheet" type="text/css">
+<link href="public/styles/stylesheet1.css" rel="stylesheet" type="text/css">
 <!--<script type="text/javascript" src="functions.js"></script>-->
 </head>
 
 <body>
+	<p id='server-time'></p>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      var el = document.getElementById('server-time');
+
+      socket.on('time', function(timeString) {
+        el.innerHTML = 'Server time: ' + timeString;
+      });
+    </script>
 	<div id="wrapper">
 		<header>
 			<h1>Tank Trouble...</h1>
