@@ -2,7 +2,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>One Player</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon for our site-->
+	<link rel="icon" href="/images/favicon.png">
+	
+	<title>Tank Assault 1 Player</title>
 	<link href="../styles/stylesheet1.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="../styles/buttons.css">
 	<script type="text/javascript" src="../js/jQuery.js"></script>
@@ -32,10 +36,10 @@
   			<div id="myBar"></div>
 		</div>
   			<canvas oncontextmenu="return false;" id="maze" style="border:1px solid #000000;"></canvas>
-  			<!--<script>
+  			<script>
 				// declare the maze height, width computed automatically
 				var mazeHeight = 600;
-			</script>-->
+			</script>
 			<script src="/socket.io/socket.io.js"></script>	
 			<script>
 				var socket = io();
@@ -53,7 +57,7 @@
 			</script>
         
    		<footer>
-			<p><b>Brought to You By &nbsp;<em>IITD Dev. Club</em></b></p>
+			<p><span style="color:red">&#9829;&nbsp;&nbsp;</span>Brought to You By IITD Dev. Club</p>
    		</footer>
     	</div>
 	<div id="squeezed">

@@ -1,4 +1,4 @@
-# Tank Trouble
+# Tank Assault
 
 
 > Love solving mazes?
@@ -11,8 +11,6 @@ Come and join us.
 Compete with your friends or with our awesome A.I.(undefeated till date) (feature coming soon...)
 
 
-
-(Just download and run index.html in the browser)
 
 ### Controls for 1 Player game: 
 
@@ -43,14 +41,16 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 |Reload:| Press Z
 
 
+### Visit https://tank-assault.herokuapp.com/
+### To run locally:
 
-### To start server
-
- - Install node and socket in your system.
+ - Install node heroku cli on your system.
 ```sh
+    $ git remote add heroku https://git.heroku.com/tank-assualt.git
     $ npm install
-    $ node Server.js 
+    $ heroku local web
+	$ visit http://localhost:5000
  ```
- - Open the one player in different windows to play! 
+ - Open the Multiplayer in different windows to play! 
 
 **Have Fun :-)**

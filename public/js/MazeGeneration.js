@@ -6,7 +6,7 @@ var theMaze = null;
 var loaded = 0;
 var onceLoaded = 0;
 
-var mazeHeight = 600;
+//var mazeHeight = 600;
 //var socket = io();
 // maze parameters from server
 var rows1,

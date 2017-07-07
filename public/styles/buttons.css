@@ -88,11 +88,15 @@
 	cursor: not-allowed;
 }
 .start {
-	background-color: rgba(229,228,74,0.83);
+	/*background-color: rgba(229,228,74,0.83);*/
+	background-color: #ffff4c;
 	display: inline-block;
 	border-radius: 10px;
 	transition: 0.5s;
 	margin-top: 20px;
+	font-size: large;
+	color: #999900;
+	vertical-align: middle;
 }
 .start span {
   cursor: pointer;
@@ -102,8 +106,9 @@
 }
 
 .start span:after {
-  content: '\00bb';
-  position: absolute;
+  content: '  \00bb';
+  position: relative;
+  vertical-align: middle;
   opacity: 0;
   top: 0;
   right: -20px;
