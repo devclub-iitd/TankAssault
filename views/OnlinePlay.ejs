@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>One Player</title>
+	<link href="../styles/stylesheet1.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../styles/buttons.css">
+	<script type="text/javascript" src="../js/jQuery.js"></script>
+</head>
+
+<body>
+
+
+   <!--<script>
+	// Initialise the game
+		var socket = io();
+		
+	</script>-->
+	<audio id="audiotank" src="../media/tank.mp3" preload="auto"></audio>
+	<audio id="audiobullet" src="../media/bullet.mp3" preload="auto"></audio>
+	<audio id="audioreload" src="../media/reload.mp3" preload="auto"></audio>
+	<div id="wrapperFullScreen">
+	<!--	<header>
+			<h1>Let's Trouble...</h1>
+			<nav>
+     			<h2 id="menulink"><a href="#navlinks">Menu</a></h2>
+      			<button class="button startGame" onclick="generate()">Start Game</button>
+				<button class="button reSetTank" onclick="reSetTank()">Re-Set Tank</button>
+    		</nav>
+		</header>-->
+ 		<div id="myProgress">
+  			<div id="myBar"></div>
+		</div>
+  			<canvas oncontextmenu="return false;" id="maze" style="border:1px solid #000000;"></canvas>
+  			<!--<script>
+				// declare the maze height, width computed automatically
+				var mazeHeight = 600;
+			</script>-->
+			<script src="/socket.io/socket.io.js"></script>	
+			<script>
+				var socket = io();
+			</script>
+			<script src="../js/MazeGeneration.js" type="text/javascript"></script>
+			<script src="../js/animation.js" type="text/javascript"></script>
+			<script src="../js/onlinePlayerFunctions.js" type="text/javascript"></script>
+			<script src="../js/serverFunctions.js" type="text/javascript"></script>
+			<script src="../js/onlineScore.js" type="application/javascript"></script>
+       		<script src="../js/onlineGamePlay.js" type="text/javascript"></script>
+       		<!-- Call the generate function -->
+       		<script>
+       			init();
+				generate();
+			</script>
+        
+   		<footer>
+			<p><b>Brought to You By &nbsp;<em>IITD Dev. Club</em></b></p>
+   		</footer>
+    	</div>
+	<div id="squeezed">
+		<p> Please Don't Squeeze Me... </p>
+		<footer>
+   		 	<p>© Copyright 2016–20 &nbsp;IITD Dev. Club</p>
+   		</footer>
+	</div>
+    
+</body>
+</html>
