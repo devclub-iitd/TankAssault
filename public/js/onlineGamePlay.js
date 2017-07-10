@@ -42,11 +42,17 @@ async function generate() {
 	if (onceLoaded == 0) onceLoaded++;
 	init();
 	
+	$('#maze').hide();
+	$('#loading').show();
+	$('#myBar').hide();
 	setEventHandlers();
 	// caution: this time depends on network speed
 	//          when moving to actual online server test and increase this time to avoid previous
 	//          'double start' errors
-	await sleep(50);
+	await sleep(5000);
+	$('#maze').show();
+	$('#loading').hide();
+	$('#myBar').show();
 	initialize();
 	//console.log("after maze.initialize : tankCenterX = "+ theTank.tankCenterX);
 	if (loaded == 0){
