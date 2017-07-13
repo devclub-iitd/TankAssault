@@ -418,24 +418,24 @@ function Tank(){
 
 function initializeTank(aTank) {
 	// tank parameters
-	var randrow = Math.floor(Math.random() * theMaze.rows);
-	var randcolumn = Math.floor(Math.random() * theMaze.columns);
+	//var randrow = Math.floor(Math.random() * theMaze.rows);
+	//var randcolumn = Math.floor(Math.random() * theMaze.columns);
 
-	aTank.tankCenterX = (randcolumn * theMaze.gridsize) + theMaze.gridsize / 30;
-	aTank.tankCenterY = (randrow * theMaze.gridsize) + theMaze.gridsize / 30;
-	aTank.rotorX = aTank.tankCenterX + 15;
-	aTank.rotorY = aTank.tankCenterY + 15;
-	aTank.rotorAngle = 0;
+	//aTank.tankCenterX = (randcolumn * theMaze.gridsize) + theMaze.gridsize / 30;
+	//aTank.tankCenterY = (randrow * theMaze.gridsize) + theMaze.gridsize / 30;
+	//aTank.rotorX = aTank.tankCenterX + 15;
+	//aTank.rotorY = aTank.tankCenterY + 15;
+	//aTank.rotorAngle = 0;
 	aTank.tankRadius = theMaze.gridsize/ 4;
 	aTank.rotorLength = aTank.tankRadius * 20 / 15;
 	aTank.rotorWidth = aTank.tankRadius * 7 / 15;
 	aTank.dDist = aTank.tankRadius / 11.5;
 	aTank.dAng = 1;
 	// tank  controls
-	aTank.rightPressed = false;
-	aTank.leftPressed = false;
-	aTank.upPressed = false;
-	aTank.downPressed = false;
+	//aTank.rightPressed = false;
+	//aTank.leftPressed = false;
+	//aTank.upPressed = false;
+	//aTank.downPressed = false;
 }
 
 

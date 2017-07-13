@@ -4,8 +4,8 @@
 
 var ctx = canvas.getContext("2d");
 
-var	//socket = io,
-	remotePlayers,
+
+var	remotePlayers,
 	localPlayer;
 
 var shootx=true;
@@ -22,7 +22,6 @@ var wallLeft = 0;
 var wallRight = 0;
 var wallTop = 0;
 var wallBottom = 0;
-//var theMaze = null;
 
 function init(){
 	
@@ -31,7 +30,6 @@ function init(){
 
 	// Initialise remote players array
 	remotePlayers = [];
-	
 	if (onceLoaded > 0) {
 		// Start listening for events
 		//setEventHandlers();
@@ -40,15 +38,11 @@ function init(){
 }
 
 function initialize(){
-	//console.log("Got into maze.initialize angle = " +theTank.rotorAngle);
 	initializeTank(theTank);
-	//console.log("after initialize tank angle = " +theTank.rotorAngle);
 	for (var i = 0; i < theTank.bulletPack; i++)
     	initializeBullet(theTank, theTank.bullet[i]);
-
 	theTank.bulletReload = true;
 	theTank.bulletShot = theTank.bulletPack;
-//	init();
 }
 
 function sleep(ms) {
@@ -57,10 +51,7 @@ function sleep(ms) {
 
 async function setEventHandlers() {
 		// Socket maze
-//	console.log("entered setEventHandlers");
 	socket.on("Player", onMazeForm);
-//	await sleep(2000);
-	//console.log("onMazeForm completed");
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
@@ -76,6 +67,9 @@ async function setEventHandlers() {
 	// Player move message received
 	socket.on("move player", onMovePlayer);
 
+	// Player move message received
+	socket.on("shoot player", onShootPlayer);
+
 	// Player removed message received
 	socket.on("remove player", onRemovePlayer);	
 };
@@ -88,25 +82,25 @@ function onMazeForm(Player){
 	wallColor1 = Player.wallColor;
 	grid1 = Player.grid;
 	mazeHeight1 = Player.mazeHeight;
-	//console.log("row1 is initialised to "+rows1);
-	//console.log("mazeHeight1 is initialised to "+mazeHeight1);
 	}
 
 // Socket connected
 function onSocketConnected() {
-	//console.log("Connected to socket server");
-	
 	// Send local player data to the game server
-//	if (!isNaN(theTank.tankCenterX) && !isNaN(theTank.tankCenterY))
 		socket.emit("new player", {
 			x: theTank.tankCenterX,
 			y: theTank.tankCenterY,
 			rotorX: theTank.rotorX,
 			rotorY: theTank.rotorY,
 			angle: theTank.rotorAngle,
-			bulletArray: theTank.bullet
+			bulletArray: theTank.bullet,
+			upPressed: theTank.upPressed,
+			downPressed: theTank.downPressed,
+			rightPressed: theTank.rightPressed,
+			leftPressed: theTank.leftPressed,
+			leftClick: theTank.leftClick,
+			reloading: theTank.reloading
 		});
-	//console.log("new player emmited " + theTank.rotorAngle);
 };
 
 // Socket disconnected
@@ -119,17 +113,31 @@ function onNewPlayer(data) {
 	console.log("New player connected: "+data.id);
 	
 	// check if data has its values
-/*	if (!(typeof data.rows != 'undefined' && undefined != data.rows)) return;
-	console.log("New Maze row: "+data.rows);*/
 	
 	// Initialise the new player
-	var newPlayer = new Tank(data.x, data.y, data.rotorX, data.rotorY, data.angle, data.bulletArray);
-	//console.log("in new player bullet@"+typeof(data.bulletArray));
+	var newPlayer = new Tank();
 	initializeTank(newPlayer);
-	//console.log("in new player initialised bullet@"+typeof(newPlayer.bullet));
+
+	newPlayer.tankCenterX = data.x;
+	newPlayer.tankCenterY = data.y;
+	newPlayer.rotorX = data.rotorX;
+	newPlayer.rotorY = data.rotorY;
+	newPlayer.rotorAngle = data.angle;
+	newPlayer.bullet = data.bulletArray;
+	newPlayer.bulletPack = data.bulletPack;
+	newPlayer.bulletShot = data.bulletShot;
+	//console.log("bulletPack: " + newPlayer.bulletPack);
+	//for (var i = 0; i < newPlayer.bulletPack; i++)
+    //	newPlayer.bullet.push(new Bullet());
+
+	for (var i = 0; i < newPlayer.bulletPack; i++)
+    	initializeBullet(newPlayer, newPlayer.bullet[i]);
+   
+   	newPlayer.bulletReload = true;
+	newPlayer.bulletShot = newPlayer.bulletPack;
+	
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
-	//console.log("pushed & newPlayerAngle="+typeof(newPlayer.bullet));
 };
 
 // Move player
@@ -142,17 +150,36 @@ function onMovePlayer(data) {
 		return;
 	};
 	
-	//console.log("In move player angle@"+data.angle+"tank@"+data.x);
 	// Update player position
 	movePlayer.tankCenterX = data.x;
 	movePlayer.tankCenterY = data.y;
 	movePlayer.rotorX = data.rotorX;
 	movePlayer.rotorY = data.rotorY;
 	movePlayer.rotorAngle = data.angle;
-	movePlayer.bullet = data.bulletArray;
-	//console.log("In move player bullet@"+typeof(movePlayer.bullet) + " " + typeof(data.bulletArray));
 };
 
+function onShootPlayer(data){
+	var shootPlayer = playerById(data.id);
+
+	// Player not found
+	if (!shootPlayer) {
+		console.log("Player not found: "+data.id);
+		return;
+	};
+	
+	shootPlayer.tankCenterX = data.x;
+	shootPlayer.tankCenterY = data.y;
+	shootPlayer.rotorX = data.rotorX;
+	shootPlayer.rotorY = data.rotorY;
+	shootPlayer.rotorAngle = data.angle;
+	shootPlayer.bullet = data.bullet;
+	shootPlayer.bulletShot = data.bulletShot;
+	shootPlayer.bulletPack = data.bulletPack;
+	shootPlayer.bulletReload = data.bulletReload;
+	shootPlayer.leftClick = data.leftClick;
+	shootPlayer.reloading = data.reloading;
+
+}
 // Remove player
 function onRemovePlayer(data) {
 	var removePlayer = playerById(data.id);
@@ -172,20 +199,22 @@ function onRemovePlayer(data) {
 **************************************************/
 function update() {
 	// Update local player and check for change
-//	if (theTank.update(keys)) {
 		// Send local player data to the game server
 		socket.emit("move player", {
-			x: theTank.tankCenterX,
-			y: theTank.tankCenterY,
-			rotorX: theTank.rotorX,
-			rotorY: theTank.rotorY,
-			angle: theTank.rotorAngle,
-			bulletArray: theTank.bullet
+			upPressed: remotePlayers[0].upPressed,
+			downPressed: remotePlayers[0].downPressed,
+			rightPressed: remotePlayers[0].rightPressed,
+			leftPressed: remotePlayers[0].leftPressed,
 		});
-//	console.log("in update bullet@" + typeof(theTank.bullet));
-	// for debugging
-//	console.log("move emitted" + theTank.tankCenterX);
-//	};
+
+		socket.emit("shoot player", {
+			leftClick: remotePlayers[0].leftClick,
+			reloading: remotePlayers[0].reloading,
+			bulletPack: remotePlayers[0].bulletPack,
+			bulletShot: remotePlayers[0].bulletShot,
+			bulletReload: remotePlayers[0].bulletReload,
+			bullet: remotePlayers[0].bullet
+		});
 }
 
 

@@ -12,18 +12,12 @@ function playGame() {
 	// function which controls the game 
 	// called repeatedly after each 'iterationTime' milisecond
 	 
-	 moveTank(theTank);
 	 drawmaze();
-	 shootTank(theTank);
 	 update();
 	 
-	 var i;
+	 var i;	
 	 for (i = 0; i < remotePlayers.length; i++) {
-			drawTank(remotePlayers[i], "orange", "red", "yellow", "#E3EF1E");
-		 	for(var bulletCount = 0; bulletCount < remotePlayers[i].bullet.length; bulletCount++){
-				// draw the bullets
-				drawBullet(remotePlayers[i].bullet[bulletCount]);
-			}
+				shootTank(remotePlayers[i]);
 		};
 	myScore.text="SCORE: " + 7;
     myScore.update();
@@ -54,7 +48,6 @@ async function generate() {
 	$('#loading').hide();
 	$('#myBar').show();
 	initialize();
-	//console.log("after maze.initialize : tankCenterX = "+ theTank.tankCenterX);
 	if (loaded == 0){
 		setInterval(playGame, iterationTime);
 	}

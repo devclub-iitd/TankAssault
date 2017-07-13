@@ -80,23 +80,23 @@ function initializeBullet(aTank, aBullet){
 function keyDownHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			theTank.upPressed = true;
+			remotePlayers[0].upPressed = true;
 			break;
 		case 40:
-			theTank.downPressed = true;
+			remotePlayers[0].downPressed = true;
 			break;
 		case 39:
-			theTank.rightPressed = true;
+			remotePlayers[0].rightPressed = true;
 			break;
 		case 37:
-			theTank.leftPressed = true;
+			remotePlayers[0].leftPressed = true;
 			break;
 		default:
 			// none of these keys
 			break;
 	}
 	if(e.keyCode == 70){
-			theTank.leftClick = true;
+			remotePlayers[0].leftClick = true;
 }
 	if(e.keyCode == 82){
 		theTank.reloading = true;
@@ -110,30 +110,30 @@ function keyDownHandler(e) {
 function keyUpHandler(e) {
 	switch (e.keyCode) {
 		case 38:
-			theTank.upPressed = false;
+			remotePlayers[0].upPressed = false;
 			break;
 		case 40:
-			theTank.downPressed = false;
+			remotePlayers[0].downPressed = false;
 			break;
 		case 39:
-			theTank.rightPressed = false;
+			remotePlayers[0].rightPressed = false;
 			break;
 		case 37:
-			theTank.leftPressed = false;
+			remotePlayers[0].leftPressed = false;
 			break;
 		default:
 			// none of these keys
 			break;
 	}
-	if(e.keyCode == 77){
-			theTank.leftClick = false;
+	if(e.keyCode == 70){
+			remotePlayers[0].leftClick = false;
 }
 }
 
 function Reload(){
-	theTank.bulletReload = true;
-	theTank.leftClick = false;
-	theTank.reloading = false;
+	remotePlayers[0].bulletReload = true;
+	remotePlayers[0].leftClick = false;
+	remotePlayers[0].reloading = false;
 }
 function drawTank(aTank, color1, color2, color3, color4){
 		var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
@@ -164,96 +164,12 @@ function drawTank(aTank, color1, color2, color3, color4){
         ctx.restore();
 }
 
-function moveTank(aTank) {
- 	var gridsize = mazeHeight1/rows1;
-	var i = Math.floor(aTank.tankCenterX / gridsize);
-	var j = Math.floor(aTank.tankCenterY / gridsize);
-	var currentPlayerGrid = grid1[0][0];
-	if(!isNaN(i) && !isNaN(j)) currentPlayerGrid = grid1[i][j];
-	
- 	wallLeft = i*gridsize;
- 	wallRight = (i+1)*gridsize;
- 	wallTop = j*gridsize;
- 	wallBottom = (j+1)*gridsize;
-
- 	// fine adjustments
- 	if (currentPlayerGrid.rightWall && (aTank.tankCenterX + aTank.rotorLength > wallRight)) {
-		// do something
-		aTank.rotorX -= ((aTank.tankCenterX + aTank.rotorLength) - wallRight);
-	}
- 	else if (currentPlayerGrid.leftWall && (aTank.tankCenterX - aTank.rotorLength < wallLeft)) {
-		// do something
-		aTank.rotorX += (wallLeft - (aTank.tankCenterX - aTank.rotorLength));
-	}
-
- 	if (currentPlayerGrid.bottomWall && (aTank.tankCenterY + aTank.rotorLength > wallBottom)) {
-		// do something
-		aTank.rotorY -= ((aTank.tankCenterY + aTank.rotorLength) - wallBottom);
-	}
- 	else if (currentPlayerGrid.topWall && (aTank.tankCenterY - aTank.rotorLength < wallTop)) {
-		// do something
-		aTank.rotorY += (wallTop - (aTank.tankCenterY - aTank.rotorLength));
-	}
-
-	if (aTank.rightPressed === true){
-		aTank.rotorAngle += 3;
-		aTank.rotorAngle = aTank.rotorAngle % 360;
-			}
-
- 	else if (aTank.leftPressed === true) {
-	 	aTank.rotorAngle -= 3;
-	 	if(aTank.rotorAngle < 0){
-			aTank.rotorAngle+=360;
-			}
-		aTank.rotorAngle = aTank.rotorAngle % 360;
- 	}
- 	if (aTank.upPressed) {
-	 	if (!currentPlayerGrid.topWall || (currentPlayerGrid.topWall && aTank.tankCenterY  - aTank.rotorLength > wallTop + aTank.dDist)) {
-			// Move the tank left
-			aTank.rotorY -= Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
-			aTank.rotorX -= Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
-		}
-		else if (aTank.tankCenterY - aTank.rotorLength > wallTop) {
-			aTank.rotorY += ((aTank.tankCenterY - aTank.rotorLength) - wallTop );
-		}
-		else if (aTank.tankCenterY + aTank.rotorLength < wallBottom) {
-			aTank.rotorY += (wallBottom - (aTank.tankCenterY + aTank.rotorLength));
-		}
-		else {
-			// tank boundary on wall
-			// do nothing
-		}
- 	}
- 	else if (aTank.downPressed) {
-	 	if (!currentPlayerGrid.bottomWall || (currentPlayerGrid.bottomWall && aTank.tankCenterY  + aTank.rotorLength < wallBottom - aTank.dDist)) {
-			// Move the tank left
-
-			aTank.rotorY += Math.sin((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
-			aTank.rotorX += Math.cos((aTank.rotorAngle) * Math.PI / 180) * (aTank.dDist);
-		}
-		else if (aTank.tankCenterY + aTank.rotorLength < wallBottom) {
-			aTank.rotorY -= (wallBottom - (aTank.tankCenterY + aTank.rotorLength));
-		}
-		else if (aTank.tankCenterY - aTank.rotorLength > wallTop) {
-			aTank.rotorY -= ((aTank.tankCenterY - aTank.rotorLength) - wallTop );
-		}
-		else {
-			// tank boundary on wall
-			// do nothing
-		}
- 	}
-
- 	aTank.tankCenterX = aTank.rotorX + aTank.rotorLength / 2;
-	aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
-}
-
 function shootTank(aTank) {
 	// Some Shooting....
 	if (aTank.bulletReload){
 		// reset each bullet and fill bulletPack
 		aTank.bulletShot = aTank.bulletPack;
 	}
-
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
 			bulletAudio.pause();
@@ -261,13 +177,13 @@ function shootTank(aTank) {
 			bulletAudio.play()
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
-	}
+}
 
 	// shoot the bullets ready for shoot
 
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
-		theTank.bulltank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-theTank.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-theTank.tankCenterY),2));
-		if((theTank.bulltank <= theTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+		aTank.bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-aTank.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-aTank.tankCenterY),2));
+			if((aTank.bullTank <= aTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 
 				endAudio.currentTime = 0;
 				endAudio.play();
@@ -277,19 +193,16 @@ function shootTank(aTank) {
 				xxxx=1
 				// Creating circles for animation
 				for (var i = 0; i < 500; i++) {
-					circles.push(new create(theTank));
+					circles.push(new create(aTank));
 				}
 
 				b = 0;
 				shootx=false;
 				shoot1=false;
-				destroyTank(theTank);
+				destroyTank(aTank);
 				
 				setTimeout(function(){
-					//makeMaze();
 				initialize();
-				//if(aTank==tank2){
-					//tank2.score++;
 					xxxx=0;
 					shoot1=true;
 					shootx=true;
@@ -298,9 +211,9 @@ function shootTank(aTank) {
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
 		}
-		if(theTank.bulltank >= theTank.tankRadius){
+		if(aTank.bullTank >= aTank.tankRadius){
 			if (shoot1==true){
-				drawTank(theTank, "blue", "green", "yellow", "yellow");
+				drawTank(aTank, "blue", "green", "yellow", "yellow");
 			}
 		}
 	}
