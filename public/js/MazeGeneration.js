@@ -17,6 +17,40 @@ var rows1,
 	grid1,
 	mazeHeight1;
 
+
+
+/* walls */
+var imgNeedle = new Image();
+imgNeedle.src = '/images/wallNeedle.png';
+imgNeedle.width = 10;
+
+function distanceBetween(point1, point2) {
+  return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+}
+function angleBetween(point1, point2) {
+  return Math.atan2( point2.x - point1.x, point2.y - point1.y );
+}
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function makeNeedleWall(coord1, coord2)
+{
+  var dist = distanceBetween(coord1, coord2);
+  var angle = angleBetween(coord1, coord2);
+  //console.log(angle);
+  for (var i = 0; i < dist; i++) {
+    x = coord1.x + (Math.sin(angle) * i);
+    y = coord1.y + (Math.cos(angle) * i);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(0.5, 0.5);
+    ctx.rotate(Math.PI * 180 / getRandomInt(0, 180));
+	  //ctx.rotate(Math.PI * 180);
+    ctx.drawImage(imgNeedle, 0, 0);
+    ctx.restore();
+  }
+}
+
 function makeMaze() {
 	// maze parameters
 	var rows =  Math.floor(Math.random() * 5) + 5,
@@ -36,27 +70,20 @@ function makeMaze() {
 		startRow = 0,
 		endColumn = columns - 1,
 		endRow = rows - 1,
-		wallR = 0,
-		wallG = 0,
-		wallB = 0,
-		backgroundR = 255,
-		backgroundG = 255,
-		backgroundB = 255,
-		solutionR = $('#solutionR').val(),
-		solutionG = $('#solutionG').val(),
-		solutionB = $('#solutionB').val(),
+		// ##e5f2e5
+		backgroundR = 229,
+		backgroundG = 242,
+		backgroundB = 200,
 	
-		wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")",
-		backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")",
-		solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
+		backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
 	
 	// actual maze
-	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
+	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, backgroundColor);
 	theMaze.generate();
 	//theMaze.draw();
 }
 
-function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor) {
+function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, backgroundColor) {
 	this.rows = rows;
 	this.columns = columns;
 	this.gridsize = gridsize;
@@ -70,9 +97,7 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.startRow = parseInt(startRow);
 	this.endColumn = parseInt(endColumn);
 	this.endRow = parseInt(endRow);
-	this.wallColor = wallColor;
 	this.backgroundColor = backgroundColor;
-	this.solutionColor = solutionColor;
 	this.lineWidth = this.gridsize / 60;
 	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
 	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
@@ -333,58 +358,31 @@ maze.prototype.draw = function() {
 			//this.drawColors(theCell);
 			context.lineWidth = this.lineWidth;
 			context.fillStyle = this.backgroundColor;
-			context.strokeStyle = this.wallColor;
-			context.fillRect(drawX, drawY, this.gridsize, this.gridsize);	
-			
+			context.fillRect(drawX - limit, drawY - limit, this.gridsize + limit, this.gridsize + limit);	
 			context.beginPath();
+			context.lineJoin="round";
+			
 			if (theCell.leftWall == true) {
 				//context.strokeRect(drawX, drawY, 1, this.gridsize);
-				context.moveTo(drawX, drawY - limit);
-				context.lineTo(drawX, pastY + limit);
+				//context.moveTo(drawX, drawY - limit);
+				//context.lineTo(drawX, pastY + limit);
+				makeNeedleWall({x:drawX,y:drawY - limit}, {x:drawX, y:pastY + limit});
 			}
 			if (theCell.topWall == true) {
 				//context.strokeRect(drawX, drawY, this.gridsize, 1);
-				context.moveTo(drawX - limit, drawY);
-				context.lineTo(pastX + limit, drawY);
+				//context.moveTo(drawX - limit, drawY);
+				//context.lineTo(pastX + limit, drawY);
+				makeNeedleWall({x:drawX - limit,y:drawY}, {x:pastX + limit, y:drawY});
 			}
-			if (theCell.rightWall == true) {
-				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
-				context.moveTo(pastX, drawY - limit);
-				context.lineTo(pastX, pastY + limit);
+			if (j === this.columns - 1) {
+				//draw right border
+				makeNeedleWall({x:pastX,y:drawY - limit}, {x:pastX, y:pastY + limit});
 			}
-			if (theCell.bottomWall == true) {
-				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
-				context.moveTo(drawX - limit, pastY);
-				context.lineTo(pastX + limit, pastY);
-			}
-			context.closePath();
-			context.stroke();
-			
-			context.lineWidth = this.lineWidth + 1;
-			context.strokeStyle = this.backgroundColor;
-			context.beginPath();
-			if (theCell.leftWall == false) {
-				//context.strokeRect(drawX, drawY, 1, this.gridsize);
-				context.moveTo(drawX, drawY + limit);
-				context.lineTo(drawX, pastY - limit);
-			}
-			if (theCell.topWall == false) {
-				//context.strokeRect(drawX, drawY, this.gridsize, 1);
-				context.moveTo(drawX + limit, drawY);
-				context.lineTo(pastX - limit, drawY);
-			}
-			if (theCell.rightWall == false) {
-				//context.strokeRect((drawX + this.gridsize), drawY, 1, this.gridsize);
-				context.moveTo(pastX, drawY + limit);
-				context.lineTo(pastX, pastY - limit);
-			}
-			if (theCell.bottomWall == false) {
-				//context.strokeRect(drawX, (drawY + this.gridsize), this.gridsize, 1);	
-				context.moveTo(drawX + limit, pastY);
-				context.lineTo(pastX - limit, pastY);
+			if (k === this.rows - 1) {
+				// draw bottom border
+				makeNeedleWall({x:drawX - limit,y:pastY}, {x:pastX + limit, y:pastY});
 			}
 			context.closePath();
-			context.stroke();
 		}
 	}
 }

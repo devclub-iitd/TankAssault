@@ -22,8 +22,8 @@
 			<h1>Let's Trouble...</h1>
 			<nav>
      			<h2 id="menulink"><a href="#navlinks">Menu</a></h2>
-      			<button class="button startGame" onclick="generate()">Start Game</button>
-				<button class="button reSetTank" onclick="reSetTank()">Re-Set Tank</button>
+      			<button class="button startGame" onclick="generate()">Start New Game</button>
+				<button class="button reSetTank" onclick="reSetTank()">Respawn Tanks</button>
     		</nav>
 		</header>
  		<div id="content">
@@ -32,6 +32,16 @@
   			<script>
 				// declare the maze height, width computed automatically
 				var mazeHeight = 400;
+				// load tank image
+				var tank1image = new Image(),
+					tank2image = new Image(),
+					tank3image = new Image(),
+					tank4image = new Image();
+				tank1image.src = '/images/tank1.png';
+				tank2image.src = '/images/tank2.png';
+				tank3image.src = '/images/tank3.png';
+				tank4image.src = '/images/tank4.png';
+      
 			</script>
 			 
         </div>
