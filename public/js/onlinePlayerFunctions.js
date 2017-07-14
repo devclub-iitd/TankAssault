@@ -28,6 +28,7 @@ function Tank(){
 	this.bulletShot = this.bulletPack;
 	this.bullet = [];
 	this.bullTank = 100;
+	this.roomno = 0;
 }
 
 function initializeTank(aTank) {

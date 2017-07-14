@@ -392,6 +392,7 @@ function Tank(){
 	this.bullet = [];
 	this.bullTank = 100;
 	this.id = 0
+	this.roomno = 0;
 }
 
 function initializeTank(aTank) {
@@ -444,6 +445,14 @@ function initializeBullet(aTank, aBullet){
 // Export the Player class so you can use it in
 // other files by using require("Player").Player
 makeMaze();
+setInterval(expo, 0.1);
+function expo(){
+	exports.rows = rows;
+	exports.columns = columns;
+	exports.mazeHeight = mazeHeight;
+	exports.grid = theMaze.grid;
+}
+exports.maze = makeMaze;
 exports.Player = Tank;
 exports.Tank = initializeTank;
 exports.rows = rows;

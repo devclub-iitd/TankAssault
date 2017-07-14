@@ -5,8 +5,16 @@ var port = process.env.PORT || 3000;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var util = require('util');
-var players = [];
+//var players = [];
 var Player = require("./js/Player");
+var rooms = [];
+//Player.maze();
+rooms[0] = [];
+rooms[0].push(Player.rows);
+rooms[0].push(Player.columns);
+rooms[0].push(Player.grid);
+rooms[0].push(Player.mazeHeight);
+var roomno = 1;
 app.use(express.static("public"));
 app.set("view engine","ejs");
 
@@ -31,8 +39,25 @@ io.on('connection', function(client){
   console.log('Client connected' + client.id);
   util.log("New player has connected: " + client.id);
   
+ // Increase roomno if 4 clients are present in a room
+  if(io.nsps['/'].adapter.rooms["room-"+roomno] && io.nsps['/'].adapter.rooms["room-"+roomno].length > 3)
+    {
+      Player.maze();
+      roomno++;
+      rooms[roomno-1] = [];
+      rooms[roomno-1].push(Player.rows);
+      rooms[roomno-1].push(Player.columns);
+      rooms[roomno-1].push(Player.grid);
+      rooms[roomno-1].push(Player.mazeHeight);
+    }
+    console.log("rooms array: " + rooms[roomno-1][0] + " " + rooms[roomno-1][1] + " " +rooms[roomno-1][3]);
+  client.join("room-"+roomno);
+
+  // Send this event to everyone in room.
+  io.sockets.in("room-"+roomno).emit("connectToRoom",'You are in room: ' + roomno);
+
   // Maze design
-  this.emit("Player", {
+  this.in("room-"+roomno).emit("Player", {
     rows: Player.rows,
     columns: Player.columns,
     //backgroundColor: Player.backgroundColor,
@@ -59,9 +84,14 @@ io.on('connection', function(client){
 // Socket client has disconnected
 function onClientDisconnect() {
   util.log("Player has disconnected: "+this.id+"server.js message");
-
-  var removePlayer = playerById(this.id);
-
+var r;
+for(var i = 0;i<roomno;i++){
+  var removePlayer = playerById(this.id,i+1);
+  if(removePlayer){
+    r = i+1;
+    break;
+  }
+}
   // Player not found
   if (!removePlayer) {
     util.log("Player not found: "+this.id+"server.js message");
@@ -69,10 +99,10 @@ function onClientDisconnect() {
   };
 
   // Remove player from players array
-  players.splice(players.indexOf(removePlayer), 1);
+  rooms[r-1].splice(rooms[r-1].indexOf(removePlayer), 1);
 
   // Broadcast removed player to connected socket clients
-  this.broadcast.emit("remove player", {id: this.id});
+  this.broadcast.in("room-"+r).emit("remove player", {id: this.id});
 };
 
 // New player has joined
@@ -80,6 +110,7 @@ function onNewPlayer(data) {
   // Create a new player
   var newPlayer = new Player.Player(); // same as new Tank();
   newPlayer.id = this.id;
+  newPlayer.roomno = roomno;
   newPlayer.tankCenterX = data.x;
   newPlayer.tankCenterY = data.y;
   newPlayer.rotorX = data.rotorX;
@@ -97,8 +128,9 @@ function onNewPlayer(data) {
   // We had to use this new way of initialize because of require and exports method of using functions of other javascript.
 
   // Broadcast new player to connected socket clients
-  io.sockets.emit("new player", {
+  io.sockets.in("room-"+roomno).emit("new player", {
     id: newPlayer.id,
+    roomno: newPlayer.roomno,
     x: newPlayer.tankCenterX,
     y: newPlayer.tankCenterY,
     rotorX: newPlayer.rotorX,
@@ -111,10 +143,11 @@ function onNewPlayer(data) {
 
   // Send existing players to the new player
   var i, existingPlayer;
-  for (i = 0; i < players.length; i++) {
-    existingPlayer = players[i];
+  for (i = 4; i < rooms[roomno-1].length; i++) {
+    existingPlayer = rooms[roomno-1][i];
     this.emit("new player", {
       id: existingPlayer.id,
+      roomno: existingPlayer.roomno,
       x: existingPlayer.tankCenterX,
       y: existingPlayer.tankCenterY,
       rotorX: existingPlayer.rotorX,
@@ -126,13 +159,13 @@ function onNewPlayer(data) {
     });
   };
   // Add new player to the players array
-  players.push(newPlayer);
+  rooms[roomno-1].push(newPlayer);
 };
 
 // Player has moved
 function onMovePlayer(data) {
   // Find player in array
-  var movePlayer = playerById(this.id);
+  var movePlayer = playerById(this.id,data.roomno);
 
   // Player not found
   if (!movePlayer) {
@@ -145,12 +178,13 @@ function onMovePlayer(data) {
   movePlayer.downPressed = data.downPressed;
   movePlayer.rightPressed = data.rightPressed;
   movePlayer.leftPressed = data.leftPressed;
-  moveTank(movePlayer)
+  movePlayer.roomno = data.roomno;
+  moveTank(movePlayer,data.roomno);
 };
 
 function onShootPlayer(data){
   // Find player in array
-  var shootPlayer = playerById(this.id);
+  var shootPlayer = playerById(this.id,data.roomno);
 
   // Player not found
   if (!shootPlayer) {
@@ -164,8 +198,9 @@ function onShootPlayer(data){
   shootPlayer.bulletPack = data.bulletPack;
   shootPlayer.bulletReload = data.bulletReload;
   shootPlayer.bullet = data.bullet;
+  shootPlayer.roomno = data.roomno;
 
-  io.sockets.emit("shoot player", {
+  io.sockets.in("room-"+data.roomno).emit("shoot player", {
     id: shootPlayer.id,
     x: shootPlayer.tankCenterX,
     y: shootPlayer.tankCenterY,
@@ -184,11 +219,11 @@ function onShootPlayer(data){
 ** GAME HELPER FUNCTIONS
 **************************************************/
 // Find player by ID
-function playerById(id) {
+function playerById(id,roomno) {
   var i;
-  for (i = 0; i < players.length; i++) {
-    if (players[i].id == id)
-      return players[i];
+  for (i = 4; i < rooms[roomno-1].length; i++) {
+    if (rooms[roomno-1][i].id == id)
+      return rooms[roomno-1][i];
   }
 
   return false;
@@ -203,12 +238,13 @@ server.listen(port,function(){
 ////////     Movements define       /////////
 /////////////////////////////////////////////
 
-function moveTank(aTank) {
-  var gridsize = Player.mazeHeight/Player.rows;
+function moveTank(aTank,roomn) {
+  var gridsize = rooms[roomn-1][3]/rooms[roomn-1][0];
   var i = Math.floor(aTank.tankCenterX / gridsize);
   var j = Math.floor(aTank.tankCenterY / gridsize);
-  var currentPlayerGrid = Player.grid[0][0];
-  if(!isNaN(i) && !isNaN(j)) currentPlayerGrid = Player.grid[i][j];
+  var gridvar = rooms[roomn-1][2];
+  var currentPlayerGrid = gridvar[0][0];
+  if(!isNaN(i) && !isNaN(j)) currentPlayerGrid = gridvar[i][j];
     
   wallLeft = i*gridsize;
   wallRight = (i+1)*gridsize;
@@ -286,7 +322,7 @@ function moveTank(aTank) {
   aTank.tankCenterY = aTank.rotorY + aTank.rotorWidth / 2;
 
   // Broadcast updated position to connected socket clients
-  io.sockets.emit("move player", {
+  io.sockets.in("room-"+roomn).emit("move player", {
     id: aTank.id,
     x: aTank.tankCenterX,
     y: aTank.tankCenterY,

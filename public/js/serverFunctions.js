@@ -56,8 +56,13 @@ async function setEventHandlers() {
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	// Socket connection successful
+	socket.on("connectToRoom", function(data){
+		console.log(data);
+	});	
+
+	// Socket connection successful
 	socket.on("connect", onSocketConnected);	
-	
+
 	// Socket disconnection
 	socket.on("disconnect", onSocketDisconnect);
 
@@ -126,6 +131,7 @@ function onNewPlayer(data) {
 	newPlayer.bullet = data.bulletArray;
 	newPlayer.bulletPack = data.bulletPack;
 	newPlayer.bulletShot = data.bulletShot;
+	newPlayer.roomno = data.roomno;
 	//console.log("bulletPack: " + newPlayer.bulletPack);
 	//for (var i = 0; i < newPlayer.bulletPack; i++)
     //	newPlayer.bullet.push(new Bullet());
@@ -157,6 +163,7 @@ function onMovePlayer(data) {
 	movePlayer.rotorX = data.rotorX;
 	movePlayer.rotorY = data.rotorY;
 	movePlayer.rotorAngle = data.angle;
+	
 };
 
 function onShootPlayer(data){
@@ -206,6 +213,7 @@ function update() {
 			downPressed: remotePlayers[0].downPressed,
 			rightPressed: remotePlayers[0].rightPressed,
 			leftPressed: remotePlayers[0].leftPressed,
+			roomno: remotePlayers[0].roomno
 		});
 
 		socket.emit("shoot player", {
@@ -214,7 +222,8 @@ function update() {
 			bulletPack: remotePlayers[0].bulletPack,
 			bulletShot: remotePlayers[0].bulletShot,
 			bulletReload: remotePlayers[0].bulletReload,
-			bullet: remotePlayers[0].bullet
+			bullet: remotePlayers[0].bullet,
+			roomno: remotePlayers[0].roomno
 		});
 }
 
