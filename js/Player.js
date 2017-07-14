@@ -22,26 +22,13 @@ function makeMaze() {
 	}else{
 		mazeStyle = 'normal';
 	}
-	var startColumn = 0;
-	var startRow = 0;
-	var endColumn = columns - 1;
-	var endRow = rows - 1;
-	var wallR = 0;
-	var wallG = 0;
-	var wallB = 0;
-	// ##e5f2e5
-	var backgroundR = 229,
-		backgroundG = 242,
-		backgroundB = 200;
 	
-	wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
-	backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
-	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor);
+	theMaze = new maze(rows, columns, gridsize, mazeStyle);
 	theMaze.generate();
 	//theMaze.draw();
 }
 
-function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor) {
+function maze(rows, columns, gridsize, mazeStyle) {
 	this.rows = rows;
 	this.columns = columns;
 	this.gridsize = gridsize;
@@ -51,12 +38,6 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.halfgridsize = this.gridsize / 2;
 	this.grid = new Array(this.columns);
 	this.history = new Array();
-	this.startColumn = parseInt(startColumn);
-	this.startRow = parseInt(startRow);
-	this.endColumn = parseInt(endColumn);
-	this.endRow = parseInt(endRow);
-	this.wallColor = wallColor;
-	this.backgroundColor = backgroundColor;
 	this.lineWidth = this.gridsize / 60;
 	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
 	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
@@ -467,8 +448,8 @@ exports.Player = Tank;
 exports.Tank = initializeTank;
 exports.rows = rows;
 exports.columns = columns;
-exports.backgroundColor = backgroundColor;
-exports.wallColor = wallColor;
+//exports.backgroundColor = backgroundColor;
+//exports.wallColor = wallColor;
 exports.mazeHeight = mazeHeight;
 //exports.lineWidth =lineWidth;
 exports.grid = theMaze.grid;

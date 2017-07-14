@@ -197,7 +197,7 @@ function drawTank(aTank, tankImage){
         ctx.restore();
 }
 
-function shootTank(aTank) {
+function shootTank(aTank, tankImage) {
 	// Some Shooting....
 	if (aTank.bulletReload){
 		// reset each bullet and fill bulletPack
@@ -246,7 +246,7 @@ function shootTank(aTank) {
 		}
 		if(aTank.bullTank >= aTank.tankRadius){
 			if (shoot1==true){
-				drawTank(aTank, tank1image);
+				drawTank(aTank, tankImage);
 			}
 		}
 	}

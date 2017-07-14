@@ -13,11 +13,10 @@ var rows1,
 	columns1,
 	lineWidth1,
 	backgroundColor1,
-	wallColor1,
 	grid1,
 	mazeHeight1;
 
-
+var mazeBackgroundColor = "#e5f2c8";
 
 /* walls */
 var imgNeedle = new Image();
@@ -97,24 +96,14 @@ function makeMaze() {
 	}else{
 		mazeStyle = 'normal';
 	}
-	var startColumn = 0,
-		startRow = 0,
-		endColumn = columns - 1,
-		endRow = rows - 1,
-		// ##e5f2e5
-		backgroundR = 229,
-		backgroundG = 242,
-		backgroundB = 200,
-	
-		backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
 	
 	// actual maze
-	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, backgroundColor);
+	theMaze = new maze(rows, columns, gridsize, mazeStyle);
 	theMaze.generate();
 	//theMaze.draw();
 }
 
-function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, backgroundColor) {
+function maze(rows, columns, gridsize, mazeStyle) {
 	this.rows = rows;
 	this.columns = columns;
 	this.gridsize = gridsize;
@@ -124,11 +113,10 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.halfgridsize = this.gridsize / 2;
 	this.grid = new Array(this.columns);
 	this.history = new Array();
-	this.startColumn = parseInt(startColumn);
-	this.startRow = parseInt(startRow);
-	this.endColumn = parseInt(endColumn);
-	this.endRow = parseInt(endRow);
-	this.backgroundColor = backgroundColor;
+	this.startColumn = 0;
+	this.startRow = 0;
+	this.endColumn = columns - 1;
+	this.endRow = rows - 1;
 	this.lineWidth = this.gridsize / 60;
 	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
 	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
@@ -378,7 +366,7 @@ maze.prototype.draw = function() {
 	$('#maze').attr("height", totalHeight);
 	//document.getElementById("maze").style.margin-left = "600";
 	context.clearRect(0, 0, totalWidth, totalHeight);
-	context.fillStyle = this.backgroundColor;
+	context.fillStyle = mazeBackgroundColor;
 	context.fillRect(0, 0, totalWidth, totalHeight);
 	for (j = 0; j < this.columns; j++) {
 		for (k = 0; k < this.rows; k++) {
@@ -447,7 +435,6 @@ function drawmaze(){
 	this.rows = rows1;
 	this.columns = columns1;
 	this.backgroundColor = backgroundColor1;
-	this.wallColor = wallColor1;
 	this.grid = grid1;
 	this.gridsize = mazeHeight1/rows1;
 	this.lineWidth = gridsize/60;
@@ -458,7 +445,7 @@ function drawmaze(){
 	$('#maze').attr("height", totalHeight);
 	//document.getElementById("maze").style.margin-left = "600";
 	context.clearRect(0, 0, totalWidth, totalHeight);
-	context.fillStyle = this.backgroundColor;
+	context.fillStyle = mazeBackgroundColor;
 	context.fillRect(0, 0, totalWidth, totalHeight);
 	for (j = 0; j < this.columns; j++) {
 		for (k = 0; k < this.rows; k++) {

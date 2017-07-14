@@ -78,8 +78,8 @@ async function setEventHandlers() {
 function onMazeForm(Player){
 	rows1 = Player.rows;
 	columns1 = Player.columns;
-	backgroundColor1 = Player.backgroundColor;
-	wallColor1 = Player.wallColor;
+	//backgroundColor1 = Player.backgroundColor;
+	//wallColor1 = Player.wallColor;
 	grid1 = Player.grid;
 	mazeHeight1 = Player.mazeHeight;
 	}

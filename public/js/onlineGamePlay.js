@@ -15,9 +15,14 @@ function playGame() {
 	 drawmaze();
 	 update();
 	 
-	 var i;	
+	 var i;
+	var tankImage;
 	 for (i = 0; i < remotePlayers.length; i++) {
-				shootTank(remotePlayers[i]);
+		 		if (i == 0) tankImage = tank1image;
+		 		else if (i % 3 == 1) tankImage = tank2image;
+				else if (i % 3 == 2) tankImage = tank3image;
+				else tankImage = tank4image;
+				shootTank(remotePlayers[i], tankImage);
 		};
 	myScore.text="SCORE: " + 7;
     myScore.update();

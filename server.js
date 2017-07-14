@@ -35,8 +35,8 @@ io.on('connection', function(client){
   this.emit("Player", {
     rows: Player.rows,
     columns: Player.columns,
-    backgroundColor: Player.backgroundColor,
-    wallColor: Player.wallColor,
+    //backgroundColor: Player.backgroundColor,
+    //wallColor: Player.wallColor,
     grid: Player.grid,
     mazeHeight: Player.mazeHeight
   });
