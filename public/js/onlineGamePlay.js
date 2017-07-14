@@ -44,10 +44,11 @@ async function generate() {
 	//          when moving to actual online server test and increase this time to avoid previous
 	//          'double start' errors
 	await sleep(5000);
+	initialize();
+	await sleep(5000);
 	$('#maze').show();
 	$('#loading').hide();
 	$('#myBar').show();
-	initialize();
 	if (loaded == 0){
 		setInterval(playGame, iterationTime);
 	}

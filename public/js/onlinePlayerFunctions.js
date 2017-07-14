@@ -135,7 +135,7 @@ function Reload(){
 	remotePlayers[0].leftClick = false;
 	remotePlayers[0].reloading = false;
 }
-function drawTank(aTank, color1, color2, color3, color4){
+/*function drawTank(aTank, color1, color2, color3, color4){
 		var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
 		grd.addColorStop(0, color1);
 		grd.addColorStop(0.4, color2);
@@ -160,6 +160,39 @@ function drawTank(aTank, color1, color2, color3, color4){
 
 	    ctx.fillStyle = color4;
 		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);
+        // restore the context to its untranslated/unrotated state
+        ctx.restore();
+}*/
+function drawTank(aTank, tankImage){
+		/*var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(0.4, color2);
+		grd.addColorStop(1, color3);*/
+
+		var height = aTank.tankRadius * 2,
+			width = height;
+		/*ctx.beginPath();
+		ctx.fillStyle = grd;
+		ctx.arc(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();*/
+	
+        // first save the untranslated/unrotated context
+        ctx.save();
+	    ctx.beginPath();
+        // move the rotation point to the center of the rect
+        ctx.translate(aTank.tankCenterX, aTank.tankCenterY);
+        // rotate the rect
+        ctx.rotate((aTank.rotorAngle - 90) * Math.PI / 180);
+		//console.log(aTank.rotorAngle);
+	    // draw the rect on the transformed context
+        // Note: after transforming [0,0] is visually [x,y]
+        //       so the rect needs to be offset accordingly when drawn
+
+	    /*ctx.fillStyle = color4;
+		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);*/
+	
+        context.drawImage(tankImage,  -width / 2, -height / 2,  width, height);
         // restore the context to its untranslated/unrotated state
         ctx.restore();
 }
@@ -213,7 +246,7 @@ function shootTank(aTank) {
 		}
 		if(aTank.bullTank >= aTank.tankRadius){
 			if (shoot1==true){
-				drawTank(aTank, "blue", "green", "yellow", "yellow");
+				drawTank(aTank, tank1image);
 			}
 		}
 	}

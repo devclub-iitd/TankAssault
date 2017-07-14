@@ -10,7 +10,7 @@ Come and join us.
 
 Compete with your friends or with our awesome A.I.(undefeated till date) (feature coming soon...)
 
-
+![alt text](public/imgages/game.png)
 
 ### Controls for 1 Player game: 
 

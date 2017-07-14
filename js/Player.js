@@ -16,10 +16,11 @@ function makeMaze() {
 	console.log("on server gridsize = "+gridsize);
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
+	var mazeStyle;
 	if(mazeStyledecision == 1){
-		var mazeStyle = 'straight';
+		mazeStyle = 'straight';
 	}else{
-		var mazeStyle = 'normal';
+		mazeStyle = 'normal';
 	}
 	var startColumn = 0;
 	var startRow = 0;
@@ -28,22 +29,19 @@ function makeMaze() {
 	var wallR = 0;
 	var wallG = 0;
 	var wallB = 0;
-	var backgroundR = 255;
-	var backgroundG = 255;
-	var backgroundB = 255;
-	var solutionR = 0;//$('#solutionR').val();
-	var solutionG = 0;//$('#solutionG').val();
-	var solutionB = 0;//$('#solutionB').val();
+	// ##e5f2e5
+	var backgroundR = 229,
+		backgroundG = 242,
+		backgroundB = 200;
 	
 	wallColor = "rgb(" + wallR + "," + wallG + "," + wallB + ")";
 	backgroundColor = "rgb(" + backgroundR + "," + backgroundG + "," + backgroundB + ")";
-	var solutionColor = "rgb(" + solutionR + "," + solutionG + "," + solutionB + ")";
-	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor);
+	theMaze = new maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor);
 	theMaze.generate();
 	//theMaze.draw();
 }
 
-function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor, solutionColor) {
+function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColumn, endRow, wallColor, backgroundColor) {
 	this.rows = rows;
 	this.columns = columns;
 	this.gridsize = gridsize;
@@ -59,7 +57,6 @@ function maze(rows, columns, gridsize, mazeStyle, startColumn, startRow, endColu
 	this.endRow = parseInt(endRow);
 	this.wallColor = wallColor;
 	this.backgroundColor = backgroundColor;
-	this.solutionColor = solutionColor;
 	this.lineWidth = this.gridsize / 60;
 	this.genStartColumn = Math.floor(Math.random() * (this.columns- 1));
 	this.genStartRow = Math.floor(Math.random() * (this.rows- 1));
@@ -301,7 +298,7 @@ maze.prototype.generate = function() {
 			//doGeneration();
 		}
 	}
-}
+}/*
 maze.prototype.draw = function() {
 	var totalWidth = this.columns * this.gridsize;
 	var totalHeight = this.rows * this.gridsize;
@@ -374,7 +371,7 @@ maze.prototype.draw = function() {
 			context.stroke();
 		}
 	}
-}
+}*/
 
 function cell(column, row, partOfMaze, isStart, isEnd, isGenStart) {
 	this.x = column;

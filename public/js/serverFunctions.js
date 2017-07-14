@@ -138,6 +138,7 @@ function onNewPlayer(data) {
 	
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
+	console.log("pushed into remote players"+newPlayer.id+" type:"+typeof(newPlayer));
 };
 
 // Move player
