@@ -13,6 +13,14 @@ function makeMaze() {
 	rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
 	columns = Math.floor(Math.random() * 5) + 10; // columns of maze
 	var gridsize = mazeHeight / rows; // grid size of maze
+	// checking if maze doesn't overflow screen -> make max width = 1200px
+	while(columns * gridsize > 1200)
+	{
+		console.log("in col loop");
+		rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
+		columns = Math.floor(Math.random() * 5) + 10; // columns of maze
+		gridsize = mazeHeight / rows; // grid size of maze
+	}
 	console.log("on server gridsize = "+gridsize);
 	var mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	//var mazeStyle = $('input[name=mazeStyle]:checked').val();
@@ -22,7 +30,7 @@ function makeMaze() {
 	}else{
 		mazeStyle = 'normal';
 	}
-	
+	theMaze = null;
 	theMaze = new maze(rows, columns, gridsize, mazeStyle);
 	theMaze.generate();
 	//theMaze.draw();
@@ -445,14 +453,20 @@ function initializeBullet(aTank, aBullet){
 // Export the Player class so you can use it in
 // other files by using require("Player").Player
 makeMaze();
-setInterval(expo, 0.1);
+//setInterval(expo, 0.1);
 function expo(){
+	//console.log("in function expo");
+	makeMaze();
+	exports.Player = Tank;
+	exports.Tank = initializeTank;
 	exports.rows = rows;
 	exports.columns = columns;
 	exports.mazeHeight = mazeHeight;
 	exports.grid = theMaze.grid;
 }
-exports.maze = makeMaze;
+console.log("bypassed setInterval");
+//exports.maze = makeMaze;
+exports.expo = expo;
 exports.Player = Tank;
 exports.Tank = initializeTank;
 exports.rows = rows;

@@ -7,6 +7,7 @@ var io = require('socket.io')(server);
 var util = require('util');
 //var players = [];
 var Player = require("./js/Player");
+//Player.maze();
 var rooms = [];
 //Player.maze();
 rooms[0] = [];
@@ -42,19 +43,23 @@ io.on('connection', function(client){
  // Increase roomno if 4 clients are present in a room
   if(io.nsps['/'].adapter.rooms["room-"+roomno] && io.nsps['/'].adapter.rooms["room-"+roomno].length > 3)
     {
-      Player.maze();
+	  //Player = require("./js/Player");
+      Player.expo();
       roomno++;
+	  // define some maximum no of rooms
+	  //if (roomno > 100000007) roomno = 0;
       rooms[roomno-1] = [];
       rooms[roomno-1].push(Player.rows);
       rooms[roomno-1].push(Player.columns);
       rooms[roomno-1].push(Player.grid);
       rooms[roomno-1].push(Player.mazeHeight);
+	  console.log("a new room has been created with row = "+Player.rows);
     }
     console.log("rooms array: " + rooms[roomno-1][0] + " " + rooms[roomno-1][1] + " " +rooms[roomno-1][3]);
   client.join("room-"+roomno);
 
   // Send this event to everyone in room.
-  io.sockets.in("room-"+roomno).emit("connectToRoom",'You are in room: ' + roomno);
+  io.sockets.in("room-"+roomno).emit("connectToRoom",'You are in room: ' + roomno + ' and your id is ' + client.id);
 
   // Maze design
   this.in("room-"+roomno).emit("Player", {
@@ -84,7 +89,7 @@ io.on('connection', function(client){
 
 // Socket client has disconnected
 function onClientDisconnect() {
-  util.log("Player has disconnected: "+this.id+"server.js message");
+  util.log("Player has disconnected: "+this.id+" (server.js message)");
 var r;
 for(var i = 0;i<roomno;i++){
   var removePlayer = playerById(this.id,i+1);
@@ -95,7 +100,7 @@ for(var i = 0;i<roomno;i++){
 }
   // Player not found
   if (!removePlayer) {
-    util.log("Player not found: "+this.id+"server.js message");
+    util.log("Player not found: "+this.id+" (server.js message)");
     return;
   };
 

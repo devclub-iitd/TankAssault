@@ -272,7 +272,12 @@ for(var j = 0;j<remotePlayers.length;j++){
 		}
 		if(remotePlayers[j].bullTank >= remotePlayers[j].tankRadius){
 		if (remotePlayers[j].shoot1==true){
-				drawTank(remotePlayers[j], tankImage);
+			var tankImage1;
+			if (j == 0) tankImage1 = tank1image;
+		 		else if (j % 3 == 1) tankImage1 = tank2image;
+				else if (j % 3 == 2) tankImage1 = tank3image;
+				else tankImage1 = tank4image;
+				drawTank(remotePlayers[j], tankImage1);
 		}
 		}
 	}

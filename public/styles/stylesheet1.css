@@ -1,31 +1,40 @@
-player1scoreplayer1scoreplayer1scoreplayer1score@charset "utf-8";
+@charset "utf-8";
 /* Simplify width and height calculations */
 html {
+	height: 100%;
 	box-sizing: border-box;
 }
 *, *:before,
 *:after {
-	
+	box-sizing: inherit;
 }
 
 body{
   margin: 0;
+  position: relative;
+  padding-bottom: 30px;
   background-color: #000000;
   text-align: center;
   font-style: normal;
   font-weight: 400;
+	min-height: 100%;
+  /*height: 100%;*/
   font-size: 1em;
 }
 
 #wrapper {
 	width: 100%;
 	margin: 0 auto;
+	/*margin-bottom: 50px;*/
+	padding-bottom: 40px;
 	max-width: 1000px;
+	height: 94%;
 	background-color: #222a33;
 }
 #wrapperFullScreen {
 	width: 100%;
 	margin: 0 auto;
+	margin-bottom: 50px;
 	max-width: 1500px;
 	background-color: #d3d3d3;
 }
@@ -237,13 +246,27 @@ a:hover, a:active, a:focus {
 	display: block;
 }
 footer {
-	padding-top: 20px;
-	padding-bottom: 20px;
+	/*position: fixed;
+	overflow: hidden;
+	z-index: 5;*/
+	position: absolute;
+	margin: 0px;
+	/*padding-top: 15px;*/
+	padding-bottom: 40px;
+	vertical-align: middle;
+	bottom: 0;
 	background-color: #1E1E1E;
 	color: white;
 	font-size: 0.8em;
+	/*max-width: 1000px;*/
+	width: 100%;
+	height: 30px;
 	text-align: center;
 }
+
+/*#wrapperFullScreen footer {
+	max-width: inherit;
+}*/
 #squeezed {
 	position: absolute;
 	z-index: -1;

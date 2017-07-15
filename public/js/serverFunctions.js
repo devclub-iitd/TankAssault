@@ -140,7 +140,7 @@ function onRenewPlayer(data){
 
 	// Player not found
 	if (!renewPlayer) {
-		console.log("Player not found: "+data.id);
+		console.log("Player not found (by renew player): "+data.id);
 		return;
 	};
 
@@ -198,7 +198,7 @@ function onMovePlayer(data) {
 
 	// Player not found
 	if (!movePlayer) {
-		console.log("Player not found: "+data.id);
+		console.log("Player not found (by move player) : "+data.id);
 		return;
 	};
 	
@@ -216,7 +216,7 @@ function onShootPlayer(data){
 
 	// Player not found
 	if (!shootPlayer) {
-		console.log("Player not found: "+data.id);
+		console.log("Player not found (by shoot player): "+data.id);
 		return;
 	};
 	
@@ -240,7 +240,7 @@ function onRemovePlayer(data) {
 
 	// Player not found
 	if (!removePlayer) {
-		console.log("Player not found: "+data.id);
+		console.log("Player not found (by remove player) : "+data.id);
 		return;
 	};
 
