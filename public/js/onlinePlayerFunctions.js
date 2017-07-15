@@ -67,8 +67,8 @@ function Bullet() {
 }
 
 function initializeBullet(aTank, aBullet){
-	aBullet.bulletX = aTank.tankCenterX;
-	aBullet.bulletY = aTank.tankCenterY;
+	aBullet.bulletX = aTank.tankCenterX + aTank.tankRadius;
+	aBullet.bulletY = aTank.tankCenterY + aTank.tankRadius;
 	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.bulletRadius = aTank.rotorWidth * 3 / 7;
 	aBullet.dbulletX = -2 * aBullet.bulletRadius / 3;
@@ -98,6 +98,7 @@ function keyDownHandler(e) {
 	}
 	if(e.keyCode == 70){
 			remotePlayers[0].leftClick = true;
+		console.log("player "+remotePlayers[0].id + " left-clicked");
 }
 	if(e.keyCode == 82){
 		theTank.reloading = true;
@@ -206,21 +207,21 @@ function shootTank(aTank, tankImage) {
 	}
  	if (aTank.bulletShot > 0 && aTank.leftClick){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
-			bulletAudio.pause();
-			bulletAudio.currentTime = 0;
-			bulletAudio.play()
+	//**--	bulletAudio.pause();
+	//**--	bulletAudio.currentTime = 0;
+	//**--	bulletAudio.play()
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
+		console.log("bullet programmed to kill");
 }
 
 	// shoot the bullets ready for shoot
 
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
 		aTank.bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-aTank.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-aTank.tankCenterY),2));
-			if((aTank.bullTank <= aTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+	//**--	if((aTank.bullTank <= aTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
 
-				endAudio.currentTime = 0;
-				endAudio.play();
+	/***--		endAudio.play();
 				date1= new Date().getTime();
 				var xboom = 0
 				var ct = document.getElementById('maze').getContext("2d");
@@ -228,27 +229,28 @@ function shootTank(aTank, tankImage) {
 				// Creating circles for animation
 				for (var i = 0; i < 500; i++) {
 					circles.push(new create(aTank));
-				}
+				}--**/
 
-				b = 0;
+	/*--		b = 0;
 				shootx=false;
 				shoot1=false;
-				destroyTank(aTank);
+	//**--		destroyTank(aTank);--**/
 				
-				setTimeout(function(){
+	/**--		setTimeout(function(){
 				initialize();
 					xxxx=0;
 					shoot1=true;
 					shootx=true;
-				},1000);
-		}
+				},1000);--**/
+	//**--}
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
+			console.log("a bullet sent to kill");
 		}
 		if(aTank.bullTank >= aTank.tankRadius){
-			if (shoot1==true){
+//**--		if (shoot1==true){
 				drawTank(aTank, tankImage);
-			}
+//**--		}
 		}
 	}
 
@@ -265,7 +267,8 @@ function drawBullet(aBullet){
 	context.arc(aBullet.bulletX, aBullet.bulletY, aBullet.bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
-	leftClick = false;
+//	leftClick = false;
+	console.log("a bullet is drawn");
 }
 
 function shootBullet(aBullet, aTank) {
@@ -339,11 +342,11 @@ function Shoot(aBullet, aTank){
 		aBullet.collisions++;
 	}
 
-	if (shootx==true){
+//**--	if (shootx==true){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
 		drawBullet(aBullet);
-	}
+//**--	}
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;

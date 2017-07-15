@@ -77,7 +77,7 @@ io.on('connection', function(client){
   client.on("move player", onMovePlayer);
 
   // shoot message
-  client.on("shoot Player", onShootPlayer);
+  client.on("shoot player", onShootPlayer);
   
 });
 

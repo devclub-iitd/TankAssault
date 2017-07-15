@@ -30,7 +30,7 @@ function changeHealth() {
   
  // var id = setInterval(frame, 10);
  
-      width-=0.5; 
+      width-=0.05; 
       elem.style.width = width/100 + '%';
 	if(width <= 0) alert("You are Dead!!");
   

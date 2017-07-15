@@ -11,7 +11,10 @@ var iterationTime = 10; // in milis
 function playGame() {
 	// function which controls the game 
 	// called repeatedly after each 'iterationTime' milisecond
-	 
+	 // removing the upressed error:
+	// if remotePlayers[0] not initialised
+	if (remotePlayers.length == 0) return;
+	
 	 drawmaze();
 	 update();
 	 

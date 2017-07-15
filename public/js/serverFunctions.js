@@ -186,7 +186,8 @@ function onShootPlayer(data){
 	shootPlayer.bulletReload = data.bulletReload;
 	shootPlayer.leftClick = data.leftClick;
 	shootPlayer.reloading = data.reloading;
-
+	//console.log("in onShootPlayer leftclick: "+shootPlayer.leftClick+" of "+shootPlayer.id);
+	
 }
 // Remove player
 function onRemovePlayer(data) {
@@ -225,6 +226,9 @@ function update() {
 			bullet: remotePlayers[0].bullet,
 			roomno: remotePlayers[0].roomno
 		});
+	// make leftClick false after once emitting true
+	//remotePlayers[0].leftClick = false; // But creating problem of bullet disappearing
+	//console.log("in update loop emitted shoot player by "+remotePlayers[0].id+" with leftclick "+remotePlayers[0].leftClick);
 }
 
 
