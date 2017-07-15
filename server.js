@@ -66,7 +66,8 @@ io.on('connection', function(client){
     mazeHeight: Player.mazeHeight
   });
 
-  
+  client.on("renew player", onRenewPlayer);
+
   //client disconnected
   client.on("disconnect", onClientDisconnect);
 
@@ -161,6 +162,46 @@ function onNewPlayer(data) {
   // Add new player to the players array
   rooms[roomno-1].push(newPlayer);
 };
+// Reinitialised player
+function onRenewPlayer(data){
+  var renewPlayer = playerById(data.id,data.roomno);
+
+  // Player not found
+  if (!renewPlayer) {
+    util.log("Player not found: "+data.id+"server.js message");
+    return;
+  };
+
+      renewPlayer.x = data.tankCenterX;
+      renewPlayer.y = data.tankCenterY;
+      renewPlayer.rotorX = data.rotorX;
+      renewPlayer.rotorY = data.rotorY;
+      renewPlayer.angle = data.rotorAngle;
+      renewPlayer.bullet = data.bullet;
+      renewPlayer.upPressed = data.upPressed;
+      renewPlayer.downPressed = data.downPressed;
+      renewPlayer.rightPressed = data.rightPressed;
+      renewPlayer.leftPressed = data.leftPressed;
+      renewPlayer.leftClick = data.leftClic;
+      renewPlayer.reloading = data.reloading;
+
+  io.sockets.in("room-"+data.roomno).emit("renew player", {
+      id: renewPlayer.id,
+      x: renewPlayer.tankCenterX,
+      y: renewPlayer.tankCenterY,
+      rotorX: renewPlayer.rotorX,
+      rotorY: renewPlayer.rotorY,
+      angle: renewPlayer.rotorAngle,
+      bullet: renewPlayer.bullet,
+      upPressed: renewPlayer.upPressed,
+      downPressed: renewPlayer.downPressed,
+      rightPressed: renewPlayer.rightPressed,
+      leftPressed: renewPlayer.leftPressed,
+      leftClick: renewPlayer.leftClick,
+      reloading: renewPlayer.reloading
+    });
+
+}
 
 // Player has moved
 function onMovePlayer(data) {
@@ -211,7 +252,7 @@ function onShootPlayer(data){
     bulletPack: shootPlayer.bulletPack,
     bulletShot: shootPlayer.bulletShot,
     bulletReload: shootPlayer.bulletReload,
-    leftClick: shootPlayer.leftClick,
+    leftClick1: shootPlayer.leftClick,
     reloading: shootPlayer.reloading
   });
 }

@@ -22,19 +22,25 @@ function Tank(){
 	this.upPressed = false;
 	this.downPressed = false;
 	this.leftClick = false;
+	this.leftClick1 = false;
 	this.reloading = false;
 	this.bulletReload = false;
 	this.bulletPack = 6;
 	this.bulletShot = this.bulletPack;
 	this.bullet = [];
 	this.bullTank = 100;
+	this.id = 0;
 	this.roomno = 0;
+	this.shoot1 = true;
+	this.shootx = true;
+	this.xxxx = 0;
 }
 
 function initializeTank(aTank) {
 	// tank parameters
 	var randrow = Math.floor(Math.random() * rows1);
 	var randcolumn = Math.floor(Math.random() * columns1);
+				console.log("I m being initialised");
 	var gridsize = mazeHeight1/rows1;
 	aTank.tankCenterX = (randcolumn * gridsize) + gridsize / 30;
 	aTank.tankCenterY = (randrow * gridsize) + gridsize / 30;
@@ -98,6 +104,15 @@ function keyDownHandler(e) {
 	}
 	if(e.keyCode == 70){
 			remotePlayers[0].leftClick = true;
+		socket.emit("shoot player", {
+			leftClick: remotePlayers[0].leftClick,
+			reloading: remotePlayers[0].reloading,
+			bulletPack: remotePlayers[0].bulletPack,
+			bulletShot: remotePlayers[0].bulletShot,
+			bulletReload: remotePlayers[0].bulletReload,
+			bullet: remotePlayers[0].bullet,
+			roomno: remotePlayers[0].roomno
+		});
 		console.log("player "+remotePlayers[0].id + " left-clicked");
 }
 	if(e.keyCode == 82){
@@ -205,55 +220,63 @@ function shootTank(aTank, tankImage) {
 		// reset each bullet and fill bulletPack
 		aTank.bulletShot = aTank.bulletPack;
 	}
- 	if (aTank.bulletShot > 0 && aTank.leftClick){
+ 	if (aTank.bulletShot > 0 && aTank.leftClick1){
 			shootBullet(aTank.bullet[aTank.bulletShot - 1], aTank);
-	//**--	bulletAudio.pause();
-	//**--	bulletAudio.currentTime = 0;
-	//**--	bulletAudio.play()
+		bulletAudio.pause();
+		bulletAudio.currentTime = 0;
+		bulletAudio.play()
+			aTank.leftClick1 = false;
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
-		console.log("bullet programmed to kill");
+		//console.log("bullet programmed to kill");
 }
 
 	// shoot the bullets ready for shoot
-
+for(var j = 0;j<remotePlayers.length;j++){
  	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
-		aTank.bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-aTank.tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-aTank.tankCenterY),2));
-	//**--	if((aTank.bullTank <= aTank.tankRadius) && (aTank.bullet[i].shoot == true) && (xxxx==0)){
+		remotePlayers[j].bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-remotePlayers[j].tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-remotePlayers[j].tankCenterY),2));
+		if((remotePlayers[j].bullTank <= remotePlayers[j].tankRadius) && (aTank.bullet[i].shoot == true) && (aTank.xxxx==0)){
 
-	/***--		endAudio.play();
+			endAudio.play();
 				date1= new Date().getTime();
 				var xboom = 0
 				var ct = document.getElementById('maze').getContext("2d");
-				xxxx=1
+				aTank.xxxx=1
 				// Creating circles for animation
 				for (var i = 0; i < 500; i++) {
-					circles.push(new create(aTank));
-				}--**/
+					circles.push(new create(remotePlayers[j]));
+				}
 
-	/*--		b = 0;
-				shootx=false;
-				shoot1=false;
-	//**--		destroyTank(aTank);--**/
-				
-	/**--		setTimeout(function(){
-				initialize();
-					xxxx=0;
-					shoot1=true;
-					shootx=true;
-				},1000);--**/
-	//**--}
+			b = 0;
+				aTank.shootx=false;
+				remotePlayers[j].shoot1=false;
+			destroyTank(remotePlayers[j]);
+		
+			setTimeout(function(){	
+				initialize(remotePlayers[j],1);
+				if(remotePlayers[j] == remotePlayers[0]){
+					//remotePlayers[0] = theTank;
+					theTank = remotePlayers[0];
+					}/*else{
+						aTank.bullet[i].shoot = false;
+					}*/
+					aTank.xxxx=0;
+					remotePlayers[j].shoot1=true;
+					aTank.shootx=true;
+				//	aTank.bullet[i].shoot = false;
+				},1000);
+	}
 		if (aTank.bullet[i].shoot) {
 			Shoot(aTank.bullet[i], aTank);
-			console.log("a bullet sent to kill");
+			//console.log("a bullet sent to kill");
 		}
-		if(aTank.bullTank >= aTank.tankRadius){
-//**--		if (shoot1==true){
-				drawTank(aTank, tankImage);
-//**--		}
+		if(remotePlayers[j].bullTank >= remotePlayers[j].tankRadius){
+		if (remotePlayers[j].shoot1==true){
+				drawTank(remotePlayers[j], tankImage);
+		}
 		}
 	}
-
+}
 
  	aTank.bulletReload = false;
  	aTank.leftClick = false;
@@ -268,7 +291,7 @@ function drawBullet(aBullet){
 	context.fill();
 	context.closePath();
 //	leftClick = false;
-	console.log("a bullet is drawn");
+	//console.log("a bullet is drawn");
 }
 
 function shootBullet(aBullet, aTank) {
@@ -342,11 +365,11 @@ function Shoot(aBullet, aTank){
 		aBullet.collisions++;
 	}
 
-//**--	if (shootx==true){
+	if (aTank.shootx==true){
 		aBullet.bulletX -=  aBullet.dbulletX * (Math.cos((180 - aBullet.bulletAngle) * Math.PI / 180));
 		aBullet.bulletY -=  aBullet.dbulletY * (Math.sin((180 - aBullet.bulletAngle) * Math.PI / 180));
 		drawBullet(aBullet);
-//**--	}
+	}
 		if(aBullet.collisions > 12){
 			aBullet.shoot = false;
 			aBullet.collisions = 0;

@@ -8,8 +8,8 @@ var ctx = canvas.getContext("2d");
 var	remotePlayers,
 	localPlayer;
 
-var shootx=true;
-var shoot1=true;
+//var shootx=true;
+//var shoot1=true;
 
 var b = 0;
 
@@ -37,12 +37,30 @@ function init(){
 	}
 }
 
-function initialize(){
-	initializeTank(theTank);
-	for (var i = 0; i < theTank.bulletPack; i++)
-    	initializeBullet(theTank, theTank.bullet[i]);
-	theTank.bulletReload = true;
-	theTank.bulletShot = theTank.bulletPack;
+function initialize(Tank,number){
+	initializeTank(Tank);
+	for (var i = 0; i < Tank.bulletPack; i++)
+    	initializeBullet(Tank, Tank.bullet[i]);
+	Tank.bulletReload = true;
+	Tank.bulletShot = Tank.bulletPack;
+	if(number == 1){
+	socket.emit("renew player", {
+			id: Tank.id,
+			roomno: Tank.roomno,
+			x: Tank.tankCenterX,
+			y: Tank.tankCenterY,
+			rotorX: Tank.rotorX,
+			rotorY: Tank.rotorY,
+			angle: Tank.rotorAngle,
+			bullet: Tank.bullet,
+			upPressed: Tank.upPressed,
+			downPressed: Tank.downPressed,
+			rightPressed: Tank.rightPressed,
+			leftPressed: Tank.leftPressed,
+			leftClick: Tank.leftClick,
+			reloading: Tank.reloading
+		});
+}
 }
 
 function sleep(ms) {
@@ -74,6 +92,9 @@ async function setEventHandlers() {
 
 	// Player move message received
 	socket.on("shoot player", onShootPlayer);
+
+	// renew Player
+	socket.on("renew player", onRenewPlayer);
 
 	// Player removed message received
 	socket.on("remove player", onRemovePlayer);	
@@ -113,6 +134,30 @@ function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
 };
 
+// renew Player
+function onRenewPlayer(data){
+	var renewPlayer = playerById(data.id);
+
+	// Player not found
+	if (!renewPlayer) {
+		console.log("Player not found: "+data.id);
+		return;
+	};
+
+     renewPlayer.x = data.tankCenterX;
+     renewPlayer.y = data.tankCenterY;
+     renewPlayer.rotorX = data.rotorX;
+     renewPlayer.rotorY = data.rotorY;
+     renewPlayer.angle = data.rotorAngle;
+     renewPlayer.bullet = data.bullet;
+     renewPlayer.upPressed = data.upPressed;
+     renewPlayer.downPressed = data.downPressed;
+     renewPlayer.rightPressed = data.rightPressed;
+     renewPlayer.leftPressed = data.leftPressed;
+     renewPlayer.leftClick = data.leftClic;
+     renewPlayer.reloading = data.reloading;
+}
+
 // New player
 function onNewPlayer(data) {
 	console.log("New player connected: "+data.id);
@@ -122,7 +167,7 @@ function onNewPlayer(data) {
 	// Initialise the new player
 	var newPlayer = new Tank();
 	initializeTank(newPlayer);
-
+	newPlayer.id = data.id;
 	newPlayer.tankCenterX = data.x;
 	newPlayer.tankCenterY = data.y;
 	newPlayer.rotorX = data.rotorX;
@@ -184,7 +229,7 @@ function onShootPlayer(data){
 	shootPlayer.bulletShot = data.bulletShot;
 	shootPlayer.bulletPack = data.bulletPack;
 	shootPlayer.bulletReload = data.bulletReload;
-	shootPlayer.leftClick = data.leftClick;
+	shootPlayer.leftClick1 = data.leftClick1;
 	shootPlayer.reloading = data.reloading;
 	//console.log("in onShootPlayer leftclick: "+shootPlayer.leftClick+" of "+shootPlayer.id);
 	
@@ -217,7 +262,7 @@ function update() {
 			roomno: remotePlayers[0].roomno
 		});
 
-		socket.emit("shoot player", {
+		/*socket.emit("shoot player", {
 			leftClick: remotePlayers[0].leftClick,
 			reloading: remotePlayers[0].reloading,
 			bulletPack: remotePlayers[0].bulletPack,
@@ -225,7 +270,7 @@ function update() {
 			bulletReload: remotePlayers[0].bulletReload,
 			bullet: remotePlayers[0].bullet,
 			roomno: remotePlayers[0].roomno
-		});
+		});*/
 	// make leftClick false after once emitting true
 	//remotePlayers[0].leftClick = false; // But creating problem of bullet disappearing
 	//console.log("in update loop emitted shoot player by "+remotePlayers[0].id+" with leftclick "+remotePlayers[0].leftClick);
