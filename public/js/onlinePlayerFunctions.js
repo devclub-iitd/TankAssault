@@ -73,8 +73,8 @@ function Bullet() {
 }
 
 function initializeBullet(aTank, aBullet){
-	aBullet.bulletX = aTank.tankCenterX + aTank.tankRadius;
-	aBullet.bulletY = aTank.tankCenterY + aTank.tankRadius;
+	aBullet.bulletX = aTank.tankCenterX ;//+ aTank.tankRadius;
+	aBullet.bulletY = aTank.tankCenterY; //+ aTank.tankRadius;
 	aBullet.bulletAngle = aTank.rotorAngle;
 	aBullet.bulletRadius = aTank.rotorWidth * 3 / 7;
 	aBullet.dbulletX = -2 * aBullet.bulletRadius / 3;
@@ -116,7 +116,7 @@ function keyDownHandler(e) {
 		console.log("player "+remotePlayers[0].id + " left-clicked");
 }
 	if(e.keyCode == 82){
-		theTank.reloading = true;
+		remotePlayers[0].reloading = true;
 		setTimeout(Reload,3000);
 		document.getElementById('audioreload').loop=false;
  		document.getElementById('audioreload').play();
@@ -128,15 +128,19 @@ function keyUpHandler(e) {
 	switch (e.keyCode) {
 		case 38:
 			remotePlayers[0].upPressed = false;
+			isMoving = false;
 			break;
 		case 40:
 			remotePlayers[0].downPressed = false;
+			isMoving = false;
 			break;
 		case 39:
 			remotePlayers[0].rightPressed = false;
+			isMoving = false;
 			break;
 		case 37:
 			remotePlayers[0].leftPressed = false;
+			isMoving = false;
 			break;
 		default:
 			// none of these keys
@@ -256,7 +260,8 @@ for(var j = 0;j<remotePlayers.length;j++){
 				initialize(remotePlayers[j],1);
 				if(remotePlayers[j] == remotePlayers[0]){
 					//remotePlayers[0] = theTank;
-					theTank = remotePlayers[0];
+					//theTank = remotePlayers[0];
+					newOrDeath = true;
 					}/*else{
 						aTank.bullet[i].shoot = false;
 					}*/

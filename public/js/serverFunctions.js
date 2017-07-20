@@ -7,7 +7,7 @@ var ctx = canvas.getContext("2d");
 
 var	remotePlayers,
 	localPlayer;
-
+var room;
 //var shootx=true;
 //var shoot1=true;
 
@@ -22,7 +22,8 @@ var wallLeft = 0;
 var wallRight = 0;
 var wallTop = 0;
 var wallBottom = 0;
-
+var isMoving = false;
+var newOrDeath = false;
 function init(){
 	
 	// Initialise socket connection
@@ -114,18 +115,18 @@ function onMazeForm(Player){
 function onSocketConnected() {
 	// Send local player data to the game server
 		socket.emit("new player", {
-			x: theTank.tankCenterX,
-			y: theTank.tankCenterY,
-			rotorX: theTank.rotorX,
-			rotorY: theTank.rotorY,
-			angle: theTank.rotorAngle,
-			bulletArray: theTank.bullet,
-			upPressed: theTank.upPressed,
-			downPressed: theTank.downPressed,
-			rightPressed: theTank.rightPressed,
-			leftPressed: theTank.leftPressed,
-			leftClick: theTank.leftClick,
-			reloading: theTank.reloading
+			//x: theTank.tankCenterX,
+			//y: theTank.tankCenterY,
+			//rotorX: theTank.rotorX,
+			//rotorY: theTank.rotorY,
+			//angle: theTank.rotorAngle,
+			//bulletArray: theTank.bullet,
+			//upPressed: theTank.upPressed,
+			//downPressed: theTank.downPressed,
+			//rightPressed: theTank.rightPressed,
+			//leftPressed: theTank.leftPressed,
+			//leftClick: theTank.leftClick,
+			//reloading: theTank.reloading
 		});
 };
 
@@ -178,8 +179,8 @@ function onNewPlayer(data) {
 	newPlayer.bulletShot = data.bulletShot;
 	newPlayer.roomno = data.roomno;
 	//console.log("bulletPack: " + newPlayer.bulletPack);
-	//for (var i = 0; i < newPlayer.bulletPack; i++)
-    //	newPlayer.bullet.push(new Bullet());
+	for (var i = 0; i < newPlayer.bulletPack; i++)
+    	newPlayer.bullet.push(new Bullet());
 
 	for (var i = 0; i < newPlayer.bulletPack; i++)
     	initializeBullet(newPlayer, newPlayer.bullet[i]);
@@ -251,9 +252,15 @@ function onRemovePlayer(data) {
 /**************************************************
 ** GAME UPDATE
 **************************************************/
-function update() {
+function update(word) {
 	// Update local player and check for change
 		// Send local player data to the game server
+if(!word){
+	if(remotePlayers[0].leftPressed || remotePlayers[0].upPressed || remotePlayers[0].downPressed || remotePlayers[0].rightPressed){
+		isMoving = true;
+	}
+}
+	if((isMoving || newOrDeath) && (!word)){
 		socket.emit("move player", {
 			upPressed: remotePlayers[0].upPressed,
 			downPressed: remotePlayers[0].downPressed,
@@ -261,19 +268,16 @@ function update() {
 			leftPressed: remotePlayers[0].leftPressed,
 			roomno: remotePlayers[0].roomno
 		});
-
-		/*socket.emit("shoot player", {
-			leftClick: remotePlayers[0].leftClick,
-			reloading: remotePlayers[0].reloading,
-			bulletPack: remotePlayers[0].bulletPack,
-			bulletShot: remotePlayers[0].bulletShot,
-			bulletReload: remotePlayers[0].bulletReload,
-			bullet: remotePlayers[0].bullet,
-			roomno: remotePlayers[0].roomno
-		});*/
-	// make leftClick false after once emitting true
-	//remotePlayers[0].leftClick = false; // But creating problem of bullet disappearing
-	//console.log("in update loop emitted shoot player by "+remotePlayers[0].id+" with leftclick "+remotePlayers[0].leftClick);
+	}else if(word){
+		socket.emit("move player", {
+			upPressed: false,
+			downPressed: false,
+			rightPressed: false,
+			leftPressed: false,
+			roomno: room
+		});
+	}
+	newOrDeath = false;
 }
 
 

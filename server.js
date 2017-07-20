@@ -117,7 +117,7 @@ function onNewPlayer(data) {
   var newPlayer = new Player.Player(); // same as new Tank();
   newPlayer.id = this.id;
   newPlayer.roomno = roomno;
-  newPlayer.tankCenterX = data.x;
+  /*newPlayer.tankCenterX = data.x;
   newPlayer.tankCenterY = data.y;
   newPlayer.rotorX = data.rotorX;
   newPlayer.rotorY = data.rotorY;
@@ -128,9 +128,9 @@ function onNewPlayer(data) {
   newPlayer.leftPressed = data.leftPressed;
   newPlayer.rightPressed = data.rightPressed;
   newPlayer.leftClick = data.leftClick;
-  newPlayer.reloading = data.reloading;
+  newPlayer.reloading = data.reloading;*/
   Player.Tank(newPlayer); // Same as initializeTank(aTank)
-
+  
   // We had to use this new way of initialize because of require and exports method of using functions of other javascript.
 
   // Broadcast new player to connected socket clients
