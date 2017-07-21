@@ -3,6 +3,10 @@
 **************************************************/
 // the tanks
 var theTank = null;
+// score
+var myscore = 0;
+// max health
+var myHealth = 10000;
 
 function Tank(){
 	// tank parameters
@@ -218,7 +222,7 @@ function drawTank(aTank, tankImage){
         ctx.restore();
 }
 
-function shootTank(aTank, tankImage) {
+function shootTank(aTank, tankImage, itsMe = false) {
 	// Some Shooting....
 	if (aTank.bulletReload){
 		// reset each bullet and fill bulletPack
@@ -233,15 +237,16 @@ function shootTank(aTank, tankImage) {
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
 		//console.log("bullet programmed to kill");
-}
-
+	}
+	
 	// shoot the bullets ready for shoot
-for(var j = 0;j<remotePlayers.length;j++){
- 	for (var i = aTank.bulletPack - 1; i >=0 ; i--){
-		remotePlayers[j].bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-remotePlayers[j].tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-remotePlayers[j].tankCenterY),2));
-		if((remotePlayers[j].bullTank <= remotePlayers[j].tankRadius) && (aTank.bullet[i].shoot == true) && (aTank.xxxx==0)){
-
-			endAudio.play();
+	for(var j = 0;j<remotePlayers.length;j++){
+		for (var i = aTank.bulletPack - 1; i >=0 ; i--){
+			remotePlayers[j].bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-remotePlayers[j].tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-remotePlayers[j].tankCenterY),2));
+			if((remotePlayers[j].bullTank <= remotePlayers[j].tankRadius) && (aTank.bullet[i].shoot == true) && (aTank.xxxx==0)){
+				if(itsMe && j != 0) myscore++;
+				if (j == 0) myHealth -= 3500;
+				endAudio.play();
 				date1= new Date().getTime();
 				var xboom = 0
 				var ct = document.getElementById('maze').getContext("2d");
@@ -250,46 +255,46 @@ for(var j = 0;j<remotePlayers.length;j++){
 				for (var i = 0; i < 500; i++) {
 					circles.push(new create(remotePlayers[j]));
 				}
-
-			b = 0;
+				
+				b = 0;
 				aTank.shootx=false;
 				remotePlayers[j].shoot1=false;
-			destroyTank(remotePlayers[j]);
-		
-			setTimeout(function(){	
-				initialize(remotePlayers[j],1);
-				if(remotePlayers[j] == remotePlayers[0]){
-					//remotePlayers[0] = theTank;
-					//theTank = remotePlayers[0];
-					newOrDeath = true;
+				destroyTank(remotePlayers[j]);
+				
+				setTimeout(function(){	
+					initialize(remotePlayers[j],1);
+					if(remotePlayers[j] == remotePlayers[0]){
+						//remotePlayers[0] = theTank;
+						//theTank = remotePlayers[0];
+						newOrDeath = true;
 					}/*else{
-						aTank.bullet[i].shoot = false;
+					aTank.bullet[i].shoot = false;
 					}*/
 					aTank.xxxx=0;
 					remotePlayers[j].shoot1=true;
 					aTank.shootx=true;
-				//	aTank.bullet[i].shoot = false;
+						aTank.bullet[i].shoot = false;
 				},1000);
+			}
+			if (aTank.bullet[i].shoot) {
+				Shoot(aTank.bullet[i], aTank);
+				//console.log("a bullet sent to kill");
+			}
+			if(remotePlayers[j].bullTank >= remotePlayers[j].tankRadius){
+				if (remotePlayers[j].shoot1==true){
+					var tankImage1;
+					if (j == 0) tankImage1 = tank1image;
+					else if (j % 3 == 1) tankImage1 = tank2image;
+					else if (j % 3 == 2) tankImage1 = tank3image;
+					else tankImage1 = tank4image;
+					drawTank(remotePlayers[j], tankImage1);
+				}
+			}
+		}
 	}
-		if (aTank.bullet[i].shoot) {
-			Shoot(aTank.bullet[i], aTank);
-			//console.log("a bullet sent to kill");
-		}
-		if(remotePlayers[j].bullTank >= remotePlayers[j].tankRadius){
-		if (remotePlayers[j].shoot1==true){
-			var tankImage1;
-			if (j == 0) tankImage1 = tank1image;
-		 		else if (j % 3 == 1) tankImage1 = tank2image;
-				else if (j % 3 == 2) tankImage1 = tank3image;
-				else tankImage1 = tank4image;
-				drawTank(remotePlayers[j], tankImage1);
-		}
-		}
-	}
-}
-
- 	aTank.bulletReload = false;
- 	aTank.leftClick = false;
+	
+	aTank.bulletReload = false;
+	aTank.leftClick = false;
 }
 
 

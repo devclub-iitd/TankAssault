@@ -24,9 +24,10 @@ function playGame() {
 			 		else if (i % 3 == 1) tankImage = tank2image;
 					else if (i % 3 == 2) tankImage = tank3image;
 					else tankImage = tank4image;
-					shootTank(remotePlayers[i], tankImage);
+					if (i == 0) shootTank(remotePlayers[i], tankImage, true);
+					else shootTank(remotePlayers[i], tankImage);
 			};
-		myScore.text="SCORE: " + 7;
+		myScore.text="SCORE: " + myscore;
     	myScore.update();
 		changeHealth();
 	}
@@ -48,7 +49,7 @@ async function generate() {
 	// caution: this time depends on network speed
 	//          when moving to actual online server test and increase this time to avoid previous
 	//          'double start' errors
-	await sleep(12000);
+	await sleep(6000);
 	//theTank = remotePlayers[0];
 	//initialize(theTank,0);
 	//await sleep(5000);

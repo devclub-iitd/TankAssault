@@ -22,7 +22,7 @@ function component(width, height, color, x, y, type) {
 
 
 // health
-var width = 10000;
+//var width = 10000;
 // this is the function to change the health of the player
 // currently it justs decreases the health with time
 function changeHealth() {
@@ -30,9 +30,12 @@ function changeHealth() {
   
  // var id = setInterval(frame, 10);
  
-      width-=0.05; 
-      elem.style.width = width/100 + '%';
-	if(width <= 0) alert("You are Dead!!");
+      //myHealth -= 0.05; 
+      elem.style.width = myHealth/100 + '%';
+	if(myHealth <= 0) {
+		window.alert("You are Dead!");
+        window.location = "/";
+	}
   
 }
 
