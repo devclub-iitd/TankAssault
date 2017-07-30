@@ -46,8 +46,10 @@ Player2ctx.textBaseline="middle";
 // Displaing bullets
 var bullet1canvas=document.getElementById("player1bullets");
 var bullet1ctx=bullet1canvas.getContext("2d");
+bullet1ctx.fillStyle = "#d6f5d6";
 var bullet2canvas=document.getElementById("player2bullets");
 var bullet2ctx=bullet2canvas.getContext("2d");
+bullet1ctx.fillStyle = "#d6f5d6";
 var img=document.getElementById("bullet");
 
 maze.prototype.maintainStats = function() {
@@ -59,6 +61,7 @@ maze.prototype.maintainStats = function() {
 	 // display the remaining bullets
 	 var bullet1start = 10;
 	 bullet1ctx.clearRect(0, 0, bullet1canvas.width, bullet1canvas.height);
+	 //bullet1ctx.fillRect(0, 0, bullet1canvas.width, bullet1canvas.height);
 	 for (var i = tank1.bulletShot - 1; i >=0 ; i--){
 	 	bullet1ctx.drawImage(img, bullet1start, 10, 16, 40);
 	 	bullet1start = bullet1start + 16;
@@ -101,6 +104,7 @@ maze.prototype.playGame = function() {
 }
 
 function generate() {
+	$('#maze').show();
 	makeMaze();
 	theMaze.draw();
 	tank1 = new Tank();

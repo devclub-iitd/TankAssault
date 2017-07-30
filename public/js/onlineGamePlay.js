@@ -41,9 +41,9 @@ async function generate() {
 	if (onceLoaded == 0) onceLoaded++;
 	init();
 	
-	$('#maze').hide();
+	//$('#maze').hide();
 	$('#loading').show();
-	$('#myBar').hide();
+	//$('#myBar').hide();
 	//await sleep(1000);
 	setEventHandlers();
 

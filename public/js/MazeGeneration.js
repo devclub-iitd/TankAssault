@@ -84,10 +84,17 @@ function makeNeedleWall(start, dist, pos)
 function makeMaze() {
 	// maze parameters
 	var rows =  Math.floor(Math.random() * 4) + 5,
-		columns = Math.floor(Math.random() * 5) + 5,
+		columns = Math.floor(Math.random() * 5) + 7,
 	 	gridsize = (mazeHeight / rows),
 	 	mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	
+	while(columns * gridsize > 1100 || columns * gridsize < 800)
+	{
+		console.log("in col loop");
+		rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze
+		columns = Math.floor(Math.random() * 5) + 10; // columns of maze
+		gridsize = mazeHeight / rows; // grid size of maze
+	}
 	console.log("on client gridsize = "+gridsize);
 	
 	var mazeStyle;
