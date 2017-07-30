@@ -11,6 +11,8 @@ var room;
 //var shootx=true;
 //var shoot1=true;
 
+// some sleep
+var universalSleepTime_dependsOnNetwork = 5000;
 var b = 0;
 
 // maze parameters
@@ -69,8 +71,6 @@ function sleep(ms) {
 }
 
 async function setEventHandlers() {
-		// Socket maze
-	socket.on("Player", onMazeForm);
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
@@ -78,27 +78,39 @@ async function setEventHandlers() {
 	socket.on("connectToRoom", function(data){
 		console.log(data);
 	});	
-
+	// Socket maze
+	socket.on("Player", onMazeForm);
+	//await sleep(1000);
+	// New player message received
+	socket.on("new player", onNewPlayer);
 	// Socket connection successful
 	socket.on("connect", onSocketConnected);	
 
 	// Socket disconnection
 	socket.on("disconnect", onSocketDisconnect);
-
-	// New player message received
-	socket.on("new player", onNewPlayer);
-
-	// Player move message received
-	socket.on("move player", onMovePlayer);
-
-	// Player move message received
-	socket.on("shoot player", onShootPlayer);
-
+	//await sleep(100);
+	
 	// renew Player
 	socket.on("renew player", onRenewPlayer);
-
+	console.log("just before sleep!");
+	await sleep(universalSleepTime_dependsOnNetwork);
+	while(remotePlayers.length == 0){
+		onSocketConnected();
+		console.log("again calling onSocketConnected manually as earlier call did not respond");
+		await sleep(2000);
+	}
+	console.log("i am awake now!");
+	// Player move message received
+	socket.on("move player", onMovePlayer);
+	//await sleep(100);
+	// Player move message received
+	socket.on("shoot player", onShootPlayer);
+	//await sleep(100);
+	
+	//await sleep(100);
 	// Player removed message received
 	socket.on("remove player", onRemovePlayer);	
+	//await sleep(100);
 };
 
 // Maze form
@@ -114,7 +126,8 @@ function onMazeForm(Player){
 // Socket connected
 function onSocketConnected() {
 	// Send local player data to the game server
-		socket.emit("new player", {
+	console.log("i have sent new player message to the server");	
+	socket.emit("new player", {
 			//x: theTank.tankCenterX,
 			//y: theTank.tankCenterY,
 			//rotorX: theTank.rotorX,
@@ -161,7 +174,7 @@ function onRenewPlayer(data){
 
 // New player
 function onNewPlayer(data) {
-	console.log("New player connected: "+data.id);
+	console.log("onNewPlayer called as server sent 'new player' so New player connected: "+data.id);
 	
 	// check if data has its values
 	
@@ -290,8 +303,8 @@ function playerById(id) {
 	for (i = 0; i < remotePlayers.length; i++) {
 		if (remotePlayers[i].id == id)
 			return remotePlayers[i];
-	};
+	}
 	
 	return false;
-};
+}
 

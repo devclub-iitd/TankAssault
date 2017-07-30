@@ -114,6 +114,7 @@ for(var i = 0;i<roomno;i++){
 // New player has joined
 function onNewPlayer(data) {
   // Create a new player
+	console.log("on server.js onNewPlayer function called.");
   var newPlayer = new Player.Player(); // same as new Tank();
   newPlayer.id = this.id;
   newPlayer.roomno = roomno;

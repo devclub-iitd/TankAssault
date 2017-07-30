@@ -49,7 +49,8 @@ async function generate() {
 	// caution: this time depends on network speed
 	//          when moving to actual online server test and increase this time to avoid previous
 	//          'double start' errors
-	await sleep(6000);
+	await sleep(universalSleepTime_dependsOnNetwork);
+	while(remotePlayers.length == 0) await sleep(100);
 	//theTank = remotePlayers[0];
 	//initialize(theTank,0);
 	//await sleep(5000);
