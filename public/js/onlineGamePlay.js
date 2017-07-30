@@ -44,6 +44,7 @@ async function generate() {
 	$('#maze').hide();
 	$('#loading').show();
 	$('#myBar').hide();
+	//await sleep(1000);
 	setEventHandlers();
 
 	// caution: this time depends on network speed

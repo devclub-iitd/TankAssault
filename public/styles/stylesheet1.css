@@ -39,6 +39,12 @@ body{
 	background-color: #d3d3d3;
 }
 
+#loading {
+	padding: 40px;
+	color: green;
+	font-weight: 600;
+	font-size: 30px;
+}
 #player1score {
 	width: 100px;
 	/*height: 200px;*/

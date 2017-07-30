@@ -71,6 +71,7 @@ function sleep(ms) {
 }
 
 async function setEventHandlers() {
+	//await sleep(1000);
 	// Keyboard
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
@@ -94,9 +95,12 @@ async function setEventHandlers() {
 	socket.on("renew player", onRenewPlayer);
 	console.log("just before sleep!");
 	await sleep(universalSleepTime_dependsOnNetwork);
-	while(remotePlayers.length == 0){
-		onSocketConnected();
-		console.log("again calling onSocketConnected manually as earlier call did not respond");
+	if(remotePlayers.length == 0){
+		//onSocketConnected();
+		console.log("again calling onSocketConnected manually needed as earlier call did not respond but results in errors");
+		console.log("adopting different technique");
+		window.alert("Sorry, the request may take longer than expected.\nCheck your internet connectivity");
+        window.location = "/OnlinePlay.ejs/";
 		await sleep(2000);
 	}
 	console.log("i am awake now!");

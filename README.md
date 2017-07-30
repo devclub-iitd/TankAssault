@@ -12,6 +12,8 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 
 ![alt text](public/images/game.png)
 
+### Visit https://tank-assault.herokuapp.com/
+
 ### Controls for 1 Player game: 
 
 | Controls | Keys |
@@ -41,7 +43,6 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 |Reload:| Press Z
 
 
-### Visit https://floating-shore.herokuapp.com/
 ### To run locally:
 
  - Install node heroku cli on your system.
@@ -49,7 +50,7 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
     $ git remote add heroku https://git.heroku.com/tank-assualt.git
     $ npm install
     $ heroku local web
-	$ visit http://localhost:5000
+    $ visit http://localhost:5000
  ```
  - Open the Multiplayer in different windows to play! 
 
