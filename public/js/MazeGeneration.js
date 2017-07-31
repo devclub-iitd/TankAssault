@@ -88,7 +88,7 @@ function makeMaze() {
 	 	gridsize = (mazeHeight / rows),
 	 	mazeStyledecision = Math.floor(Math.random() * 2) + 1;
 	
-	while(columns * gridsize > 1100 || columns * gridsize < 800)
+	while(columns * gridsize > 900 || columns * gridsize < 800)
 	{
 		console.log("in col loop");
 		rows =  Math.floor(Math.random() * 5) + 5;  // rows of maze

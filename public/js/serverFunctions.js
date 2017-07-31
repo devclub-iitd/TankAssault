@@ -12,7 +12,7 @@ var room;
 //var shoot1=true;
 
 // some sleep
-var universalSleepTime_dependsOnNetwork = 5000;
+var universalSleepTime_dependsOnNetwork = 3000;
 var b = 0;
 
 // maze parameters
@@ -98,8 +98,8 @@ async function setEventHandlers() {
 	if(remotePlayers.length == 0){
 		//onSocketConnected();
 		console.log("again calling onSocketConnected manually needed as earlier call did not respond but results in errors");
-		console.log("adopting different technique");
-		window.alert("Sorry, the request may take longer than expected.\nCheck your internet connectivity");
+		console.log("adopting different ");
+	//	window.alert("Sorry, the request may take longer than expected.\nCheck your internet connectivity");
         window.location = "/OnlinePlay.ejs/";
 		await sleep(2000);
 	}

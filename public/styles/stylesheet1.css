@@ -22,24 +22,27 @@ body{
   /*height: 100%;*/
   font-size: 1em;
 }
-
+#gameI{
+	margin-top: 20px;
+	
+}
 #wrapper {
 	width: 100%;
 	margin: 0 auto;
 	/*margin-bottom: 50px;*/
 	padding-bottom: 40px;
-	max-width: 1200px;
+	max-width: 1400px;
 	height: 94%;
 	/*background-color: #222a33;*/
-	background-color: #d6f5d6;
+	background-color: #222a33;/*#d6f5d6;*/
 }
 #wrapperFullScreen {
 	width: 100%;
 	margin: 0 auto;
 	margin-bottom: 50px;
 	max-width: 1500px;
-	/*background-color: #d3d3d3;*/
-	background-color: #d6f5d6;
+	background-color: #d3d3d3;
+	/*background-color: #d6f5d6;*/
 }
 
 #loading {
@@ -198,6 +201,7 @@ a:hover, a:active, a:focus {
 	display: block;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	padding-left: 300px;
 	color: white;
 	font-weight: 400;
 	text-decoration: none;
@@ -347,7 +351,7 @@ main, aside {
 
 }
 
-@media (max-width: 1400px){
+@media (max-width: 1000px){
 #squeezed {
 	display: block;
 }
