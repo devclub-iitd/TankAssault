@@ -7,7 +7,6 @@ var theTank = null;
 var myscore = 0;
 // max health
 var myHealth = 10000;
-
 function Tank(){
 	// tank parameters
 	this.tankCenterX = 0;
@@ -160,47 +159,10 @@ function Reload(){
 	remotePlayers[0].leftClick = false;
 	remotePlayers[0].reloading = false;
 }
-/*function drawTank(aTank, color1, color2, color3, color4){
-		var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
-		grd.addColorStop(0, color1);
-		grd.addColorStop(0.4, color2);
-		grd.addColorStop(1, color3);
-
-		ctx.beginPath();
-		ctx.fillStyle = grd;
-		ctx.arc(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, 0, 2 * Math.PI);
-		ctx.fill();
-		ctx.closePath();
-	
-        // first save the untranslated/unrotated context
-        ctx.save();
-	    ctx.beginPath();
-        // move the rotation point to the center of the rect
-        ctx.translate( aTank.tankCenterX, aTank.tankCenterY );
-        // rotate the rect
-        ctx.rotate(aTank.rotorAngle * Math.PI / 180);
-	    // draw the rect on the transformed context
-        // Note: after transforming [0,0] is visually [x,y]
-        //       so the rect needs to be offset accordingly when drawn
-
-	    ctx.fillStyle = color4;
-		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);
-        // restore the context to its untranslated/unrotated state
-        ctx.restore();
-}*/
 function drawTank(aTank, tankImage){
-		/*var grd=ctx.createRadialGradient(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius / 6, aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius);
-		grd.addColorStop(0, color1);
-		grd.addColorStop(0.4, color2);
-		grd.addColorStop(1, color3);*/
-
+	
 		var height = aTank.tankRadius * 2,
 			width = height;
-		/*ctx.beginPath();
-		ctx.fillStyle = grd;
-		ctx.arc(aTank.tankCenterX, aTank.tankCenterY, aTank.tankRadius, 0, 2 * Math.PI);
-		ctx.fill();
-		ctx.closePath();*/
 	
         // first save the untranslated/unrotated context
         ctx.save();
@@ -214,8 +176,6 @@ function drawTank(aTank, tankImage){
         // Note: after transforming [0,0] is visually [x,y]
         //       so the rect needs to be offset accordingly when drawn
 
-	    /*ctx.fillStyle = color4;
-		ctx.fillRect( -aTank.rotorLength / 2 - 10, -aTank.rotorWidth / 2, aTank.rotorLength, aTank.rotorWidth);*/
 	
         context.drawImage(tankImage,  -width / 2, -height / 2,  width, height);
         // restore the context to its untranslated/unrotated state
@@ -236,14 +196,16 @@ function shootTank(aTank, tankImage, itsMe = false) {
 			aTank.leftClick1 = false;
 			aTank.leftClick = false;
 			aTank.bulletShot -= 1;
-		//console.log("bullet programmed to kill");
 	}
 	
 	// shoot the bullets ready for shoot
 	for(var j = 0;j<remotePlayers.length;j++){
+		shot = 0;
 		for (var i = aTank.bulletPack - 1; i >=0 ; i--){
 			remotePlayers[j].bullTank = Math.sqrt(Math.pow((aTank.bullet[i].bulletX-remotePlayers[j].tankCenterX),2) + Math.pow((aTank.bullet[i].bulletY-remotePlayers[j].tankCenterY),2));
 			if((remotePlayers[j].bullTank <= remotePlayers[j].tankRadius) && (aTank.bullet[i].shoot == true) && (aTank.xxxx==0)){
+				
+				aTank.bullet[i].collisions = 13;
 				if(itsMe && j != 0) myscore++;
 				if (j == 0) myHealth -= 3500;
 				endAudio.play();
@@ -255,30 +217,25 @@ function shootTank(aTank, tankImage, itsMe = false) {
 				for (var i = 0; i < 500; i++) {
 					circles.push(new create(remotePlayers[j]));
 				}
-				
 				b = 0;
-				aTank.shootx=false;
 				remotePlayers[j].shoot1=false;
 				destroyTank(remotePlayers[j]);
 				
-				setTimeout(function(){	
+				//setTimeout(function(){	
 					initialize(remotePlayers[j],1);
 					if(remotePlayers[j] == remotePlayers[0]){
-						//remotePlayers[0] = theTank;
-						//theTank = remotePlayers[0];
 						newOrDeath = true;
-					}/*else{
-					aTank.bullet[i].shoot = false;
-					}*/
+					}
 					aTank.xxxx=0;
 					remotePlayers[j].shoot1=true;
 					aTank.shootx=true;
-						aTank.bullet[i].shoot = false;
-				},1000);
+					
+					aTank.bullet[i].shoot = false;
+					console.log("i " + aTank.bullet[i].collisions);
+				//},1000);
 			}
 			if (aTank.bullet[i].shoot) {
 				Shoot(aTank.bullet[i], aTank);
-				//console.log("a bullet sent to kill");
 			}
 			if(remotePlayers[j].bullTank >= remotePlayers[j].tankRadius){
 				if (remotePlayers[j].shoot1==true){
@@ -305,8 +262,6 @@ function drawBullet(aBullet){
 	context.arc(aBullet.bulletX, aBullet.bulletY, aBullet.bulletRadius, 0, 2 * Math.PI);
 	context.fill();
 	context.closePath();
-//	leftClick = false;
-	//console.log("a bullet is drawn");
 }
 
 function shootBullet(aBullet, aTank) {
