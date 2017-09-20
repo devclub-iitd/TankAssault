@@ -12,7 +12,8 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 
 ![alt text](public/images/game.png)
 
-### Visit https://tank-assault.herokuapp.com/
+### Visit https://tank-assault.herokuapp.com/  (For outside IIT network)
+### Visit http://10.17.51.99:3000/  (On IIT network)
 
 ### Controls for 1 Player game: 
 
@@ -42,16 +43,36 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 |Fire:| Press X
 |Reload:| Press Z
 
+### To run locally
 
-### To run locally:
-
- - Install node heroku cli on your system.
-```sh
-    $ git remote add heroku https://git.heroku.com/tank-assualt.git
+- Install nodeJs on your system
+```
+    $ git clone https://github.com/devclub-iitd/tankAssault.git
+    $ cd tankAssault
     $ npm install
-    $ heroku local web
-    $ visit http://localhost:5000
- ```
- - Open the Multiplayer in different windows to play! 
+    $ node server.js
+    $ visit http://localhost:3000
+```
+- Select Beat Your Friend mode to play 2 player game
+- Select Multiplayer Game mode to play with another player and open another client on other tab
+
+## Authors
+
+* **Atishya Jain** - https://github.com/Atishya-jain
+* **Arpan Mangal** - https://github.com/ArpanMangal
+* **Ayush Patel** - https://github.com/Ayush21298
+* **Arshdeep Singh** - https://github.com/arshsherdill
+
+See also the list of [contributors](https://github.com/devclub-iitd/tankAssault/graphs/contributors) who participated in this project.
+
+### Bugs
+- [X] Bullet goes through after hitting
+- [ ] Lag on slow networks
+
+### TO DO
+- [X] Correct Bullet Problems
+- [ ] Reduce the size of JSON Objects sent over network
+- [ ] Optimize correct bullet and player speed for good play
+- [ ] Implement Prediction Model for reducing lag
 
 **Have Fun :-)**
