@@ -27,7 +27,7 @@ body{
 }
 #gameI{
 	margin-top: 20px;
-	
+    margin-left: 15px;	
 }
 #wrapper {
 	width: 100%;
@@ -321,6 +321,7 @@ footer {
 	padding-bottom: 15px;
 	margin-bottom: 20px;
 	float: left;
+	margin-left: -27px;
 	color: #7AF484;
 }
 header {

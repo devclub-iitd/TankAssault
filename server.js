@@ -19,20 +19,20 @@ var roomno = 1;
 app.use(express.static("public"));
 app.set("view engine","ejs");
 
-app.get("/",function(req,res){
-  res.render("index");
+app.get("/TankAssault/",function(req,res){
+  res.render("TankAssault/index");
 });
-app.get("/Player1.ejs",function(req,res){
-  res.render("Player1");
+app.get("/TankAssault/Player1.ejs",function(req,res){
+  res.render("TankAssault/Player1");
 });
-app.get("/Player2.ejs",function(req,res){
-  res.render("Player2");
+app.get("/TankAssault/Player2.ejs",function(req,res){
+  res.render("TankAssault/Player2");
 });
-app.get("/OnlinePlay.ejs",function(req,res){
-  res.render("OnlinePlay");
+app.get("/TankAssault/OnlinePlay.ejs",function(req,res){
+  res.render("TankAssault/OnlinePlay");
 });
-app.get("/LocalPlay.ejs",function(req,res){
-  res.render("LocalPlay");
+app.get("/TankAssault/LocalPlay.ejs",function(req,res){
+  res.render("TankAssault/LocalPlay");
 });
 
 
