@@ -10,7 +10,7 @@ Come and join us.
 
 Compete with your friends or with our awesome A.I.(undefeated till date) (feature coming soon...)
 
-![alt text](public/images/game.png)
+![alt text](public/images/game4.png)
 
 ### Visit https://tank-assault.herokuapp.com/  (For outside IIT network)
 ### Visit http://10.17.51.99:3000/  (On IIT network)
