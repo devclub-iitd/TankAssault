@@ -4,12 +4,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon for our site-->
-	<link rel="icon" href="/images/favicon.png">
+	<link rel="icon" href="/TankAssault/images/favicon.png">
 	
 	<title>Tank Assault 1 Player</title>
-	<link href="../styles/stylesheet1.css" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="../styles/buttons.css">
-	<script type="text/javascript" src="../js/jQuery.js"></script>
+	<link href="../TankAssault/styles/stylesheet1.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../TankAssault/styles/buttons.css">
+	<script type="text/javascript" src="../TankAssault/js/jQuery.js"></script>
 </head>
 
 <body style="background-color: #000015;">
@@ -20,9 +20,9 @@
 		var socket = io();
 		
 	</script>-->
-	<audio id="audiotank" src="../media/tank.mp3" preload="auto"></audio>
-	<audio id="audiobullet" src="../media/bullet.mp3" preload="auto"></audio>
-	<audio id="audioreload" src="../media/reload.mp3" preload="auto"></audio>
+	<audio id="audiotank" src="../TankAssault/media/tank.mp3" preload="auto"></audio>
+	<audio id="audiobullet" src="../TankAssault/media/bullet.mp3" preload="auto"></audio>
+	<audio id="audioreload" src="../TankAssault/media/reload.mp3" preload="auto"></audio>
 	<div id="wrapperFullScreen">
 	<!--	<header>
 			<h1>Let's Trouble...</h1>
@@ -36,7 +36,7 @@
   			<div id="myBar" style="display:none;"></div>
 		</div>
   			<canvas oncontextmenu="return false;" id="maze" style="display:none; border:1px solid #000000;"></canvas>
-		<div id="loading"><center><img alt='loading' src='../images/giphy.gif'/><p>Searching for Players...</p></center></div>
+		<div id="loading"><center><img alt='loading' src='../TankAssault/images/giphy.gif'/><p>Searching for Players...</p></center></div>
   			<script>
 				// declare the maze height, width computed automatically
 				var mazeHeight = 600;
@@ -45,21 +45,21 @@
 					tank2image = new Image(),
 					tank3image = new Image(),
 					tank4image = new Image();
-				tank1image.src = '/images/tank1.png';
-				tank2image.src = '/images/tank2.png';
-				tank3image.src = '/images/tank3.png';
-				tank4image.src = '/images/tank4.png';
+				tank1image.src = '/TankAssault/images/tank1.png';
+				tank2image.src = '/TankAssault/images/tank2.png';
+				tank3image.src = '/TankAssault/images/tank3.png';
+				tank4image.src = '/TankAssault/images/tank4.png';
 			</script>
-			<script src="/socket.io/socket.io.js"></script>	
+			<script src="/TankAssault/socket.io/socket.io.js"></script>	
 			<script>
 				var socket = io();
 			</script>
-			<script src="../js/MazeGeneration.js" type="text/javascript"></script>
-			<script src="../js/animation.js" type="text/javascript"></script>
-			<script src="../js/onlinePlayerFunctions.js" type="text/javascript"></script>
-			<script src="../js/serverFunctions.js" type="text/javascript"></script>
-			<script src="../js/onlineScore.js" type="application/javascript"></script>
-       		<script src="../js/onlineGamePlay.js" type="text/javascript"></script>
+			<script src="../TankAssault/js/MazeGeneration.js" type="text/javascript"></script>
+			<script src="../TankAssault/js/animation.js" type="text/javascript"></script>
+			<script src="../TankAssault/js/onlinePlayerFunctions.js" type="text/javascript"></script>
+			<script src="../TankAssault/js/serverFunctions.js" type="text/javascript"></script>
+			<script src="../TankAssault/js/onlineScore.js" type="application/javascript"></script>
+       		<script src="../TankAssault/js/onlineGamePlay.js" type="text/javascript"></script>
        		<!-- Call the generate function -->
        		<script>
        			init();
