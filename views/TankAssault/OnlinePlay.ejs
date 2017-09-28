@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon for our site-->
-	<link rel="icon" href="/TankAssault/images/favicon.png">
+	<link rel="icon" href="../TankAssault/images/favicon.png">
 	
 	<title>Tank Assault 1 Player</title>
 	<link href="../TankAssault/styles/stylesheet1.css" rel="stylesheet" type="text/css">
@@ -37,24 +37,10 @@
 		</div>
   			<canvas oncontextmenu="return false;" id="maze" style="display:none; border:1px solid #000000;"></canvas>
 		<div id="loading"><center><img alt='loading' src='../TankAssault/images/giphy.gif'/><p>Searching for Players...</p></center></div>
-  			<script>
-				// declare the maze height, width computed automatically
-				var mazeHeight = 600;
-				// load tank images
-				var tank1image = new Image(),
-					tank2image = new Image(),
-					tank3image = new Image(),
-					tank4image = new Image();
-				tank1image.src = '/TankAssault/images/tank1.png';
-				tank2image.src = '/TankAssault/images/tank2.png';
-				tank3image.src = '/TankAssault/images/tank3.png';
-				tank4image.src = '/TankAssault/images/tank4.png';
-			</script>
-			<script src="/TankAssault/socket.io/socket.io.js"></script>	
-			<script>
-				var socket = io();
-			</script>
-			<script src="../TankAssault/js/MazeGeneration.js" type="text/javascript"></script>
+  			<script src="/TankAssault/socket.io/socket.io.js"></script>	
+	
+			<script type="text/javascript" src="../TankAssault/js/HTMLscripts.js"></script>
+  			<script src="../TankAssault/js/MazeGeneration.js" type="text/javascript"></script>
 			<script src="../TankAssault/js/animation.js" type="text/javascript"></script>
 			<script src="../TankAssault/js/onlinePlayerFunctions.js" type="text/javascript"></script>
 			<script src="../TankAssault/js/serverFunctions.js" type="text/javascript"></script>
