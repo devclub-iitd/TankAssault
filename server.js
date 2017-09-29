@@ -2,6 +2,7 @@
 var express = require("express");
 var app = express();
 var port = process.env.PORT || 3000;
+var IP = process.env.IP || "127.0.0.1";
 var server = require('http').createServer(app);
 var io = require('socket.io')(server,{path: '/TankAssault/socket.io'});
 var util = require('util');
@@ -280,8 +281,8 @@ function playerById(id,roomno) {
 };
 
 
-server.listen(port,function(){
-  console.log("listening");
+server.listen(port,IP,function(){
+  console.log("Server listening on ip: "+IP+" and port: "+port);
 });
 
 /////////////////////////////////////////////
