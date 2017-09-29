@@ -10,4 +10,3 @@ tank2image.src = '../TankAssault/images/tank2.png';
 tank3image.src = '../TankAssault/images/tank3.png';
 tank4image.src = '../TankAssault/images/tank4.png';
 
-				var socket = io({path: '/TankAssault/socket.io'});
