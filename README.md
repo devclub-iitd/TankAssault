@@ -68,11 +68,22 @@ See also the list of [contributors](https://github.com/devclub-iitd/tankAssault/
 ### Bugs
 - [X] Bullet goes through after hitting
 - [ ] Lag on slow networks
+- [ ] On hitting edges, sometimes tank disappear and appear at other side of the cell (mainly at convex edges).
+- [ ] Not loading mutiplayer on VM (Cannot GET /OnlinePlay.ejs/)
+- [ ] "Teleporting" tank movement in online on heroku
+- [ ] When tank dies, actual initialisation is somewhere else and it shows up somewhere else. On movement it goes to the actual position.
+
 
 ### TO DO
 - [X] Correct Bullet Problems
 - [ ] Reduce the size of JSON Objects sent over network
 - [ ] Optimize correct bullet and player speed for good play
 - [ ] Implement Prediction Model for reducing lag
+- [ ] Fix screen resolution and resizing problem
+- [ ] Decrease tank and game speed for smooth game
+
+### Minor Bugs and TODO's
+- [ ] Favicon not found on index page (on VM)
+- [ ] Fix the view of index page, controls page
 
 **Have Fun :-)**
