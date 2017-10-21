@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
 <!-- favicon for our site-->
 <link rel="icon" href="/images/favicon.png">
 
 <title>Tank Assault</title>
-<link href="/TankAssault/styles/stylesheet1.css" rel="stylesheet" type="text/css">
+<link href="/TankAssault/styles/stylesheet10.css" rel="stylesheet" type="text/css">
 <!--<script type="text/javascript" src="functions.js"></script>-->
+<script type="text/javascript" src="/TankAssault/js/main_menu.js"></script>
+<script type="text/javascript" src="/TankAssault/js/jQuery.js"></script>
 </head>
 
 <body>
@@ -26,20 +28,25 @@
 	<div id="wrapper">
 		<header>
 			<h1>Tank Assault</h1>
-			<nav>
+			<!-- <nav>
      			<h2 id="menulink"><a href="#navlinks">Menu</a></h2>
       			<ul class="displayed" id="navlinks">
       			  <li><a href="/TankAssault/Player1.ejs">Multiplayer Game</a></li>
       			  <li><a href="/TankAssault/Player2.ejs">Beat your Friend</a></li>
       			</ul>
-    		</nav>
+    		</nav> -->
+      <!-- <h2 id="choice"><a href="#" id="achoice">Compete</a></h2> -->
+      <!-- <h2 id="choice"><a href="/TankAssault/Player2.ejs" id="achoice">Training</a></h2> -->
+      <h2 id="choice"><a href="/TankAssault/Player1.ejs" id="achoice">Multiplayer Game</a></h2>
+      <h2 id="choice"><a href="/TankAssault/Player2.ejs" id="achoice">Beat your Friend</a></h2>
+      <h2 id="bchoice"><a href="/TankAssault/Player1.ejs" id="achoice">Main Menu</a></h2>
 		</header>
     <!--<script type="text/javascript" src="js/menu.js"></script>-->
-    <img style="padding-top:20px;" id = 'gameI' src="../TankAssault/images/game.png" alt="Player1" width="600" height = "300">
+    <!-- <img style="padding-top:20px;" id = 'gameI' src="../TankAssault/images/game.png" alt="Player1" width="600" height = "300"> -->
 	</div>
-	
+
 	<footer>
-		<p><span style="color:red">&#9829;&nbsp;&nbsp;</span>Brought to You By IITD Dev. Club</p>
+		<p>Brought to You By <a href="https://devclub.iitd.info" style="color : #666699;">IITD Dev. Club</a></p>
     </footer>
 </body>
 </html>

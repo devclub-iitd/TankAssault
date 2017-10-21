@@ -27,7 +27,7 @@ body{
 }
 #gameI{
 	margin-top: 20px;
-    margin-left: 15px;
+    margin-left: 15px;	
 }
 #wrapper {
 	width: 100%;
@@ -177,7 +177,7 @@ a:hover, a:active, a:focus {
 }
 #menuControls {
 	color: #45EF53;
-
+	
 }
 #navlinks, #controls {
 	width: 100%;
@@ -216,9 +216,9 @@ a:hover, a:active, a:focus {
 #navlinks a:hover, #navlinks a:active, #navlinks a:focus, #navlinks a.thispage {
 	color: #F68979;
 }
-
+	
 #demo {
-	margin-top: 500px;
+	margin-top: 500px;	
 }
 #left{
 	background-color:black;
@@ -255,7 +255,7 @@ a:hover, a:active, a:focus {
 	background-color: black;
 	color: white;
 }
-
+	
 #demo {
 	color: wheat;
 	margin-top: 600px;
