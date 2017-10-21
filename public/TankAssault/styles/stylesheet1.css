@@ -38,7 +38,8 @@ body{
 	height: 94%;
 	/*background-color: #222a33;*/
 	/*background-color: #222a33;/*#d6f5d6;*/
-	background-color: #000015;
+	background-color: #111115;
+	opacity: 0.8;
 }
 #wrapperFullScreen {
 	width: 100%;
