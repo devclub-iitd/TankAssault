@@ -4,96 +4,95 @@
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 1vh 1vw;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 0.9em;
+    margin: 1vh 1vh;
     cursor: pointer;
 }
 
 .up {
 	background-color: rgba(216,223,106,0.69);/* Blue */
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .left {
 	background-color: rgba(135,220,36,0.64);/* Red */
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .down {
-	background-color: #7BE38E;/* Gray */ 
+	background-color: #7BE38E;/* Gray */
 	color: black;
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .right {
 	background-color: rgba(135,220,36,0.64); /* Black */
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .shoot {
 	background-color: #e7e7e7;
 	color: black;
 	cursor: not-allowed;
-	border-radius: 10px 3px 1px 1px;
-	font-size: 10px;
-	padding-top: 15px;
-	padding-right: 11px;
-	padding-left: 7px;
-	padding-bottom: 15px;
-	margin-top: 4px;
-	margin-left: 2px;
-	margin-right: 0px;
-	margin-bottom: 0px;
+	border-radius: 1vh;
+	font-size: 0.9em;
+	padding-top: 1vh;
+	padding-right: 1vw;
+	padding-left: 1vw;
+	padding-bottom: 1vh;
+	margin-top: 0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 0;
 }
 .reload {
 	background-color: #e7e7e7;
 	color: black;
 	cursor: not-allowed;
-	border-radius: 3px 10px 1px 1px;
-	font-size: 9.5px;
-	padding-top: 15px;
-	padding-right: 8px;
-	padding-left: 10px;
-	padding-bottom: 15px;
-	margin-top: 4px;
-	margin-right: 2px;
-	margin-left: 0px;
-	margin-bottom: 0px;
+	border-radius: 1vh;
+	font-size: 0.9em;
+	padding-top: 1vh;
+	padding-right: 1vw;
+	padding-left: 1vw;
+	padding-bottom: 1vw;
+	margin-top: 0;
+	margin-right: 0;
+	margin-left: 0;
+	margin-bottom: 0;
 }
 .rotate {
-	background-color: #e7e7e7;
+  background-color: #e7e7e7;
 	color: black;
 	cursor: not-allowed;
-	border-radius: 1px 1px 10px 10px;
-	font-size: 16px;
-	padding-top: 20px;
-	padding-right: 35px;
-	padding-left: 34.5px;
-	padding-bottom: 20px;
-	margin: 4px 2px;
-	margin-top: 1px;
+	border-radius: 1vh;
+	font-size: 0.9em;
+	padding-top: 1vh;
+	padding-right: 1vw;
+	padding-left: 1vw;
+	padding-bottom: 1vw;
+	margin: 0;
 }
 .kill {
 	background-color: rgba(221,3,7,0.69);
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .save {
 	background-color: rgba(100,100,253,0.81);
-	border-radius: 10px;
+	border-radius: 1vh;
 	cursor: not-allowed;
 }
 .start {
 	/*background-color: rgba(229,228,74,0.83);*/
 	background-color: #ffff4c;
 	display: inline-block;
-	border-radius: 10px;
+	border-radius: 1vh;
 	transition: 0.5s;
-	margin-top: 20px;
+	margin-top: 1vh;
 	font-size: large;
 	color: #999900;
 	vertical-align: middle;
@@ -111,7 +110,7 @@
   vertical-align: middle;
   opacity: 0;
   top: 0;
-  right: -20px;
+  right: -1vw;
   transition: 0.5s;
 }
 
@@ -126,16 +125,16 @@
 .startGame {
 	background-color: rgba(143,205,231,0.83);
 	display: inline-block;
-	border-radius: 10px;
+	border-radius: 1vh;
 	transition: 0.5s;
-	margin-top: 20px;
+	margin-top: 1vw;
 }
 .reSetTank {
 	background-color: rgba(143,205,231,0.83);
 	display: inline-block;
-	border-radius: 10px;
+	border-radius: 1vh;
 	transition: 0.5s;
-	margin-top: 20px;
+	margin-top: 1vh;
 	margin-left: 40%;
 }
 
@@ -143,7 +142,7 @@ h3 {
 	color: rgba(249,252,154,1.00);
 	text-transform: uppercase;
 	text-align: center;
-	
+
 }
 #container {
     width: 80%;
@@ -159,6 +158,7 @@ h3 {
 }
 #player {
     width: 50%;
+    height: 50%;
     margin-left:auto;
 	margin-right:auto;
 }

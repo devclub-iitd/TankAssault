@@ -4,24 +4,25 @@ html {
 	height: 100%;
 	box-sizing: border-box;
 }
-*, *:before,
+/**, *:before,
 *:after {
 	box-sizing: inherit;
-}
+}*/
 
 body{
   margin: 0;
   position: relative;
-  padding-bottom: 30px;
+  padding: 0;
   /*background-color: #000000;*/
 	/*background-color: #d6f5d6;*/
   /*background-color: #000d1a;*/
 	/*background-color: #00000c;*/
 	background-color: #cccce5;
+	background-size: cover;
   text-align: center;
   font-style: normal;
   font-weight: 400;
-	min-height: 100%;
+	max-height: 100vh;
   /*height: 100%;*/
   font-size: 1em;
 }
@@ -30,27 +31,22 @@ body{
     margin-left: 15px;
 }
 #wrapper {
-	width: 100%;
+	width: 80vw;
 	margin: 0 auto;
+	margin-top: 2vh;
+	margin-bottom: 0;
 	/*margin-bottom: 50px;*/
 	padding-bottom: 40px;
-	max-width: 1200px;
-	height: 94%;
+	/*max-width: 1200px;*/
+	height: 80vh;
 	/*background-color: #222a33;*/
 	/*background-color: #222a33;/*#d6f5d6;*/
-	background-color: #111115;
+	/*background-color: #000015;*/
+	background-color: #121215;
 	opacity: 0.8;
+	overflow:scroll;
 }
-#wrapperFullScreen {
-	width: 100%;
-	margin: 0 auto;
-	padding-top: 20px;
-	margin-bottom: 50px;
-	max-width: 1500px;
-	/*background-color: #d3d3d3;*/
-	background-color: #000015;
-	/*background-color: #d6f5d6;*/
-}
+
 
 #loading {
 	padding: 40px;
@@ -127,22 +123,26 @@ body{
 }
 
 h1, h2 {
-	color: #cc8400;
+	/*color: #cc8400;*/
+	color: #EEEEEE;
 	font-style: normal;
-	font-weight: 400;
+	font-weight: bold;
 }
 h1 {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	font-size: 2.5em;
+	padding-top: 2vh;
+	padding-bottom: 1vh;
+	font-size: 2.0em;
 	text-align: center;
 	text-transform: none;
 }
 h2 {
 	margin-top: 0.5em;
-	font-size: 2.25em;
+	font-size: 1.5em;
+}
+h3 {
+	font-size: 1.0em;
 }
 a {
 	font-weight: bold;
@@ -301,6 +301,10 @@ footer {
 	margin-right: auto;
 	position: static;
 }
+#footnote {
+	font-size: 1.0em;
+	color: #FFF;
+}
 
 
 /* Media Queries */
@@ -326,7 +330,7 @@ footer {
 	color: #7AF484;
 }
 header {
-    overflow: hidden;
+		/*height: 100vh;*/
 }
 #hero p {
 	width: 36%;
@@ -357,14 +361,58 @@ main, aside {
 	font-size: 0.875em;
 }
 
+#footnote {
+	font-size: 0.8em;
 }
 
-@media (max-width: 1000px){
+}
+
+@media (max-width: 1200px){
 #squeezed {
 	display: block;
 }
+
 #wrapper {
-	display: none;
+	width: 90vw;
+	margin: 0 auto;
+	margin-top: 2vh;
+	margin-bottom: 0;
+	/*margin-bottom: 50px;*/
+	padding-bottom: 40px;
+	/*max-width: 1200px;*/
+	height: 80vh;
+	/*background-color: #222a33;*/
+	/*background-color: #222a33;/*#d6f5d6;*/
+	/*background-color: #000015;*/
+	background-color: #121215;
+	opacity: 0.8;
+}
+
+#choice {
+	background-color: #CCCCCC;
+	color: #000000;
+	font-style: italic;
+	font-weight: bold;
+	max-width: 80%;
+	margin-left: 10%;
+	text-align: center;
+}
+#achoice {
+	background-color: #CCCCCC;
+	color: #000000;
+	font-style: italic;
+	font-weight: bold;
+	max-width: 80%;
+	font-size: 0.8em;
+}
+#achoice:hover{
+	background-color: #CCCCCC;
+	color: #666;
+	font-style: italic;
+	font-weight: bolder;
+	max-width: 80%;
+	font-size: 0.9em;
+	text-decoration: none;
 }
 #squeezed p {
 	color: wheat;
@@ -377,6 +425,85 @@ footer {
 	color: white;
 	font-size: 0.8em;
 	text-align: center;
+}
+#footnote {
+	font-size: 0.8em;
+}
+
+}
+
+@media (max-width: 500px){
+#squeezed {
+	display: block;
+}
+
+#wrapper {
+	width: 90vw;
+	margin: 0 auto;
+	margin-top: 2vh;
+	margin-bottom: 0;
+	/*margin-bottom: 50px;*/
+	padding-bottom: 40px;
+	/*max-width: 1200px;*/
+	height: 80vh;
+	/*background-color: #222a33;*/
+	/*background-color: #222a33;/*#d6f5d6;*/
+	/*background-color: #000015;*/
+	background-color: #121215;
+	opacity: 0.8;
+}
+
+h1 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 1.5em;
+	text-align: center;
+	text-transform: none;
+}
+
+#choice {
+	background-color: #CCCCCC;
+	color: #000000;
+	font-style: italic;
+	font-weight: bold;
+	max-width: 80%;
+	margin-left: 10%;
+	text-align: center;
+}
+#achoice {
+	background-color: #CCCCCC;
+	color: #000000;
+	font-style: italic;
+	font-weight: bold;
+	max-width: 80%;
+	font-size: 0.5em;
+}
+#achoice:hover{
+	background-color: #CCCCCC;
+	color: #666;
+	font-style: italic;
+	font-weight: bolder;
+	max-width: 80%;
+	font-size: 0.6em;
+	text-decoration: none;
+}
+#squeezed p {
+	color: wheat;
+}
+footer {
+	width: 100%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: #1E1E1E;
+	color: white;
+	font-size: 0.8em;
+	text-align: center;
+}
+
+#footnote {
+	font-size: 0.5em;
 }
 
 
