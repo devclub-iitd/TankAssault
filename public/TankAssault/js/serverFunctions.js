@@ -100,7 +100,7 @@ async function setEventHandlers() {
 		console.log("again calling onSocketConnected manually needed as earlier call did not respond but results in errors");
 		console.log("adopting different ");
 	//	window.alert("Sorry, the request may take longer than expected.\nCheck your internet connectivity");
-        window.location = "/OnlinePlay.ejs/";
+        window.location = "/TankAssault/OnlinePlay.ejs/";
 		await sleep(2000);
 	}
 	console.log("i am awake now!");

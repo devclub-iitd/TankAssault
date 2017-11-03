@@ -20,10 +20,10 @@ var mazeBackgroundColor = "#e5f2c8";
 
 /* walls */
 var imgNeedle = new Image();
-imgNeedle.src = '../TankAssault/images/wallNeedle.png';
+imgNeedle.src = '/TankAssault/images/wallNeedle.png';
 imgNeedle.width = 10;
 var grassImage = new Image();
-grassImage.src = '../TankAssault/images/grass2.PNG';
+grassImage.src = '/TankAssault/images/grass2.PNG';
 
 /*function distanceBetween(point1, point2) {
   return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));

@@ -58,6 +58,7 @@ async function generate() {
 	$('#maze').show();
 	$('#loading').hide();
 	$('#myBar').show();
+	console.log("showing #maze");
 	room = remotePlayers[0].roomno;
 	//console.log(remotePlayers[0].upPressed + " " + remotePlayers[0].downPressed + " " + remotePlayers[0].rightPressed + " " + remotePlayers[0].leftPressed);
 	update(true);

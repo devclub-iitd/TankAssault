@@ -69,7 +69,7 @@ See also the list of [contributors](https://github.com/devclub-iitd/tankAssault/
 - [X] Bullet goes through after hitting
 - [ ] Lag on slow networks
 - [ ] On hitting edges, sometimes tank disappear and appear at other side of the cell (mainly at convex edges).
-- [ ] Not loading mutiplayer on VM (Cannot GET /OnlinePlay.ejs/)
+- [X] Not loading mutiplayer on VM (Cannot GET /OnlinePlay.ejs/)
 - [ ] "Teleporting" tank movement in online on heroku
 - [ ] When tank dies, actual initialisation is somewhere else and it shows up somewhere else. On movement it goes to the actual position.
 
