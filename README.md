@@ -13,7 +13,7 @@ Compete with your friends or with our awesome A.I.(undefeated till date) (featur
 ![alt text](public/TankAssault/images/game4.png)
 
 ### Visit https://tank-assault.herokuapp.com/  (For outside IIT network)
-### Visit http://10.17.51.99:3000/  (On IIT network)
+### Visit http://game.devclub.cse.iitd.ac.in/  (On IIT network)
 
 ### Controls for 1 Player game: 
 
@@ -83,7 +83,7 @@ See also the list of [contributors](https://github.com/devclub-iitd/tankAssault/
 - [ ] Decrease tank and game speed for smooth game
 
 ### Minor Bugs and TODO's
-- [ ] Favicon not found on index page (on VM)
+- [X] Favicon not found on index page (on VM)
 - [ ] Fix the view of index page, controls page
 
 **Have Fun :-)**

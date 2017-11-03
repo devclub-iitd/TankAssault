@@ -1,3 +1,3 @@
-var socket = io({path: '../TankAssault/socket.io'});
+var socket = io({path: '/TankAssault/socket.io'});
 
 			

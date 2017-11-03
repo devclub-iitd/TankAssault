@@ -76,7 +76,7 @@ function draw(aTank) {
 }
 
 function animate(aTank) {
-	console.log("AA gya");
+	// console.log("AA gya");
 	b++;
 	if(b<300){
 	requestAnimFrame(animate);
