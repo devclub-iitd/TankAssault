@@ -193,6 +193,9 @@ function onNewPlayer(data) {
   };
   // Add new player to the players array
   rooms[roomno-1].push(newPlayer);
+
+  // set remaing handlers for the client
+  // clientNext();
 };
 // Reinitialised player
 function onRenewPlayer(data){

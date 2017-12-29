@@ -63,7 +63,7 @@ function initialize(Tank,number){
 			leftClick: Tank.leftClick,
 			reloading: Tank.reloading
 		});
-}
+	}
 }
 
 function sleep(ms) {
@@ -93,6 +93,10 @@ async function setEventHandlers() {
 	
 	// renew Player
 	socket.on("renew player", onRenewPlayer);
+	
+};
+
+async function setRemainingCallbacks() {
 	console.log("just before sleep!");
 	await sleep(universalSleepTime_dependsOnNetwork);
 	if(remotePlayers.length == 0){
@@ -115,7 +119,7 @@ async function setEventHandlers() {
 	// Player removed message received
 	socket.on("remove player", onRemovePlayer);	
 	//await sleep(100);
-};
+}
 
 // Maze form
 function onMazeForm(Player){
@@ -125,7 +129,7 @@ function onMazeForm(Player){
 	//wallColor1 = Player.wallColor;
 	grid1 = Player.grid;
 	mazeHeight1 = Player.mazeHeight;
-	}
+}
 
 // Socket connected
 function onSocketConnected() {
@@ -145,6 +149,8 @@ function onSocketConnected() {
 			//leftClick: theTank.leftClick,
 			//reloading: theTank.reloading
 		});
+		// next();
+		setRemainingCallbacks();
 };
 
 // Socket disconnected
