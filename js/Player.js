@@ -34,6 +34,7 @@ function makeMaze() {
 	theMaze = new maze(rows, columns, gridsize, mazeStyle);
 	theMaze.generate();
 	//theMaze.draw();
+	// cb(); // execute the callback
 }
 
 function maze(rows, columns, gridsize, mazeStyle) {
@@ -452,30 +453,41 @@ function initializeBullet(aTank, aBullet){
 
 // Export the Player class so you can use it in
 // other files by using require("Player").Player
-makeMaze();
+// makeMaze(cb);
 //setInterval(expo, 0.1);
-function expo(){
+function expo(cb){
 	//console.log("in function expo");
 	makeMaze();
-	exports.Player = Tank;
-	exports.Tank = initializeTank;
-	exports.rows = rows;
-	exports.columns = columns;
-	exports.mazeHeight = mazeHeight;
-	exports.grid = theMaze.grid;
+	// exports.Player = Tank;
+	// exports.Tank = initializeTank;
+	module.exports.rows = rows;
+	module.exports.columns = columns;
+	// exports.mazeHeight = mazeHeight;
+	module.exports.grid = theMaze.grid;
+	cb(); // execute the callback
 }
 console.log("bypassed setInterval");
+
+module.exports = {
+	'expo': expo,
+	'Player': Tank,
+	'Tank': initializeTank,
+	// 'rows': rows,
+	// 'columns': columns,
+	'mazeHeight': mazeHeight
+	// 'grid': theMaze.grid
+}
 //exports.maze = makeMaze;
-exports.expo = expo;
-exports.Player = Tank;
-exports.Tank = initializeTank;
-exports.rows = rows;
-exports.columns = columns;
-//exports.backgroundColor = backgroundColor;
-//exports.wallColor = wallColor;
-exports.mazeHeight = mazeHeight;
-//exports.lineWidth =lineWidth;
-exports.grid = theMaze.grid;
+// exports.expo = expo;
+// exports.Player = Tank;
+// exports.Tank = initializeTank;
+// exports.rows = rows;
+// exports.columns = columns;
+// //exports.backgroundColor = backgroundColor;
+// //exports.wallColor = wallColor;
+// exports.mazeHeight = mazeHeight;
+// //exports.lineWidth =lineWidth;
+// exports.grid = theMaze.grid;
 //exports.mazeStyledecision = mazeStyledecision;//Math.floor(Math.random() * 2) + 1;//mazeStyledecision;
 //exports.rand =rand;
 //exports.genStartColumn = genStartColumn;

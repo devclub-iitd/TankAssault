@@ -9,54 +9,76 @@ var util = require('util');
 //var players = [];
 var Player = require("./js/Player");
 //Player.maze();
-var rooms = [];
+
 //Player.maze();
-rooms[0] = [];
-rooms[0].push(Player.rows);
-rooms[0].push(Player.columns);
-rooms[0].push(Player.grid);
-rooms[0].push(Player.mazeHeight);
+// Player.expo();
+// rooms[0] = [];
+// rooms[0].push(Player.rows);
+// rooms[0].push(Player.columns);
+// rooms[0].push(Player.grid);
+// rooms[0].push(Player.mazeHeight);
+
+var rooms = [];
 var roomno = 1;
+function newRoom() {
+  Player.expo(pushRoom);
+}
+function pushRoom() {
+  roomno++;
+  rooms[roomno-1] = [];
+  rooms[roomno-1].push(Player.rows);
+  rooms[roomno-1].push(Player.columns);
+  rooms[roomno-1].push(Player.grid);
+  rooms[roomno-1].push(Player.mazeHeight);
+  console.log("rooms array: " + rooms[roomno-1][0] + " " + rooms[roomno-1][1] + " " +rooms[roomno-1][3]);
+}
+newRoom();
+
+
+
+/* Render the views */
 app.use(express.static("public"));
 app.set("view engine","ejs");
 
-app.get("/",function(req,res){
- res.render("TankAssault/index");
-});
-app.get("/TankAssault/",function(req,res){
+app.get("/", function (req, res) {
   res.render("TankAssault/index");
 });
-app.get("/TankAssault/Player1.ejs",function(req,res){
+app.get("/TankAssault/", function (req, res) {
+  res.render("TankAssault/index");
+});
+app.get("/TankAssault/Player1.ejs", function (req, res) {
   res.render("TankAssault/Player1");
 });
-app.get("/TankAssault/Player2.ejs",function(req,res){
+app.get("/TankAssault/Player2.ejs", function (req, res) {
   res.render("TankAssault/Player2");
 });
-app.get("/TankAssault/OnlinePlay.ejs",function(req,res){
+app.get("/TankAssault/OnlinePlay.ejs", function (req, res) {
   res.render("TankAssault/OnlinePlay");
 });
-app.get("/TankAssault/LocalPlay.ejs",function(req,res){
+app.get("/TankAssault/LocalPlay.ejs", function (req, res) {
   res.render("TankAssault/LocalPlay");
 });
 
 
+/* Establish socket connection */
 io.on('connection', function(client){
   console.log('Client connected' + client.id);
-  util.log("New player has connected: " + client.id);
+  // util.log("New player has connected: " + client.id);
   
  // Increase roomno if 4 clients are present in a room
   if(io.nsps['/'].adapter.rooms["room-"+roomno] && io.nsps['/'].adapter.rooms["room-"+roomno].length > 3)
     {
+      newRoom();
 	  //Player = require("./js/Player");
-      Player.expo();
-      roomno++;
-	  // define some maximum no of rooms
-	  //if (roomno > 100000007) roomno = 0;
-      rooms[roomno-1] = [];
-      rooms[roomno-1].push(Player.rows);
-      rooms[roomno-1].push(Player.columns);
-      rooms[roomno-1].push(Player.grid);
-      rooms[roomno-1].push(Player.mazeHeight);
+    //   Player.expo();
+    //   roomno++;
+	  // // define some maximum no of rooms
+	  // //if (roomno > 100000007) roomno = 0;
+    //   rooms[roomno-1] = [];
+    //   rooms[roomno-1].push(Player.rows);
+    //   rooms[roomno-1].push(Player.columns);
+    //   rooms[roomno-1].push(Player.grid);
+    //   rooms[roomno-1].push(Player.mazeHeight);
 	  console.log("a new room has been created with row = "+Player.rows);
     }
     console.log("rooms array: " + rooms[roomno-1][0] + " " + rooms[roomno-1][1] + " " +rooms[roomno-1][3]);
